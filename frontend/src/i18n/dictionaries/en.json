@@ -1,0 +1,138 @@
+{
+  "seo": {
+    "siteTitle": "Saleh",
+    "siteDescription": "Pragmatic, deployable AI architectures: LLMs, RAG, vector databases, APIs, monitoring, deployment.",
+    "homeTitle": "Home",
+    "homeDescription": "Pragmatic, deployable AI architectures: LLM integration, RAG, vector databases, APIs.",
+    "approachTitle": "Architecture Approach",
+    "approachDescription": "A production-oriented methodology to design deployable AI systems.",
+    "projectsTitle": "Projects",
+    "projectsDescription": "Architecture-oriented projects: context, architecture, technical choices, constraints, results.",
+    "contactTitle": "Contact",
+    "contactDescription": "Professional contact for missions and technical discussions.",
+    "chatTitle": "AI Chat",
+    "chatDescription": "AI dialogue interface — direct exchange with a conversational agent."
+  },
+  "nav": {
+    "home": "Home",
+    "approach": "Architecture Approach",
+    "projects": "Projects",
+    "contact": "Contact",
+    "language": "Language"
+  },
+  "home": {
+    "greeting": "Saleh Minawi",
+    "role": "Backend Developer · AI-oriented",
+    "goal": "Heading towards a Master's in AI Architecture — this site is built to showcase how I think about designing deployable AI systems.",
+    "bioBullets": [
+      "3 years of backend development experience",
+      "REST API & microservices design",
+      "Data processing & AI pipelines",
+      "AI solutions integration",
+      "Production environment deployment",
+      "Teamwork & real-world constraints"
+    ],
+    "termRole": "Backend Developer",
+    "termTarget": "Master's in AI Architecture",
+    "termXp": "3 years · production · teamwork",
+    "termStack": "Python · FastAPI · LLM · RAG · Docker",
+    "stackBackend": "Python · FastAPI · Microservices",
+    "stackAi": "LLM · RAG · LangChain · Embeddings",
+    "stackInfra": "Docker · CI/CD · Monitoring",
+    "stackData": "PostgreSQL · pgvector · Pipelines",
+    "chatCta": "Initialize AI Dialogue"
+  },
+  "approach": {
+    "title": "Architecture Approach",
+    "intro": "Production-first methodology: start from business needs, make constraints explicit, then choose AI building blocks and API layer with observability and deployment strategy.",
+    "steps": [
+      {
+        "title": "1) Business need analysis",
+        "detail": "Use case, criticality, SLA, data, legal constraints, scope, acceptance criteria."
+      },
+      {
+        "title": "2) Model choice (API vs local)",
+        "detail": "Cost/latency/privacy trade-offs, availability, governance, GPU constraints, fallbacks and degraded modes."
+      },
+      {
+        "title": "3) Embeddings strategy",
+        "detail": "Granularity, chunking, versioning, evaluation, updates and source quality."
+      },
+      {
+        "title": "4) Vector database",
+        "detail": "Storage choice, indexes, filtering, multi-tenant, retention, performance and cost."
+      },
+      {
+        "title": "5) API layer",
+        "detail": "FastAPI/REST, auth, rate limiting, schemas, idempotency, traceability and contracts."
+      },
+      {
+        "title": "6) Monitoring",
+        "detail": "Structured logs, metrics, traces, and quality monitoring (prompt/version, retrieval, hallucinations)."
+      },
+      {
+        "title": "7) Deployment",
+        "detail": "CI/CD, environments, secrets, scaling, observability, runbooks and operations."
+      }
+    ]
+  },
+  "projects": {
+    "title": "Projects",
+    "intro": "Each project is presented with an architecture-first structure and real-world constraints.",
+    "labels": {
+      "context": "Context",
+      "architecture": "Architecture",
+      "choices": "Technical choices",
+      "constraints": "Constraints",
+      "results": "Results"
+    }
+  },
+  "contact": {
+    "ghostLine1": "Connect",
+    "ghostLine2": "With The",
+    "ghostLine3": "System",
+    "tagProfessional": "Professional",
+    "tagDirectMail": "Direct_Mail",
+    "tagCurriculum": "Curriculum",
+    "tagCode": "Source_Code",
+    "linkedinDesc": "View my profile and professional recommendations.",
+    "githubDesc": "Open-source projects and technical contributions.",
+    "cvLabel": "View CV",
+    "cvHint": "Open in modal · download",
+    "cvModalTitle": "CV // Saleh Minawi",
+    "cvModalClose": "Close",
+    "cvModalDownload": "Download",
+    "emailCopy": "COPY",
+    "emailCopied": "COPIED ✓",
+    "chatTestTitle": "Test API /chat (stub)",
+    "chatTestPlaceholder": "Message (e.g. ping)",
+    "chatTestSend": "Send",
+    "chatTestOkPrefix": "Response:",
+    "chatTestErrorPrefix": "Error:"
+  },
+  "chat": {
+    "title": "CHAT_LLM",
+    "subtitle": "AI dialogue interface — deployment in progress.",
+    "comingSoon": "[ MODULE IN PREPARATION ]",
+    "inputPrefix": "> USER_INPUT:",
+    "inputPlaceholder": "Enter your query...",
+    "disconnect": "DISCONNECT_SESSION",
+    "boot1": "Neural interface initialized.",
+    "boot2": "Connection to SALEH_ARCH v1.2 model established.",
+    "boot3": "Context memory loaded — 4096 tokens.",
+    "boot4": "Awaiting user query...",
+    "sidebarTitle": "SYS_MONITOR",
+    "contextTitle": "CONTEXT",
+    "statusIdle": "IDLE",
+    "statusProcessing": "PROCESSING...",
+    "statusComplete": "COMPLETE",
+    "modelName": "SALEH_ARCH_v1.2",
+    "noSources": "No active sources",
+    "sessionLabel": "SESSION",
+    "uptimeLabel": "UPTIME"
+  },
+  "language": {
+    "switchToFr": "FR",
+    "switchToEn": "EN"
+  }
+}

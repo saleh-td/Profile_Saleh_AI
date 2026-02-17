@@ -1,0 +1,19 @@
+.base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--foreground) 22%, transparent);
+}
+
+.primary {
+  background: color-mix(in srgb, var(--foreground) 92%, transparent);
+  color: var(--background);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--foreground);
+}

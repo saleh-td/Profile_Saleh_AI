@@ -1,0 +1,226 @@
+/* ═══════════════════════════════════════
+   HERO — Panoramic full-width layout
+   ═══════════════════════════════════════ */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+  padding: 2.5rem;
+  display: flex;
+  align-items: stretch;
+}
+
+/* ── Background image ── */
+.bgWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bgImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+  transform: scale(1.05);
+}
+
+@media (min-width: 768px) {
+  .bgImg {
+    object-fit: contain;
+  }
+}
+
+.bgRadial {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, #000 80%);
+}
+
+/* ── Content grid: 12-col ── */
+.grid {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+  align-content: start;
+}
+
+/* ── Left column: identity ── */
+.colLeft {
+  grid-column: 1 / 6;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(100vh - 5rem);
+}
+
+@media (max-width: 768px) {
+  .colLeft {
+    grid-column: 1 / -1;
+    min-height: auto;
+  }
+}
+
+.kicker {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+
+.name {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: clamp(4rem, 11vw, 8rem);
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  background: linear-gradient(to bottom, #ffffff 0%, #6b7280 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
+  font-weight: 300;
+  margin-top: 1rem;
+}
+
+/* Bio block — terminal style with left accent */
+.bioBlock {
+  margin-top: auto;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-left: 2px solid var(--accent);
+  max-width: 420px;
+}
+
+.bioText {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.8;
+}
+
+/* ── Right column: stack & CTA ── */
+.colRight {
+  grid-column: 6 / -1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  min-height: calc(100vh - 5rem);
+}
+
+@media (max-width: 768px) {
+  .colRight {
+    grid-column: 1 / -1;
+    min-height: auto;
+    align-items: stretch;
+  }
+}
+
+/* Stack cards grid */
+.stackGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  width: 100%;
+  max-width: 480px;
+}
+
+@media (max-width: 768px) {
+  .stackGrid {
+    max-width: 100%;
+  }
+}
+
+.stackCard {
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.stackCard:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.stackLabel {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 0.5rem;
+}
+
+.stackText {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+}
+
+/* CTA area bottom-right */
+.ctaArea {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .ctaArea {
+    align-items: stretch;
+    margin-top: 2rem;
+  }
+}
+
+.cta {
+  display: inline-block;
+  padding: 1.25rem 3rem;
+  background: #fff;
+  color: #000;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.cta:hover {
+  background: var(--accent);
+  color: #000;
+  box-shadow: 0 0 40px rgba(0, 212, 255, 0.25);
+}
+
+.versionTag {
+  margin-top: 0.75rem;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.1em;
+  text-align: right;
+}

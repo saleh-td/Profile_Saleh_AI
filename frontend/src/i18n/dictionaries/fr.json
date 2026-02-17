@@ -1,0 +1,138 @@
+{
+  "seo": {
+    "siteTitle": "Saleh",
+    "siteDescription": "Architectures IA pragmatiques et déployables : LLM, RAG, bases vectorielles, APIs, monitoring, déploiement.",
+    "homeTitle": "Accueil",
+    "homeDescription": "Architectures IA pragmatiques et déployables : intégration LLM, RAG, bases vectorielles, APIs.",
+    "approachTitle": "Approche Architecture",
+    "approachDescription": "Méthodologie de conception d’architectures IA déployables en production.",
+    "projectsTitle": "Projets",
+    "projectsDescription": "Projets structurés : contexte, architecture, choix techniques, contraintes, résultats.",
+    "contactTitle": "Contact",
+    "contactDescription": "Contact professionnel pour missions et échanges techniques.",
+    "chatTitle": "Chat IA",
+    "chatDescription": "Interface de dialogue IA — échange direct avec un agent conversationnel."
+  },
+  "nav": {
+    "home": "Accueil",
+    "approach": "Approche Architecture",
+    "projects": "Projets",
+    "contact": "Contact",
+    "language": "Langue"
+  },
+  "home": {
+    "greeting": "Saleh Minawi",
+    "role": "Développeur Backend · orienté Intelligence Artificielle",
+    "goal": "En route vers un Master Architecture IA — ce site est conçu pour montrer ma façon de réfléchir à la conception de systèmes IA déployables.",
+    "bioBullets": [
+      "3 ans d'expérience en développement backend",
+      "Conception d'API REST & microservices",
+      "Traitement de données & pipelines IA",
+      "Intégration de solutions d'intelligence artificielle",
+      "Déploiement en environnements de production",
+      "Travail en équipe & contraintes réelles"
+    ],
+    "termRole": "Développeur Backend",
+    "termTarget": "Master Architecture IA",
+    "termXp": "3 ans · production · équipe",
+    "termStack": "Python · FastAPI · LLM · RAG · Docker",
+    "stackBackend": "Python · FastAPI · Microservices",
+    "stackAi": "LLM · RAG · LangChain · Embeddings",
+    "stackInfra": "Docker · CI/CD · Monitoring",
+    "stackData": "PostgreSQL · pgvector · Pipelines",
+    "chatCta": "Initialiser Dialogue IA"
+  },
+  "approach": {
+    "title": "Approche Architecture",
+    "intro": "Méthodologie orientée production : on part du besoin métier, on explicite les contraintes, puis on choisit les briques IA et l’API layer avec une stratégie d’observabilité et de déploiement.",
+    "steps": [
+      {
+        "title": "1) Analyse du besoin métier",
+        "detail": "Cas d’usage, criticité, SLA, données, contraintes légales, périmètre, critères d’acceptation."
+      },
+      {
+        "title": "2) Choix modèle (API vs local)",
+        "detail": "Trade-offs coût/latence/confidentialité, disponibilité, governance, contraintes GPU, fallback et modes dégradés."
+      },
+      {
+        "title": "3) Stratégie embeddings",
+        "detail": "Granularité, chunking, versioning, évaluation, gestion des mises à jour et qualité des sources."
+      },
+      {
+        "title": "4) Vector database",
+        "detail": "Choix de stockage, index, filtrage, multi-tenant, rétention, performances et coûts."
+      },
+      {
+        "title": "5) API layer",
+        "detail": "FastAPI/REST, auth, rate limiting, schémas, idempotence, traçabilité, contrats."
+      },
+      {
+        "title": "6) Monitoring",
+        "detail": "Logs structurés, métriques, traces, monitoring qualité (prompt/version, retrieval, hallucinations)."
+      },
+      {
+        "title": "7) Déploiement",
+        "detail": "CI/CD, environnements, secrets, scalabilité, observabilité, runbooks et opérations."
+      }
+    ]
+  },
+  "projects": {
+    "title": "Projets",
+    "intro": "Chaque projet est présenté avec un format orienté architecture et contraintes réelles.",
+    "labels": {
+      "context": "Contexte",
+      "architecture": "Architecture",
+      "choices": "Choix techniques",
+      "constraints": "Contraintes",
+      "results": "Résultats"
+    }
+  },
+  "contact": {
+    "ghostLine1": "Connecter",
+    "ghostLine2": "Avec Le",
+    "ghostLine3": "Système",
+    "tagProfessional": "Professionnel",
+    "tagDirectMail": "Direct_Mail",
+    "tagCurriculum": "Curriculum",
+    "tagCode": "Code_Source",
+    "linkedinDesc": "Consulter mon profil et mes recommandations.",
+    "githubDesc": "Projets open-source et contributions techniques.",
+    "cvLabel": "Consulter le CV",
+    "cvHint": "Ouvrir en modal · télécharger",
+    "cvModalTitle": "CV // Saleh Minawi",
+    "cvModalClose": "Fermer",
+    "cvModalDownload": "Télécharger",
+    "emailCopy": "COPY",
+    "emailCopied": "COPIÉ ✓",
+    "chatTestTitle": "Test API /chat (stub)",
+    "chatTestPlaceholder": "Message (ex: ping)",
+    "chatTestSend": "Envoyer",
+    "chatTestOkPrefix": "Réponse:",
+    "chatTestErrorPrefix": "Erreur:"
+  },
+  "chat": {
+    "title": "CHAT_LLM",
+    "subtitle": "Interface de dialogue IA — en cours de déploiement.",
+    "comingSoon": "[ MODULE EN PRÉPARATION ]",
+    "inputPrefix": "> USER_INPUT:",
+    "inputPlaceholder": "Entrez votre requête...",
+    "disconnect": "DISCONNECT_SESSION",
+    "boot1": "Interface neurale initialisée.",
+    "boot2": "Connexion au modèle SALEH_ARCH v1.2 établie.",
+    "boot3": "Mémoire contextuelle chargée — 4096 tokens.",
+    "boot4": "En attente de requête utilisateur...",
+    "sidebarTitle": "SYS_MONITOR",
+    "contextTitle": "CONTEXT",
+    "statusIdle": "IDLE",
+    "statusProcessing": "PROCESSING...",
+    "statusComplete": "COMPLETE",
+    "modelName": "SALEH_ARCH_v1.2",
+    "noSources": "Aucune source active",
+    "sessionLabel": "SESSION",
+    "uptimeLabel": "UPTIME"
+  },
+  "language": {
+    "switchToFr": "FR",
+    "switchToEn": "EN"
+  }
+}
