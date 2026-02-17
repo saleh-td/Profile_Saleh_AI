@@ -1,0 +1,26 @@
+[
+  {
+    "name": "RAG sécurisé (multi-tenant) sur base documentaire interne",
+    "context": "Assistant de recherche pour équipes Support/CS. Objectif: réponses fiables, traçables et auditables, tout en maîtrisant l’exposition de données sensibles.",
+    "architecture": "Sources (Drive/Confluence/S3) → pipeline d’ingestion (parsers + normalisation) → chunking + versioning → embeddings → vector DB (+ métadonnées/ACL) → retrieval filtré (tenant + permissions) → re-ranking → génération avec citations → API FastAPI → observabilité (logs/métriques/traces + quality signals).",
+    "choices": "Embeddings versionnés (rebuild contrôlé), séparation index / metadata store, filtrage strict par ACL avant retrieval, citations obligatoires, tests d’évaluation retrieval (jeux de questions + ground truth), BFF (Next API routes) pour isoler le backend.",
+    "constraints": "Données sensibles, hétérogénéité des documents, latence, coût d’inférence, gestion des mises à jour et invalidations, exigences d’audit (qui a consulté quoi / quelle source).",
+    "results": "Système opéré comme un service: contrats d’API stables, traçabilité des réponses (sources), et une boucle d’amélioration continue basée sur mesures (qualité retrieval + retours utilisateurs)."
+  },
+  {
+    "name": "Automatisation de workflows métier via agent outillé (HITL)",
+    "context": "Automatiser des tâches répétitives (triage, extraction, rédaction, préparation de tickets/CRM) tout en gardant un contrôle humain sur les actions sensibles.",
+    "architecture": "UI (Next) → API (FastAPI) → orchestrateur (agent + politiques) → outils (connecteurs CRM/ERP, recherche interne, génération de documents) → store d’état (idempotency keys + audit log) → validation humaine (HITL) → exécution → monitoring (latence, taux d’erreur, coûts, taux d’escalade).",
+    "choices": "Tool-calling avec schémas stricts, idempotence et retry contrôlés, séparation planification/exécution, garde-fous (policies) avant action, journalisation structurée pour audit, modes dégradés (fallback manuel) si l’agent est incertain.",
+    "constraints": "Risque d’actions incorrectes, conformité (trace), coût/latence, qualité variable des entrées, robustesse réseau (APIs externes), besoin de reproductibilité des décisions.",
+    "results": "Workflow “production-friendly”: actions traçables, contrôlées, et réversibles; meilleure fiabilité grâce à la validation humaine sur les étapes critiques et à des contrats d’outils stricts."
+  },
+  {
+    "name": "Observabilité & évaluation continue pour applications LLM",
+    "context": "Mettre sous contrôle une application LLM/RAG: comprendre la qualité, détecter les régressions, et piloter coûts/latence en continu.",
+    "architecture": "Instrumentation (frontend+backend) → traces corrélées (request_id) → logs structurés (prompt/version, sources, scores retrieval) → métriques (latence, coût estimé, taux d’erreur) → jeux d’évaluation (offline) → alerting + dashboards → process de release (gates qualité).",
+    "choices": "Versioning des prompts et des embeddings, jeux d’évaluation par domaine, séparation signaux “rétrieval” vs “génération”, red-team prompts basiques (injection / jailbreak), budget/quotas côté API.",
+    "constraints": "Évaluer sans vérité absolue, variabilité des modèles, dérive des données, risques de fuite de données dans les logs, besoin de comparabilité entre versions.",
+    "results": "Cadre d’exploitation: releases plus sûres (gates), visibilité claire sur les compromis qualité/coût/latence, et capacité à diagnostiquer rapidement les incidents (retrieval vs génération)."
+  }
+]

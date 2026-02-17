@@ -1,0 +1,480 @@
+/* ═══════════════════════════════════════
+   CHAT — Neural Interface
+   ═══════════════════════════════════════ */
+
+/* ── Power-off overlay ── */
+.powerOff {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+}
+
+/* ── Scene ── */
+.scene {
+  position: relative;
+  width: 100vw;
+  height: calc(100vh - 56px);
+  margin-left: calc(-50vw + 50%);
+  overflow: hidden;
+  display: flex;
+}
+
+/* ── Background ── */
+.bgWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bgImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.25;
+  transform: scale(1.05);
+  transition: opacity 0.8s ease;
+}
+
+@media (min-width: 768px) {
+  .bgImg {
+    object-fit: contain;
+  }
+}
+
+.bgRadial {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(ellipse at center, transparent 20%, #000 85%);
+  pointer-events: none;
+}
+
+/* Pulse overlay when AI is thinking */
+.bgPulse {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0) 0%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.bgPulseActive {
+  opacity: 1;
+  animation: neuralPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes neuralPulse {
+  0%, 100% {
+    background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.06) 0%, transparent 60%);
+  }
+  50% {
+    background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.14) 0%, transparent 65%);
+  }
+}
+
+/* ── CRT Scanline ── */
+.scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 212, 255, 0.06) 20%,
+    rgba(0, 212, 255, 0.12) 50%,
+    rgba(0, 212, 255, 0.06) 80%,
+    transparent 100%
+  );
+  z-index: 50;
+  pointer-events: none;
+  animation: crtScan 6s linear infinite;
+}
+
+@keyframes crtScan {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(calc(100vh - 56px)); }
+}
+
+/* subtle CRT scanlines pattern */
+.scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 49;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.3;
+}
+
+/* ── 3-column grid ── */
+.grid {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;
+  width: 100%;
+  height: 100%;
+}
+
+/* ═══ LEFT SIDEBAR ═══ */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(0, 212, 255, 0.1);
+  padding: 1rem 0.75rem;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  overflow-y: auto;
+}
+
+.sidebarHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.12);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e80;
+  flex-shrink: 0;
+}
+
+.logGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.logRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.logKey {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.logVal {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: right;
+  transition: color 0.3s;
+}
+
+.logValActive {
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+  animation: statusBlink 0.8s ease-in-out infinite;
+}
+
+@keyframes statusBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+
+.sidebarFooter {
+  margin-top: auto;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(0, 212, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* ═══ CENTER — CHAT ═══ */
+.chatZone {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.chatScroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  /* custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 212, 255, 0.2) transparent;
+}
+
+.chatScroll::-webkit-scrollbar {
+  width: 4px;
+}
+.chatScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chatScroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 255, 0.2);
+  border-radius: 2px;
+}
+
+/* ── Message rows ── */
+.msgRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.msgTs {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  min-width: 55px;
+}
+
+.msgPrefix {
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.msgText {
+  word-break: break-word;
+}
+
+/* Role colors */
+.msgUser .msgPrefix,
+.msgUser .msgText {
+  color: #fff;
+}
+
+.msgSystem .msgPrefix {
+  color: rgba(34, 197, 94, 0.6);
+}
+.msgSystem .msgText {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.msgAi .msgPrefix {
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+}
+.msgAi .msgText {
+  color: var(--accent);
+}
+
+/* Blinking cursor */
+.cursor {
+  display: inline-block;
+  color: var(--accent);
+  animation: blink 0.7s step-end infinite;
+  margin-left: 1px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+.idleLine {
+  padding: 0.25rem 0;
+  padding-left: calc(55px + 0.6rem);
+}
+
+/* ── Input bar ── */
+.inputBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 2rem;
+  border-top: 1px solid rgba(0, 212, 255, 0.12);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.inputPrefix {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.input {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: #fff;
+  background: transparent;
+  border: none;
+  outline: none;
+  caret-color: var(--accent);
+  letter-spacing: 0.02em;
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.input:disabled {
+  opacity: 0.3;
+}
+
+/* ═══ RIGHT — CONTEXT ═══ */
+.contextPanel {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(0, 212, 255, 0.1);
+  padding: 1rem 0.75rem;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  overflow-y: auto;
+}
+
+.contextHead {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.12);
+}
+
+.contextBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.contextSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.contextLabel {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+}
+
+.contextVal {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.contextDivider {
+  height: 1px;
+  background: rgba(0, 212, 255, 0.08);
+  margin: 0.3rem 0;
+}
+
+.noSources {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.2);
+  font-style: italic;
+  padding: 0.3rem 0;
+}
+
+/* ── Disconnect button ── */
+.disconnect {
+  margin-top: auto;
+  padding: 0.6rem 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ef4444;
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.disconnect:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.5);
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+/* ── Thinking state ── */
+.thinking {
+  box-shadow: inset 0 0 60px rgba(0, 212, 255, 0.04);
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .sidebar,
+  .contextPanel {
+    display: none;
+  }
+  .chatScroll {
+    padding: 1rem;
+  }
+  .inputBar {
+    padding: 0.8rem 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .scene {
+    height: calc(100vh - 56px);
+    height: calc(100dvh - 56px);
+  }
+  .msgTs {
+    display: none;
+  }
+  .idleLine {
+    padding-left: 0;
+  }
+}

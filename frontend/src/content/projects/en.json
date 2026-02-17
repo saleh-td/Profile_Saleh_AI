@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Secure multi-tenant RAG over internal knowledge base",
+    "context": "Search assistant for Support/CS teams. Goal: reliable, traceable and auditable answers while controlling exposure of sensitive data.",
+    "architecture": "Sources (Drive/Confluence/S3) → ingestion pipeline (parsers + normalization) → chunking + versioning → embeddings → vector DB (+ metadata/ACL) → filtered retrieval (tenant + permissions) → re-ranking → generation with citations → FastAPI layer → observability (logs/metrics/traces + quality signals).",
+    "choices": "Versioned embeddings (controlled rebuilds), separation of vector index and metadata store, strict ACL filtering before retrieval, mandatory citations, retrieval evaluation tests (question sets + ground truth), BFF (Next API routes) to isolate the backend.",
+    "constraints": "Sensitive data, heterogeneous documents, latency, inference costs, updates/invalidations, audit requirements (who accessed what / which sources).",
+    "results": "Operated as a service: stable API contracts, traceable answers (sources), and a continuous improvement loop driven by measurements (retrieval quality + user feedback)."
+  },
+  {
+    "name": "Business workflow automation via tool-using agent (HITL)",
+    "context": "Automate repetitive tasks (triage, extraction, drafting, preparing tickets/CRM) while keeping human control over sensitive actions.",
+    "architecture": "UI (Next) → API (FastAPI) → orchestrator (agent + policies) → tools (CRM/ERP connectors, internal search, doc generation) → state store (idempotency keys + audit log) → human validation (HITL) → execution → monitoring (latency, error rate, cost, escalation rate).",
+    "choices": "Tool-calling with strict schemas, idempotency and controlled retries, separation of planning vs execution, guardrails (policies) before actions, structured audit logs, degraded modes (manual fallback) when uncertain.",
+    "constraints": "Risk of wrong actions, compliance/traceability, cost/latency, noisy inputs, external API reliability, need for reproducible decisions.",
+    "results": "Production-friendly workflow: traceable, controlled, and reversible actions; improved reliability thanks to human approval on critical steps and strict tool contracts."
+  },
+  {
+    "name": "Observability & continuous evaluation for LLM applications",
+    "context": "Put an LLM/RAG application under control: understand quality, detect regressions, and continuously manage cost/latency.",
+    "architecture": "Instrumentation (frontend+backend) → correlated traces (request_id) → structured logs (prompt/version, sources, retrieval scores) → metrics (latency, estimated cost, error rate) → offline evaluation sets → alerting + dashboards → release process (quality gates).",
+    "choices": "Prompt and embedding versioning, domain-specific evaluation sets, separate retrieval vs generation signals, basic red-team prompts (injection/jailbreak), budgets/quotas at the API layer.",
+    "constraints": "Evaluation without perfect ground truth, model variability, data drift, risk of leaking data through logs, need for comparability between versions.",
+    "results": "Operational framework: safer releases (gates), clear visibility on quality/cost/latency trade-offs, and faster incident diagnosis (retrieval vs generation)."
+  }
+]
