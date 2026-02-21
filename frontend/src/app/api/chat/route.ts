@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     return NextResponse.json(data, { status: response.status });
   } catch {
     return NextResponse.json(
-      { message: "Backend unreachable" },
+      { detail: "Backend unreachable" },
       { status: 502 }
     );
   }
