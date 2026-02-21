@@ -14,5 +14,15 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
     ]
 
+    # Groq
+    GROQ_API_KEY: str | None = None
+    GROQ_MODEL: str = "llama-3.1-8b-instant"
+    GROQ_TEMPERATURE: float = 0.25
+    GROQ_MAX_TOKENS: int = 420
+    GROQ_TIMEOUT_SECONDS: float = 20.0
+
+    # Minimal abuse guardrails
+    CHAT_MAX_MESSAGE_CHARS: int = 1200
+
 
 settings = Settings()
