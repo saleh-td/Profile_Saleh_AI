@@ -170,10 +170,23 @@ export function ChatScene({ locale, dict }: Props) {
       const res = await fetch("http://localhost:8000/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: trimmed }),
+        body: JSON.stringify({
+          message: trimmed,
+          session_id: sessionId,
+          locale,
+        }),
       });
-      const data = await res.json();
-      const reply = data.reply || data.message || "No response received.";
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        const detail =
+          (typeof data.detail === "string" && data.detail) ||
+          `HTTP_${res.status}`;
+        throw new Error(detail);
+      }
+
+      const reply =
+        data.response || data.reply || data.message || "No response received.";
 
       const aiMsg: Message = {
         id: `ai-${Date.now()}`,
@@ -188,9 +201,9 @@ export function ChatScene({ locale, dict }: Props) {
         ...p,
         tokensUsed: p.tokensUsed + reply.split(/\s+/).length * 3,
       }));
-    } catch {
-      const errText =
-        "[ERR] Backend unreachable — SALEH_ARCH connection failed.";
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Unknown error";
+      const errText = `[ERR] ${msg}`;
       const errMsg: Message = {
         id: `ai-${Date.now()}`,
         role: "ai",
