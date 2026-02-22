@@ -284,6 +284,9 @@
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
+    /* Snap scroll target */
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
   }
 
   .scene {
@@ -292,6 +295,11 @@
     align-items: center;
     gap: 1.5rem;
     padding: 8rem 1.5rem 6rem;
+    /* Snap scroll container */
+    scroll-snap-type: y proximity;
+    overflow-y: auto;
+    height: 100vh;
+    height: 100dvh;
   }
 
   .terminate {
@@ -300,6 +308,7 @@
     left: auto;
     transform: none;
     margin-top: 2rem;
+    scroll-snap-align: center;
   }
 
   .footer {

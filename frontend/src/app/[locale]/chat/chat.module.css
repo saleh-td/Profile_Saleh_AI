@@ -230,6 +230,7 @@
   padding: 1.5rem 2rem 1rem;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.3rem;
 
   /* custom scrollbar */
@@ -246,6 +247,15 @@
 .chatScroll::-webkit-scrollbar-thumb {
   background: rgba(0, 212, 255, 0.2);
   border-radius: 2px;
+}
+
+/* ── Message content constrainer ── */
+.chatContent {
+  max-width: 56rem; /* ~896px = max-w-4xl */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 
 /* ── Message rows ── */
@@ -290,9 +300,20 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
+.msgAi {
+  align-items: flex-start;
+  background: rgba(0, 212, 255, 0.05);
+  border-left: 2px solid rgba(0, 212, 255, 0.75);
+  border-bottom: none;
+  padding: 0.5rem 0.75rem;
+  margin: 0.15rem 0;
+  border-radius: 0 3px 3px 0;
+}
+
 .msgAi .msgPrefix {
   color: var(--accent);
   text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+  padding-top: 0.05rem;
 }
 .msgAi .msgText {
   color: var(--accent);
@@ -421,6 +442,11 @@
   padding: 0.3rem 0;
 }
 
+/* ── Disconnect FAB (mobile only) ── */
+.disconnectFab {
+  display: none;
+}
+
 /* ── Disconnect button ── */
 .disconnect {
   margin-top: auto;
@@ -460,10 +486,37 @@
     display: none;
   }
   .chatScroll {
-    padding: 1rem;
+    padding: 1rem 1rem 5rem;
   }
   .inputBar {
     padding: 0.8rem 1rem;
+    position: sticky;
+    bottom: 0;
+    flex-shrink: 0;
+  }
+  .disconnectFab {
+    display: flex;
+    position: fixed;
+    bottom: 4.5rem;
+    right: 1rem;
+    z-index: 100;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(5, 0, 0, 0.85);
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    color: #ef4444;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.15);
+    transition: all 0.2s ease;
+  }
+  .disconnectFab:hover {
+    background: rgba(239, 68, 68, 0.18);
+    border-color: rgba(239, 68, 68, 0.7);
+    box-shadow: 0 0 24px rgba(239, 68, 68, 0.25);
   }
 }
 
