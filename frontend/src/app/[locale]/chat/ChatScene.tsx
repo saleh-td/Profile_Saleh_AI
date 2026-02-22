@@ -105,10 +105,13 @@ export function ChatScene({ locale, dict }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* ── Auto-scroll ── */
+  /* ── Auto-scroll (smooth) ── */
   useEffect(() => {
     if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+      chatRef.current.scrollTo({
+        top: chatRef.current.scrollHeight,
+        behavior: "smooth",
+      });
     }
   }, [messages, typingText]);
 
@@ -306,6 +309,7 @@ export function ChatScene({ locale, dict }: Props) {
           {/* CENTER — Chat stream */}
           <main className={s.chatZone}>
             <div className={s.chatScroll} ref={chatRef}>
+              <div className={s.chatContent}>
               <AnimatePresence>
                 {messages.map((msg) => (
                   <motion.div
@@ -320,7 +324,7 @@ export function ChatScene({ locale, dict }: Props) {
                     <span className={s.msgText}>
                       {msg.id === typingId ? typingText : msg.content}
                       {msg.id === typingId && (
-                        <span className={s.cursor}>&#9612;</span>
+                        <span className={s.cursor}>_</span>
                       )}
                     </span>
                   </motion.div>
@@ -330,9 +334,10 @@ export function ChatScene({ locale, dict }: Props) {
               {/* idle blinking cursor */}
               {booted && !isProcessing && (
                 <div className={s.idleLine}>
-                  <span className={s.cursor}>&#9612;</span>
+                  <span className={s.cursor}>_</span>
                 </div>
               )}
+              </div>
             </div>
 
             {/* Input bar */}
@@ -385,6 +390,13 @@ export function ChatScene({ locale, dict }: Props) {
             </button>
           </aside>
         </div>
+        {/* ── Mobile FAB: disconnect ── */}
+        <button className={s.disconnectFab} onClick={handleDisconnect} aria-label="Disconnect">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+            <line x1="12" y1="2" x2="12" y2="12" />
+          </svg>
+        </button>
       </div>
     </>
   );
