@@ -50,9 +50,9 @@ export function CVModal({ open, onClose, labels }: Props) {
           </div>
         </div>
 
-        {/* PDF viewer */}
+        {/* PDF viewer — #navpanes=0 masque le volet miniatures gauche */}
         <iframe
-          src="/cv.pdf"
+          src="/cv.pdf#navpanes=0&view=FitH"
           className={styles.viewer}
           title="CV Saleh Minawi"
         />

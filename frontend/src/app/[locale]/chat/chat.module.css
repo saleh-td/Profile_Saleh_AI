@@ -14,34 +14,44 @@
 .scene {
   position: relative;
   width: 100vw;
-  height: calc(100vh - 56px);
+  /* dvh: adapts to mobile address bar without jumping */
+  height: calc(100dvh - 56px);
+  /* cancel Container's padding (2.25rem top/bottom, 1.25rem left/right) */
+  margin-top: -2.25rem;
   margin-left: calc(-50vw + 50%);
   overflow: hidden;
   display: flex;
+  flex-direction: column;
 }
 
 /* ── Background ── */
 .bgWrap {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: -1; /* always behind everything */
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 .bgImg {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* contain: never stretch or crop — preserves the brain proportions + animations */
+  object-fit: contain;
+  object-position: center;
   opacity: 0.25;
-  transform: scale(1.05);
+  /* breathing room on large screens so image doesn't touch sidebar text */
+  transform: scale(0.85);
   transition: opacity 0.8s ease;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .bgImg {
-    object-fit: contain;
+    /* slightly larger on mobile so it reads well behind the chat */
+    transform: scale(0.95);
+    opacity: 0.2;
   }
 }
 
@@ -127,7 +137,8 @@
   display: grid;
   grid-template-columns: 200px 1fr 200px;
   width: 100%;
-  height: 100%;
+  flex: 1;         /* fills scene vertically */
+  min-height: 0;   /* prevents grid from overflowing flex parent */
 }
 
 /* ═══ LEFT SIDEBAR ═══ */
@@ -341,11 +352,20 @@
 .inputBar {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.8rem 2rem;
+  gap: 0;
+  height: 60px;
+  padding: 0 0 0 1.75rem; /* no top/bottom padding — let button stretch full height */
   border-top: 1px solid rgba(0, 212, 255, 0.12);
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 3, 8, 0.75);
+  backdrop-filter: blur(12px);
+  transition: border-top-color 0.35s ease, box-shadow 0.35s ease;
+  overflow: hidden;
+}
+
+/* Glow the top border when focused */
+.inputBar:focus-within {
+  border-top-color: rgba(0, 212, 255, 0.55);
+  box-shadow: inset 0 1px 0 rgba(0, 212, 255, 0.12);
 }
 
 .inputPrefix {
@@ -355,27 +375,233 @@
   color: var(--accent);
   letter-spacing: 0.05em;
   flex-shrink: 0;
-  opacity: 0.8;
+  opacity: 0.65;
+  transition: opacity 0.3s;
+  /* Separator from input zone */
+  padding-right: 1rem;
+  border-right: 1px solid rgba(0, 212, 255, 0.15);
+  align-self: center;
+}
+
+.inputBar:focus-within .inputPrefix {
+  opacity: 1;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+  border-right-color: rgba(0, 212, 255, 0.35);
+}
+
+/* ── inputFrame: corner brackets container ── */
+.inputFrame {
+  flex: 1;
+  position: relative;
+  padding: 0 1.25rem;
+  margin-left: 0.9rem; /* space after prefix separator */
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+/* Top-left corner bracket */
+.inputFrame::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid rgba(0, 212, 255, 0.30);
+  border-left: 1px solid rgba(0, 212, 255, 0.30);
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s, filter 0.3s;
+  pointer-events: none;
+}
+
+/* Bottom-right corner bracket */
+.inputFrame::after {
+  content: "";
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.30);
+  border-right: 1px solid rgba(0, 212, 255, 0.30);
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s, filter 0.3s;
+  pointer-events: none;
+}
+
+/* Brackets close in + glow on focus */
+.inputBar:focus-within .inputFrame::before,
+.inputBar:focus-within .inputFrame::after {
+  width: 14px;
+  height: 14px;
+  border-color: rgba(0, 212, 255, 0.95);
+  filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.55));
+}
+
+/* ── inputWrapper: scan beam ── */
+.inputWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Horizontal scan beam — active on focus */
+.inputWrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 35%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 212, 255, 0.07) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.inputBar:focus-within .inputWrapper::before {
+  opacity: 1;
+  animation: scanBeam 2.8s linear infinite;
+}
+
+@keyframes scanBeam {
+  0%   { left: -40%; }
+  100% { left: 110%; }
 }
 
 .input {
   flex: 1;
   font-family: var(--mono);
-  font-size: 0.85rem;
-  color: #fff;
+  font-size: 1rem; /* ≥ 16px: prevents iOS auto-zoom on focus */
+  color: #d8f4ff;
   background: transparent;
   border: none;
   outline: none;
   caret-color: var(--accent);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
+  padding-right: 1.4rem;
 }
 
 .input::placeholder {
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(0, 212, 255, 0.3);
 }
 
 .input:disabled {
-  opacity: 0.3;
+  opacity: 0.25;
+}
+
+/* ── Clear button (inside input wrapper) ── */
+.clearBtn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(0, 212, 255, 0.3);
+  font-size: 0.58rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  line-height: 1;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.clearBtn:hover {
+  color: rgba(0, 212, 255, 0.9);
+}
+
+/* ──────────────────────────────────────────
+   SEND BUTTON — Terminal Physical Key
+   3D bottom-border + key-press collapse
+   fill-from-bottom glow on hover
+────────────────────────────────────────── */
+.sendBtn {
+  position: relative;
+  flex-shrink: 0;
+  align-self: stretch;           /* fill full bar height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 64px;                   /* wider — feels like a real key */
+  background: rgba(0, 5, 10, 0.9);
+  border: none;
+  border-left: 1px solid rgba(0, 212, 255, 0.2);
+  border-bottom: 3px solid rgba(0, 212, 255, 0.4);
+  border-radius: 0;              /* flush with bar */
+  color: var(--accent);
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    border-color 0.2s ease,
+    transform 0.08s ease,
+    box-shadow 0.2s ease,
+    border-bottom-width 0.08s ease,
+    background 0.2s ease;
+}
+
+/* Fill from bottom on hover */
+.sendBtn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 212, 255, 0.18) 0%,
+    rgba(0, 212, 255, 0.04) 70%,
+    transparent 100%
+  );
+  transform: translateY(100%);
+  transition: transform 0.28s ease;
+  pointer-events: none;
+}
+
+.sendBtn:hover::before {
+  transform: translateY(0);
+}
+
+.sendBtn:hover {
+  border-color: rgba(0, 212, 255, 0.75);
+  border-bottom-color: rgba(0, 212, 255, 1);
+  box-shadow: 0 4px 18px rgba(0, 212, 255, 0.2), 0 0 8px rgba(0, 212, 255, 0.08);
+}
+
+/* Key-press: sinks down + bottom border collapses */
+.sendBtn:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+  box-shadow: 0 1px 6px rgba(0, 212, 255, 0.15);
+}
+
+/* Icon + label sit above ::before fill */
+.sendBtn svg,
+.sendLabel {
+  position: relative;
+  z-index: 1;
+}
+
+.sendLabel {
+  font-family: var(--mono);
+  font-size: 0.4rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.6;
+  line-height: 1;
+}
+
+.sendBtnDimmed {
+  opacity: 0.18;
+  pointer-events: none;
 }
 
 /* ═══ RIGHT — CONTEXT ═══ */
@@ -447,28 +673,67 @@
   display: none;
 }
 
-/* ── Disconnect button ── */
-.disconnect {
-  margin-top: auto;
-  padding: 0.6rem 0.5rem;
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #ef4444;
-  background: transparent;
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
-  text-transform: uppercase;
-  transition: all 0.2s ease;
+/* ══ TERMINATE_SESSION button (same as contact) ══ */
+.terminate {
+  position: fixed;
+  bottom: calc(60px + 1.5rem);
+  left: 1.75rem;
+  transform: none;
+  z-index: 30;
+  pointer-events: auto;
 }
 
-.disconnect:hover {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.5);
-  text-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+.terminateBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.terminateLabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.terminateBtn:hover .terminateLabel {
+  opacity: 1;
+}
+
+.terminateIcon {
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  transition: background 0.3s, color 0.3s;
+}
+
+.terminateBtn:hover .terminateIcon {
+  background: var(--accent);
+  color: #000;
+}
+
+.terminateCode {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Disconnect button ── */
+.disconnect {
+  display: none;
 }
 
 /* ── Thinking state ── */
@@ -486,37 +751,18 @@
     display: none;
   }
   .chatScroll {
-    padding: 1rem 1rem 5rem;
+    /* extra bottom padding so last message clears the inputBar + terminate btn */
+    padding: 1rem 1rem 9rem;
   }
   .inputBar {
-    padding: 0.8rem 1rem;
+    padding: 0 0 0 1rem;
     position: sticky;
     bottom: 0;
     flex-shrink: 0;
   }
-  .disconnectFab {
-    display: flex;
-    position: fixed;
+  /* Terminate button: move above the sticky inputBar on mobile */
+  .terminate {
     bottom: 4.5rem;
-    right: 1rem;
-    z-index: 100;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: rgba(5, 0, 0, 0.85);
-    border: 1px solid rgba(239, 68, 68, 0.45);
-    color: #ef4444;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 16px rgba(239, 68, 68, 0.15);
-    transition: all 0.2s ease;
-  }
-  .disconnectFab:hover {
-    background: rgba(239, 68, 68, 0.18);
-    border-color: rgba(239, 68, 68, 0.7);
-    box-shadow: 0 0 24px rgba(239, 68, 68, 0.25);
   }
 }
 

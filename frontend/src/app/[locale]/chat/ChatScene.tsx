@@ -50,6 +50,18 @@ export function ChatScene({ locale, dict }: Props) {
   /* hydration-safe: generate random session id on client only */
   useEffect(() => { setSessionId(hexId()); }, []);
 
+  /* ── Lock body scroll (chat is full-screen) ── */
+  useEffect(() => {
+    const html = document.documentElement;
+    const prev = html.style.overflow;
+    html.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    return () => {
+      html.style.overflow = prev;
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   /* ── Live metrics ── */
   const [metrics, setMetrics] = useState({
     latency: 42,
@@ -136,6 +148,13 @@ export function ChatScene({ locale, dict }: Props) {
 
     return () => clearInterval(interval);
   }, [typingId]);
+
+  /* ── Refocus input after AI response ── */
+  useEffect(() => {
+    if (!isProcessing && booted) {
+      inputRef.current?.focus();
+    }
+  }, [isProcessing, booted]);
 
   /* ── Metrics jitter ── */
   useEffect(() => {
@@ -343,18 +362,44 @@ export function ChatScene({ locale, dict }: Props) {
             {/* Input bar */}
             <div className={s.inputBar}>
               <span className={s.inputPrefix}>{dict.chat.inputPrefix}</span>
-              <input
-                ref={inputRef}
-                type="text"
-                className={s.input}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={onKey}
-                placeholder={dict.chat.inputPlaceholder}
-                disabled={isProcessing || !booted}
-                autoComplete="off"
-                spellCheck={false}
-              />
+              <div className={s.inputFrame}>
+                <div className={s.inputWrapper}>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    className={s.input}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={onKey}
+                    placeholder={dict.chat.inputPlaceholder}
+                    disabled={isProcessing || !booted}
+                    autoComplete="off"
+                    spellCheck={false}
+                  />
+                  {input.length > 0 && (
+                    <button
+                      className={s.clearBtn}
+                      onClick={() => { setInput(""); inputRef.current?.focus(); }}
+                      tabIndex={-1}
+                      aria-label="Clear"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              </div>
+              <button
+                className={`${s.sendBtn} ${(!input.trim() || isProcessing || !booted) ? s.sendBtnDimmed : ""}`}
+                onClick={handleSend}
+                disabled={isProcessing || !booted || !input.trim()}
+                aria-label="Send"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13" />
+                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+                <span className={s.sendLabel}>EXEC</span>
+              </button>
             </div>
           </main>
 
@@ -383,20 +428,27 @@ export function ChatScene({ locale, dict }: Props) {
               </div>
               <div className={s.noSources}>{dict.chat.noSources}</div>
             </div>
-
-            {/* Disconnect */}
-            <button className={s.disconnect} onClick={handleDisconnect}>
-              [{dict.chat.disconnect}]
-            </button>
           </aside>
         </div>
-        {/* ── Mobile FAB: disconnect ── */}
-        <button className={s.disconnectFab} onClick={handleDisconnect} aria-label="Disconnect">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
-            <line x1="12" y1="2" x2="12" y2="12" />
-          </svg>
-        </button>
+
+        {/* ── Return button — same as contact page ── */}
+        <motion.div
+          className={s.terminate}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1 }}
+        >
+          <button onClick={handleDisconnect} className={s.terminateBtn}>
+            <span className={s.terminateLabel}>Return to Core</span>
+            <span className={s.terminateIcon}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+            </span>
+            <span className={s.terminateCode}>[TERMINATE_SESSION]</span>
+          </button>
+        </motion.div>
       </div>
     </>
   );
