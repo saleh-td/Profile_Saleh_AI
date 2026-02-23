@@ -1,6 +1,6 @@
 export const profile = {
   name: "Saleh",
-  email: "saleh.minawi@outlook.com",
+  email: "sminawi24@gmail.com",
   socials: {
     github: {
       handle: "saleh-td",
