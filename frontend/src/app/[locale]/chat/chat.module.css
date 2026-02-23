@@ -755,11 +755,35 @@
     padding: 1rem 1rem 9rem;
   }
   .inputBar {
-    padding: 0 0 0 1rem;
+    padding: 0;
     position: sticky;
     bottom: 0;
     flex-shrink: 0;
   }
+
+  /* Masquer le préfixe texte (trop large sur mobile) */
+  .inputPrefix {
+    display: none;
+  }
+
+  /* Supprimer le margin-left et les paddings superflus */
+  .inputFrame {
+    margin-left: 0;
+    padding: 0 0.5rem;
+  }
+
+  /* Le champ texte prend tout l'espace dispo */
+  .input {
+    font-size: 1rem; /* maintenir ≥ 16px anti-zoom iOS */
+    padding-left: 0.5rem;
+  }
+
+  /* Send button toujours visible, taille adaptée */
+  .sendBtn {
+    width: 56px;
+    flex-shrink: 0;
+  }
+
   /* Terminate button: move above the sticky inputBar on mobile */
   .terminate {
     bottom: 4.5rem;
