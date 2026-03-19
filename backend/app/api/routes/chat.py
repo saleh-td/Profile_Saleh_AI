@@ -20,6 +20,10 @@ SESSION_MEMORY_MAX_TURNS = 6
 SESSION_HISTORY: dict[str, deque[tuple[str, str]]] = defaultdict(
     lambda: deque(maxlen=SESSION_MEMORY_MAX_TURNS)
 )
+FOLLOW_UP_MEMORY_MAX_ITEMS = 5
+FOLLOW_UP_HISTORY: dict[str, deque[str]] = defaultdict(
+    lambda: deque(maxlen=FOLLOW_UP_MEMORY_MAX_ITEMS)
+)
 SUPPORTED_LANGS = {"fr", "en"}
 
 
@@ -96,6 +100,12 @@ def _recent_user_messages(session_id: str | None) -> list[str]:
     if not session_id:
         return []
     return [m for role, m in SESSION_HISTORY.get(session_id, []) if role == "user"]
+
+
+def _recent_follow_ups(session_id: str | None) -> list[str]:
+    if not session_id:
+        return []
+    return list(FOLLOW_UP_HISTORY.get(session_id, []))
 
 
 def _normalize_text(message: str) -> str:
@@ -211,6 +221,59 @@ def _saleh_intro_answer(lang: str = "fr") -> str:
         "- la construction de modèles MLP et CNN avec PyTorch\n"
         "- l’analyse de logs CI via LLM pour automatiser la compréhension d’erreurs\n\n"
         "Son objectif est de concevoir des systèmes IA robustes et intégrables en production, notamment dans des environnements DevOps et CI/CD."
+    )
+
+
+def _is_work_experience_question(message: str) -> bool:
+    text = _normalize_text(message)
+
+    # Robust pattern for variants like:
+    # "il a travailler ou avant", "où il a travaillé", "where did he work before"
+    if re.search(r"\btravaill\w*\b", text) and re.search(r"\b(ou|où|avant|before)\b", text):
+        return True
+
+    markers = [
+        "il a travaille ou",
+        "il à travaille ou",
+        "il a travailler ou",
+        "il à travailler ou",
+        "ou il a travaille",
+        "où il a travaille",
+        "ou il a travailler",
+        "où il a travailler",
+        "ou est ce qu il a travaille",
+        "ou est ce qu il a travailler",
+        "experience professionnelle",
+        "expérience professionnelle",
+        "alternance",
+        "go2cam",
+        "where did he work",
+        "where has he worked",
+        "work experience",
+    ]
+    return any(marker in text for marker in markers)
+
+
+def _work_experience_answer(lang: str = "fr") -> str:
+    if lang == "en":
+        return (
+            "He completed a work-study (alternance) experience at Go2cam International in Lyon, from November 2022 to August 2025, as a backend developer oriented to AI systems.\n"
+            "Main contributions:\n"
+            "- designed and deployed a RAG system for internal document search\n"
+            "- integrated internal AI tools via APIs into business workflows\n"
+            "- implemented and operated vector databases (PostgreSQL + pgvector)\n"
+            "- revamped and evolved the internal Django portal (auth, workflows, API)\n"
+            "- automated and optimized data/AI pipelines"
+        )
+
+    return (
+        "Il a fait son alternance chez Go2cam International (Lyon), de novembre 2022 à août 2025, comme développeur backend orienté systèmes IA.\n"
+        "Ses missions principales :\n"
+        "- conception et déploiement d'un système RAG pour la recherche documentaire interne\n"
+        "- intégration d'outils IA internes via API dans les workflows métier\n"
+        "- mise en place et exploitation de bases vectorielles (PostgreSQL + pgvector)\n"
+        "- refonte et évolution du portail interne Django (authentification, workflows, API)\n"
+        "- automatisation et optimisation des pipelines de données et IA"
     )
 
 
@@ -434,6 +497,27 @@ def _is_positive_feedback(message: str) -> bool:
     if not text:
         return False
 
+    # Avoid misclassifying actionable requests (e.g. "j'aimerais un exemple") as feedback.
+    if any(token in text for token in [
+        "j aimerais",
+        "j'aimerais",
+        "je veux",
+        "je voudrais",
+        "peux tu",
+        "pouvez vous",
+        "explique",
+        "detail",
+        "détail",
+        "exemple",
+        "comment",
+        "pourquoi",
+        "quel",
+        "quelle",
+        "qu est ce",
+        "qu'est ce",
+    ]):
+        return False
+
     markers = [
         "interessant",
         "intéressant",
@@ -456,8 +540,105 @@ def _is_positive_feedback(message: str) -> bool:
         "c'est intéressant",
     ]
 
-    # This intent should only trigger for short acknowledgement messages.
-    return len(text.split()) <= 8 and any(token in text for token in markers)
+    # This intent should only trigger for short acknowledgement messages,
+    # and only on word-level matches (avoid "j'aime" matching "j'aimerais").
+    words = set(text.split())
+    has_marker = False
+    for marker in markers:
+        marker_words = marker.split()
+        if len(marker_words) == 1:
+            if marker_words[0] in words:
+                has_marker = True
+                break
+        else:
+            if marker in text:
+                has_marker = True
+                break
+
+    return len(text.split()) <= 8 and has_marker
+
+
+def _is_example_request(message: str) -> bool:
+    text = _normalize_text(message)
+    if not text:
+        return False
+
+    example_markers = [
+        "exemple",
+        "cas concret",
+        "concret",
+        "probleme approche resultat",
+        "problème approche résultat",
+        "donne moi un exemple",
+        "donne moi un cas",
+        "show me an example",
+        "concrete example",
+    ]
+
+    if any(marker in text for marker in example_markers):
+        return True
+
+    # Follow-up style requests after a previous project answer.
+    if any(token in text for token in ["oui", "ok", "yes"]) and any(
+        token in text for token in ["detail", "détail", "approfond", "more", "plus"]
+    ):
+        return True
+
+    return False
+
+
+def _pick_project_from_recent_context(session_id: str | None) -> dict[str, str] | None:
+    recent = " ".join(_normalize_text(m) for m in _recent_user_messages(session_id)[-5:])
+    if not recent:
+        return None
+
+    idx = _extract_project_index(recent)
+    if idx in {1, 2, 3}:
+        return PROJECTS_CATALOG[idx - 1]
+
+    project_keywords = {
+        0: ["ia training", "pytorch", "mlp", "cnn", "wavenet", "regression", "régression"],
+        1: ["teamcity", "build", "logs", "ci", "cd", "jenkins", "github actions"],
+        2: ["ourtiguet", "django", "react", "rag", "vector", "quadrant", "openai"],
+    }
+    for index, keywords in project_keywords.items():
+        if any(token in recent for token in keywords):
+            return PROJECTS_CATALOG[index]
+
+    return None
+
+
+def _project_example_answer(project: dict[str, str], lang: str = "fr") -> str:
+    name = project["name"]
+    if lang == "en":
+        if name.startswith("IA Training"):
+            return (
+                "Concrete example (project 1):\n"
+                "Problem: unstable learning because features were not normalized and learning rate was too high.\n"
+                "Approach: apply StandardScaler, lower learning rate, track loss curve every epoch, and compare SGD vs Adam.\n"
+                "Result: stable convergence, lower loss, and reproducible training behavior with clearer model interpretation."
+            )
+        return (
+            f"Concrete example ({name}):\n"
+            "Problem: noisy input and unclear root cause.\n"
+            "Approach: structure data, classify error type, and generate a focused corrective action.\n"
+            "Result: faster diagnosis and clearer technical decisions."
+        )
+
+    if name.startswith("IA Training"):
+        return (
+            "Exemple concret (projet 1):\n"
+            "Problème: l'apprentissage était instable car les variables n'étaient pas normalisées et le learning rate était trop élevé.\n"
+            "Approche: application de StandardScaler, réduction du learning rate, suivi de la loss à chaque époque, puis comparaison SGD vs Adam.\n"
+            "Résultat: convergence stable, loss plus faible, et comportement du modèle plus lisible et reproductible."
+        )
+
+    return (
+        f"Exemple concret ({name}):\n"
+        "Problème: données bruyantes et cause racine peu claire.\n"
+        "Approche: structuration du contexte, classification de l'erreur, puis proposition d'action corrective ciblée.\n"
+        "Résultat: diagnostic plus rapide et décisions techniques plus nettes."
+    )
 
 
 def _positive_feedback_answer(session_id: str | None, lang: str = "fr") -> str:
@@ -803,13 +984,84 @@ def _conversation_follow_up(lang: str = "fr") -> str:
     )
 
 
-def _append_follow_up(text: str, lang: str = "fr") -> str:
+def _extract_topics(text: str) -> set[str]:
+    normalized = _normalize_text(text)
+    topics: set[str] = set()
+
+    mapping = {
+        "gradient": ["gradient", "descente"],
+        "pytorch": ["pytorch", "mlp", "cnn"],
+        "wavenet": ["wavenet"],
+        "project": ["projet", "project"],
+        "example": ["exemple", "cas concret", "concret", "example"],
+        "logistic": ["logistique", "logistic", "sigmoid", "sigmoide", "sigmoïde"],
+    }
+
+    for topic, markers in mapping.items():
+        if any(marker in normalized for marker in markers):
+            topics.add(topic)
+
+    return topics
+
+
+def _looks_like_direct_request(message: str) -> bool:
+    text = _normalize_text(message)
+    direct_markers = [
+        "je veux",
+        "j aimerais",
+        "j'aimerais",
+        "parle",
+        "explique",
+        "detail",
+        "détail",
+        "qu est ce",
+        "qu'est ce",
+        "comment",
+        "pourquoi",
+        "what",
+        "how",
+        "why",
+        "tell me",
+    ]
+    return any(marker in text for marker in direct_markers)
+
+
+def _append_follow_up(
+    text: str,
+    lang: str = "fr",
+    session_id: str | None = None,
+    user_message: str | None = None,
+) -> str:
     base = (text or "").strip()
     if not base:
         return _conversation_follow_up(lang)
+
+    # If the response already contains a clear question or next-step CTA,
+    # avoid stacking another generic follow-up and creating repetitive output.
+    if "?" in base:
+        return base
+    if any(token in base.lower() for token in ["si tu veux", "if you want", "voulez", "would you like"]):
+        return base
+
     follow_up = _conversation_follow_up(lang)
     if follow_up in base:
         return base
+
+    # Adaptive behavior: avoid repeating the same follow-up in recent turns.
+    recent_follow_ups = _recent_follow_ups(session_id)
+    if follow_up in recent_follow_ups:
+        return base
+
+    # Adaptive behavior: if user asked a direct topic question and follow-up repeats
+    # the same topic family, don't append generic suggestion.
+    user_topics = _extract_topics(user_message or "")
+    follow_up_topics = _extract_topics(follow_up)
+    overlap = user_topics.intersection(follow_up_topics)
+    if overlap and _looks_like_direct_request(user_message or ""):
+        return base
+
+    if session_id:
+        FOLLOW_UP_HISTORY[session_id].append(follow_up)
     return f"{base}\n\n{follow_up}"
 
 
@@ -884,7 +1136,7 @@ def _project_answer_with_level(project: dict[str, str], detail_level: str, lang:
             "If you want, I can also provide a concrete breakdown (problem → approach → result) for this project."
         )
 
-    if project_data["name"] == "IA Training":
+    if project_data["name"].startswith("IA Training"):
         return (
             "IA Training\n"
             "Contexte: projet fondateur de son parcours IA, commencé pour comprendre les mathématiques de l'apprentissage et aller jusqu'aux premiers réseaux de neurones.\n"
@@ -912,12 +1164,14 @@ def _detect_intent(message: str, session_id: str | None) -> str:
         "greeting": 0,
         "identity": 0,
         "saleh_intro": 0,
+        "work_experience": 0,
         "parcours_scolaire": 0,
         "parcours": 0,
         "technical_path": 0,
         "gradient_focus": 0,
         "logistic_focus": 0,
         "positive_feedback": 0,
+        "example_request": 0,
         "projects": 0,
         "project_selector": 0,
         "llm": 0,
@@ -929,6 +1183,8 @@ def _detect_intent(message: str, session_id: str | None) -> str:
         scores["identity"] += 10
     if _is_saleh_intro_question(text):
         scores["saleh_intro"] += 10
+    if _is_work_experience_question(text):
+        scores["work_experience"] += 12
     if _is_parcours_scolaire_question(text):
         scores["parcours_scolaire"] += 10
     if _is_parcours_question(text):
@@ -941,6 +1197,8 @@ def _detect_intent(message: str, session_id: str | None) -> str:
         scores["logistic_focus"] += 13
     if _is_positive_feedback(text):
         scores["positive_feedback"] += 9
+    if _is_example_request(text):
+        scores["example_request"] += 11
     if _is_project_question(text):
         scores["projects"] += 7
     if _is_project_selector(text):
@@ -949,7 +1207,9 @@ def _detect_intent(message: str, session_id: str | None) -> str:
     if _extract_project_index(text) in {1, 2, 3}:
         scores["project_selector"] += 6
 
-    if any(token in text for token in ["gradient", "pytorch", "wavenet", "cnn", "mlp", "deep learning"]):
+    if any(token in text for token in ["gradient", "pytorch", "wavenet", "cnn", "mlp", "deep learning"]) and any(
+        token in text for token in ["projet", "project", "saleh", "son"]
+    ):
         scores["projects"] += 4
     if any(token in text for token in ["sigmoid", "sigmoide", "sigmoïde", "logistique", "logistic", "admis", "nll"]):
         scores["logistic_focus"] += 4
@@ -962,6 +1222,8 @@ def _detect_intent(message: str, session_id: str | None) -> str:
             scores["project_selector"] += 8
         if any(token in text for token in ["approfond", "detail", "plus", "encore", "explique"]):
             scores["projects"] += 4
+        if _is_example_request(text):
+            scores["example_request"] += 6
 
     best_intent = max(scores, key=scores.get)
     if scores[best_intent] == 0:
@@ -1051,6 +1313,11 @@ def chat(payload: ChatRequest) -> ChatResponse:
         _remember_ai_turn(session_id, response_text)
         return ChatResponse(response=response_text)
 
+    if detected_intent == "work_experience":
+        response_text = _work_experience_answer(response_lang)
+        _remember_ai_turn(session_id, response_text)
+        return ChatResponse(response=response_text)
+
     if detected_intent == "parcours_scolaire":
         response_text = _parcours_scolaire_answer(response_lang)
         _remember_ai_turn(session_id, response_text)
@@ -1068,12 +1335,37 @@ def chat(payload: ChatRequest) -> ChatResponse:
         return ChatResponse(response=response_text)
 
     if detected_intent == "gradient_focus":
-        response_text = _append_follow_up(_gradient_focus_answer(response_lang), response_lang)
+        response_text = _append_follow_up(
+            _gradient_focus_answer(response_lang),
+            response_lang,
+            session_id=session_id,
+            user_message=message,
+        )
         _remember_ai_turn(session_id, response_text)
         return ChatResponse(response=response_text)
 
     if detected_intent == "logistic_focus":
         response_text = _logistic_regression_answer(response_lang)
+        _remember_ai_turn(session_id, response_text)
+        return ChatResponse(response=response_text)
+
+    if detected_intent == "example_request":
+        if _is_project_question(message) or _is_project_selector(message):
+            project = _pick_project(message)
+        else:
+            project = _pick_project_from_recent_context(session_id)
+
+        if project is None:
+            response_text = _projects_menu_answer(response_lang)
+            _remember_ai_turn(session_id, response_text)
+            return ChatResponse(response=response_text)
+
+        response_text = _append_follow_up(
+            _project_example_answer(project, response_lang),
+            response_lang,
+            session_id=session_id,
+            user_message=message,
+        )
         _remember_ai_turn(session_id, response_text)
         return ChatResponse(response=response_text)
 
@@ -1085,7 +1377,12 @@ def chat(payload: ChatRequest) -> ChatResponse:
     # Hard guardrail: project answers are deterministic from approved catalog.
     if detected_intent in {"projects", "project_selector"}:
         if _is_generic_projects_request(message):
-            response_text = _append_follow_up(_projects_menu_answer(response_lang), response_lang)
+            response_text = _append_follow_up(
+                _projects_menu_answer(response_lang),
+                response_lang,
+                session_id=session_id,
+                user_message=message,
+            )
             _remember_ai_turn(session_id, response_text)
             return ChatResponse(response=response_text)
         project = _pick_project(message)
@@ -1094,6 +1391,8 @@ def chat(payload: ChatRequest) -> ChatResponse:
             _project_answer_with_level(project=project, detail_level=detail_level, lang=response_lang)
             ,
             response_lang,
+            session_id=session_id,
+            user_message=message,
         )
         _remember_ai_turn(session_id, response_text)
         return ChatResponse(response=response_text)
@@ -1159,7 +1458,12 @@ def chat(payload: ChatRequest) -> ChatResponse:
         response_text = (
             content
             if _is_scope_guardrail_response(content, response_lang)
-            else _append_follow_up(content, response_lang)
+            else _append_follow_up(
+                content,
+                response_lang,
+                session_id=session_id,
+                user_message=message,
+            )
         )
         _remember_ai_turn(session_id, response_text)
         return ChatResponse(response=response_text)

@@ -28,6 +28,182 @@ const ts = () =>
 
 const hexId = () => Math.random().toString(16).slice(2, 6);
 
+const REQUEST_TIMEOUT_MS = 15000;
+const MAX_CHAT_ATTEMPTS = 2;
+const RETRYABLE_STATUSES = new Set([502, 503, 504]);
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function isFrench(locale: Locale): boolean {
+  return locale.startsWith("fr");
+}
+
+function toUserErrorMessage(locale: Locale, detail: string, status?: number): string {
+  const fr = isFrench(locale);
+
+  if (detail === "timeout") {
+    return fr
+      ? "[ERR] Le serveur met trop de temps à répondre. Réessaie dans quelques secondes."
+      : "[ERR] The server took too long to respond. Please try again in a few seconds.";
+  }
+
+  if (status && RETRYABLE_STATUSES.has(status)) {
+    return fr
+      ? "[ERR] Service IA temporairement indisponible. Réessaie dans quelques secondes."
+      : "[ERR] AI service is temporarily unavailable. Please try again in a few seconds.";
+  }
+
+  if (/backend unreachable/i.test(detail)) {
+    return fr
+      ? "[ERR] Connexion au backend indisponible pour le moment."
+      : "[ERR] Backend connection is currently unavailable.";
+  }
+
+  if (/quota|rate limit/i.test(detail)) {
+    return fr
+      ? "[ERR] Limite temporaire atteinte côté service IA. Réessaie un peu plus tard."
+      : "[ERR] Temporary rate limit reached on the AI service. Please try again later.";
+  }
+
+  return fr
+    ? "[ERR] Une erreur temporaire est survenue. Merci de réessayer."
+    : "[ERR] A temporary error occurred. Please try again.";
+}
+
+async function postChatWithRetry(params: {
+  message: string;
+  sessionId: string;
+  locale: Locale;
+}) {
+  let lastStatus: number | undefined;
+  let lastDetail = "";
+
+  for (let attempt = 1; attempt <= MAX_CHAT_ATTEMPTS; attempt++) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: params.message,
+          session_id: params.sessionId,
+          locale: params.locale,
+        }),
+        signal: controller.signal,
+      });
+
+      const data = await res.json().catch(() => ({}));
+      clearTimeout(timeout);
+
+      if (res.ok) {
+        return data;
+      }
+
+      lastStatus = res.status;
+      lastDetail =
+        (typeof data.detail === "string" && data.detail) || `HTTP_${res.status}`;
+
+      const retryable = RETRYABLE_STATUSES.has(res.status);
+      if (retryable && attempt < MAX_CHAT_ATTEMPTS) {
+        await sleep(300 * attempt);
+        continue;
+      }
+
+      throw new Error(lastDetail);
+    } catch (error) {
+      clearTimeout(timeout);
+
+      if (error instanceof DOMException && error.name === "AbortError") {
+        lastDetail = "timeout";
+        if (attempt < MAX_CHAT_ATTEMPTS) {
+          await sleep(300 * attempt);
+          continue;
+        }
+        throw new Error("timeout");
+      }
+
+      const isNetworkError = error instanceof TypeError;
+      if (isNetworkError && attempt < MAX_CHAT_ATTEMPTS) {
+        await sleep(300 * attempt);
+        continue;
+      }
+
+      if (error instanceof Error && error.message) {
+        throw error;
+      }
+
+      throw new Error(lastDetail || "request_failed");
+    }
+  }
+
+  throw new Error(lastDetail || (lastStatus ? `HTTP_${lastStatus}` : "request_failed"));
+}
+
+function renderMessageContent(content: string) {
+  const normalized = (content || "")
+    .replace(/([.:])\s(?=(?:[2-9]|10)\)\s)/g, "$1\n")
+    .replace(/([.:])\s(?=(?:[2-9]|10)\.\s)/g, "$1\n");
+
+  const paragraphs = normalized
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+
+  if (paragraphs.length === 0) {
+    return [<p key="0">{content}</p>];
+  }
+
+  return paragraphs.map((paragraph, pIndex) => {
+    const lines = paragraph
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    const bulletLines = lines.filter((line) => /^[-*]\s+/.test(line));
+    const numberedLines = lines.filter((line) => /^\d+[).]\s+/.test(line));
+
+    if (lines.length > 0 && bulletLines.length === lines.length) {
+      return (
+        <ul key={`${pIndex}-${paragraph.slice(0, 12)}`} className={s.msgList}>
+          {lines.map((line, lIndex) => (
+            <li key={`${pIndex}-${lIndex}`} className={s.msgListItem}>
+              {line.replace(/^[-*]\s+/, "")}
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    if (lines.length > 0 && numberedLines.length === lines.length) {
+      return (
+        <ol key={`${pIndex}-${paragraph.slice(0, 12)}`} className={s.msgList}>
+          {lines.map((line, lIndex) => (
+            <li key={`${pIndex}-${lIndex}`} className={s.msgListItem}>
+              {line.replace(/^\d+[).]\s+/, "")}
+            </li>
+          ))}
+        </ol>
+      );
+    }
+
+    return (
+      <p key={`${pIndex}-${paragraph.slice(0, 12)}`} className={s.msgParagraph}>
+        {lines.map((line, lIndex) => (
+          <span
+            key={`${pIndex}-${lIndex}`}
+            className={/^[A-Za-zÀ-ÿ0-9\s'()_-]{3,40}:$/.test(line) ? s.msgHeadingLine : undefined}
+          >
+            {line}
+            {lIndex < lines.length - 1 ? <br /> : null}
+          </span>
+        ))}
+      </p>
+    );
+  });
+}
+
 /* ═══════════════════════════════════════
    ChatScene — Neural Interface
    ═══════════════════════════════════════ */
@@ -189,23 +365,11 @@ export function ChatScene({ locale, dict }: Props) {
     }));
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: trimmed,
-          session_id: sessionId,
-          locale,
-        }),
+      const data = await postChatWithRetry({
+        message: trimmed,
+        sessionId,
+        locale,
       });
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        const detail =
-          (typeof data.detail === "string" && data.detail) ||
-          `HTTP_${res.status}`;
-        throw new Error(detail);
-      }
 
       const reply =
         data.response || data.reply || data.message || "No response received.";
@@ -224,8 +388,10 @@ export function ChatScene({ locale, dict }: Props) {
         tokensUsed: p.tokensUsed + reply.split(/\s+/).length * 3,
       }));
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Unknown error";
-      const errText = `[ERR] ${msg}`;
+      const raw = e instanceof Error ? e.message : "request_failed";
+      const statusMatch = raw.match(/^HTTP_(\d{3})$/);
+      const status = statusMatch ? Number(statusMatch[1]) : undefined;
+      const errText = toUserErrorMessage(locale, raw, status);
       const errMsg: Message = {
         id: `ai-${Date.now()}`,
         role: "ai",
@@ -340,12 +506,12 @@ export function ChatScene({ locale, dict }: Props) {
                   >
                     <span className={s.msgTs}>{msg.ts}</span>
                     <span className={s.msgPrefix}>{rolePrefix[msg.role]}</span>
-                    <span className={s.msgText}>
-                      {msg.id === typingId ? typingText : msg.content}
+                    <div className={s.msgText}>
+                      {renderMessageContent(msg.id === typingId ? typingText : msg.content)}
                       {msg.id === typingId && (
                         <span className={s.cursor}>_</span>
                       )}
-                    </span>
+                    </div>
                   </motion.div>
                 ))}
               </AnimatePresence>
