@@ -1,0 +1,239 @@
+{
+  "_comment": "Source unique des deux CV. Modifier ici, puis lancer `python cv/build.py`. Le bloc `skills` DOIT rester identique entre fr et en (contenu, pas langue) : c'est la désynchronisation entre versions qui avait produit des CV contradictoires.",
+  "fr": {
+    "lang": "fr",
+    "file": "CV_Saleh_Minawi_FR.pdf",
+    "name": "Saleh Minawi",
+    "title": "Développeur backend & IA",
+    "contact": [
+      "sminawi24@gmail.com",
+      "Lyon, France",
+      "Permis B"
+    ],
+    "links": [
+      {
+        "label": "linkedin.com/in/saleh-minawi-62331123b",
+        "url": "https://www.linkedin.com/in/saleh-minawi-62331123b/"
+      },
+      {
+        "label": "github.com/saleh-td",
+        "url": "https://github.com/saleh-td"
+      },
+      {
+        "label": "profile-saleh-ai.vercel.app",
+        "url": "https://profile-saleh-ai.vercel.app"
+      }
+    ],
+    "availability": "Disponible immédiatement : CDI, CDD ou mission freelance, sur Lyon ou en télétravail",
+    "summaryLabel": "Profil",
+    "summary": "Développeur backend spécialisé en intelligence artificielle. Conception de systèmes backend et intégration de solutions IA en production (RAG, LLM, bases vectorielles), d'abord au sein d'un éditeur logiciel, puis en autonomie chez des clients. Autonome sur l'ensemble du cycle : conception, développement, déploiement et maintenance.",
+    "experienceLabel": "Expérience professionnelle",
+    "experience": [
+      {
+        "role": "Développeur backend & IA, freelance",
+        "company": "En partenariat avec SY Solutions, Lyon",
+        "period": "2026 –",
+        "note": "Missions de développement au forfait",
+        "bullets": [
+          "Développement backend et intégration IA sur les missions techniques (Python, FastAPI, API REST).",
+          "Prospection et qualification de clients : startups early-stage, incubateurs lyonnais et français."
+        ]
+      },
+      {
+        "role": "Développeur backend & IA",
+        "company": "Go2cam International, Lyon",
+        "period": "Septembre 2022 – Août 2025",
+        "note": "Éditeur de logiciels CAO/FAO",
+        "bullets": [
+          "Conception et déploiement d'un système RAG pour la recherche documentaire interne, réduisant le temps de recherche d'environ 50 %.",
+          "Intégration et exposition d'un LLM interne via API REST dans les outils métiers.",
+          "Mise en place et exploitation de bases de données vectorielles (Qdrant, ChromaDB, PostgreSQL + pgvector).",
+          "Développement de modèles de machine learning prédictifs (Random Forest, XGBoost) pour la prévision de demande, jusqu'à 87 % de précision sur le jeu de test.",
+          "Nettoyage et migration de trois bases de production alimentées depuis 2008, plusieurs millions d'enregistrements, restituées par des tableaux de bord : affichage ramené de plus de dix secondes par page à un temps de réponse normal.",
+          "Automatisation et optimisation de pipelines de données et d'IA.",
+          "Développement d'un chatbot d'assistance utilisateur.",
+          "Refonte et évolution du portail interne avec Django (authentification, workflows, API REST).",
+          "Déploiement et maintenance en production, en collaboration avec les équipes techniques."
+        ]
+      }
+    ],
+    "projectLabel": "Projet personnel",
+    "projects": [
+      {
+        "name": "jobsearch-platform : plateforme de recherche d'emploi",
+        "url": "github.com/saleh-td/jobsearch-platform",
+        "note": "Dépôt public · 2026",
+        "bullets": [
+          "Agrégation automatique de trois sources d'offres : EURES, Adzuna et Himalayas.",
+          "Scoring de pertinence par un LLM exécuté en local (Qwen 2.5 7B via Ollama, sur GPU) : aucun coût d'inférence, aucune limite de débit.",
+          "Interface de consultation en Vue 3.",
+          "Architecture complète orchestrée par Docker Compose, reproductible d'une machine à l'autre."
+        ]
+      }
+    ],
+    "skillsLabel": "Compétences techniques",
+    "skills": [
+      {
+        "cat": "IA & machine learning",
+        "items": "RAG, intégration et déploiement de LLM, fine-tuning, embeddings, prompt engineering, machine learning (classification, régression), deep learning"
+      },
+      {
+        "cat": "Frameworks ML",
+        "items": "PyTorch, TensorFlow, scikit-learn, XGBoost"
+      },
+      {
+        "cat": "Backend & data",
+        "items": "Python, FastAPI, Django REST, Pandas, NumPy, API REST, PostgreSQL, MongoDB, SQL"
+      },
+      {
+        "cat": "Bases vectorielles",
+        "items": "pgvector, Qdrant, ChromaDB"
+      },
+      {
+        "cat": "DevOps & MLOps",
+        "items": "Docker, Kubernetes, MLflow, Airflow, Git, GitHub, CI/CD, tests unitaires, n8n, Ollama"
+      },
+      {
+        "cat": "Frontend",
+        "items": "JavaScript, React, Vue 3, Next.js, HTML, CSS"
+      },
+      {
+        "cat": "Langues",
+        "items": "Français (natif), anglais (B2)"
+      }
+    ],
+    "educationLabel": "Formation",
+    "education": [
+      {
+        "degree": "Bachelor Concepteur Développeur d'Applications",
+        "school": "Afip Formation, Villeurbanne",
+        "period": "2023 – 2025",
+        "note": "Spécialité science des données et algorithmique · Bac+3/4, RNCP niveau 6"
+      },
+      {
+        "degree": "DUT Mathématiques Informatique",
+        "school": "IUT La Doua, Villeurbanne",
+        "period": "2022 – 2023",
+        "note": ""
+      }
+    ]
+  },
+  "en": {
+    "lang": "en",
+    "file": "CV_Saleh_Minawi_EN.pdf",
+    "name": "Saleh Minawi",
+    "title": "Backend & AI Developer",
+    "contact": [
+      "sminawi24@gmail.com",
+      "Lyon, France",
+      "EU citizen, no work permit required"
+    ],
+    "links": [
+      {
+        "label": "linkedin.com/in/saleh-minawi-62331123b",
+        "url": "https://www.linkedin.com/in/saleh-minawi-62331123b/"
+      },
+      {
+        "label": "github.com/saleh-td",
+        "url": "https://github.com/saleh-td"
+      },
+      {
+        "label": "profile-saleh-ai.vercel.app",
+        "url": "https://profile-saleh-ai.vercel.app"
+      }
+    ],
+    "availability": "Available immediately: permanent, fixed-term or contract, across Europe or fully remote",
+    "summaryLabel": "Profile",
+    "summary": "Backend developer specialising in artificial intelligence. Designing backend systems and integrating AI into production (RAG, LLMs, vector databases), first inside a software vendor, then independently for clients. Comfortable owning the full lifecycle: design, development, deployment and maintenance.",
+    "experienceLabel": "Professional experience",
+    "experience": [
+      {
+        "role": "Backend & AI Developer, freelance",
+        "company": "In partnership with SY Solutions, Lyon",
+        "period": "2026 –",
+        "note": "Fixed-scope client engagements",
+        "bullets": [
+          "Backend development and AI integration on client engagements (Python, FastAPI, REST APIs).",
+          "Identifying and qualifying prospective clients among early-stage startups and French innovation incubators."
+        ]
+      },
+      {
+        "role": "Backend & AI Developer",
+        "company": "Go2cam International, Lyon",
+        "period": "September 2022 – August 2025",
+        "note": "CAD/CAM software vendor",
+        "bullets": [
+          "Designed and deployed a RAG system for internal documentation search, cutting research time by approximately 50%.",
+          "Integrated and exposed an in-house LLM through REST APIs consumed by business tools.",
+          "Built and operated vector databases (Qdrant, ChromaDB, PostgreSQL + pgvector).",
+          "Developed predictive machine learning models (Random Forest, XGBoost) for demand forecasting, reaching up to 87% accuracy on the test set.",
+          "Cleaned and migrated three production databases fed since 2008, several million records, surfaced through dashboards: page loads brought back from over ten seconds to normal response times.",
+          "Automated and optimised data and AI pipelines.",
+          "Developed a user-facing support chatbot.",
+          "Rebuilt and extended the internal portal with Django (authentication, workflows, REST APIs).",
+          "Deployed and maintained services in production, working alongside the technical teams."
+        ]
+      }
+    ],
+    "projectLabel": "Personal project",
+    "projects": [
+      {
+        "name": "jobsearch-platform: job search platform",
+        "url": "github.com/saleh-td/jobsearch-platform",
+        "note": "Public repository · 2026",
+        "bullets": [
+          "Automatic aggregation of three job sources: EURES, Adzuna and Himalayas.",
+          "Relevance scoring by a locally hosted LLM (Qwen 2.5 7B via Ollama, on GPU): no inference cost, no rate limits.",
+          "Vue 3 interface for browsing results.",
+          "Full architecture orchestrated with Docker Compose, reproducible from one machine to the next."
+        ]
+      }
+    ],
+    "skillsLabel": "Technical skills",
+    "skills": [
+      {
+        "cat": "AI & machine learning",
+        "items": "RAG, LLM integration and deployment, fine-tuning, embeddings, prompt engineering, machine learning (classification, regression), deep learning"
+      },
+      {
+        "cat": "ML frameworks",
+        "items": "PyTorch, TensorFlow, scikit-learn, XGBoost"
+      },
+      {
+        "cat": "Backend & data",
+        "items": "Python, FastAPI, Django REST, Pandas, NumPy, REST APIs, PostgreSQL, MongoDB, SQL"
+      },
+      {
+        "cat": "Vector databases",
+        "items": "pgvector, Qdrant, ChromaDB"
+      },
+      {
+        "cat": "DevOps & MLOps",
+        "items": "Docker, Kubernetes, MLflow, Airflow, Git, GitHub, CI/CD, unit testing, n8n, Ollama"
+      },
+      {
+        "cat": "Frontend",
+        "items": "JavaScript, React, Vue 3, Next.js, HTML, CSS"
+      },
+      {
+        "cat": "Languages",
+        "items": "French (native), English (B2)"
+      }
+    ],
+    "educationLabel": "Education",
+    "education": [
+      {
+        "degree": "Bachelor's Degree: Application Design and Development",
+        "school": "Afip Formation, Villeurbanne, France",
+        "period": "2023 – 2025",
+        "note": "Specialisation in data science and algorithms · Three-year post-secondary degree, RNCP Level 6"
+      },
+      {
+        "degree": "Diploma in Mathematics and Computer Science",
+        "school": "IUT La Doua, Villeurbanne, France",
+        "period": "2022 – 2023",
+        "note": ""
+      }
+    ]
+  }
+}

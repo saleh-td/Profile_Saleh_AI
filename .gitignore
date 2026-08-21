@@ -33,5 +33,10 @@ Thumbs.db
 *.tgz
 coverage/
 
-# ── CV : versions candidature (coordonnées complètes) ──
+# ── CV : tout ce qui porte les coordonnées personnelles ──
+# Le dépôt est public, et une donnée entrée dans l'historique git y reste
+# même après suppression du fichier. Ces trois entrées ne doivent jamais
+# être retirées d'ici.
 cv/out/
+cv/data.local.json
+cv/archive/
