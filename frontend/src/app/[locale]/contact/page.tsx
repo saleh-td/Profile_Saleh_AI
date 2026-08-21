@@ -12,6 +12,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const dict = await getDictionary(locale);
+
   return {
     title: dict.seo.contactTitle,
     description: dict.seo.contactDescription,
