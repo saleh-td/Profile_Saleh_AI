@@ -32,3 +32,6 @@ Thumbs.db
 # ── Misc ──
 *.tgz
 coverage/
+
+# ── CV : versions candidature (coordonnées complètes) ──
+cv/out/
