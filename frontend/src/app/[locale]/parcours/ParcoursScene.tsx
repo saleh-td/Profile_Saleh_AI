@@ -64,7 +64,7 @@ export function ParcoursScene({ dict }: Props) {
 
         <Section label={parcours.stackLabel}>
           <p className={s.stackIntro}>{parcours.stackIntro}</p>
-          <StackGrid items={parcours.stack} />
+          <StackGrid items={parcours.stack} drift />
         </Section>
       </div>
     </>

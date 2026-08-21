@@ -10,7 +10,15 @@
   gap: var(--space-sm);
 }
 
+/* Simple cellule de grille : c'est framer-motion qui écrit son transform
+   pendant l'entrée. Tout le rendu de la tuile est sur l'enfant, qui reçoit
+   la dérive. */
+.cell {
+  display: flex;
+}
+
 .tile {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,6 +34,85 @@
 .tile:hover {
   border-color: var(--color-line-strong);
   transform: translateY(-2px);
+}
+
+/* ── Dérive en apesanteur ────────────────────────────────────────
+   Activée uniquement là où la stack est le sujet de la section (prop
+   `drift`). Chaque tuile garde sa place dans la grille : l'amplitude est
+   de quelques pixels, très en dessous de la gouttière, donc rien ne se
+   chevauche et la grille reste scannable d'un coup d'œil. */
+
+.drift {
+  animation-name: driftA;
+  animation-duration: var(--drift-period, 19s);
+  animation-delay: var(--drift-offset, 0s);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  /* Chaque tuile devient sa propre couche : sans ça le navigateur repeint
+     la grille entière à chaque image. */
+  will-change: transform;
+}
+
+.path1 {
+  animation-name: driftB;
+}
+
+.path2 {
+  animation-name: driftC;
+}
+
+/* Au survol la tuile s'immobilise sous le curseur : viser une cible qui
+   bouge est désagréable. Le décalage courant est figé par la keyframe, donc
+   le `translateY` de survol ne s'applique pas ici — c'est la bordure qui
+   porte seule le retour visuel. */
+.drift:hover {
+  animation-play-state: paused;
+}
+
+/* Trois trajectoires sans symétrie ni retour sur leurs pas, pour qu'aucune
+   ne se lise comme un aller-retour.
+
+   L'amplitude est plafonnée à 4px de translation et 1.2deg de rotation, et
+   ce n'est pas un réglage esthétique : la gouttière de la grille fait 12px,
+   et deux tuiles voisines qui dérivent l'une vers l'autre en consomment
+   chacune environ 4.9px, rotation comprise. Au-delà, elles se touchent.
+
+   C'est la rotation qui porte la sensation d'apesanteur. La translation
+   seule se lit comme un bloc qui glisse. */
+@keyframes driftA {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(3px, -3px) rotate(1deg); }
+  40% { transform: translate(4px, 2px) rotate(-0.5deg); }
+  60% { transform: translate(-1px, 4px) rotate(-1.2deg); }
+  80% { transform: translate(-4px, 0) rotate(0.6deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes driftB {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(-3px, 2px) rotate(-0.9deg); }
+  40% { transform: translate(1px, 4px) rotate(0.7deg); }
+  60% { transform: translate(4px, -1px) rotate(1.2deg); }
+  80% { transform: translate(2px, -4px) rotate(-0.4deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes driftC {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(2px, 4px) rotate(0.5deg); }
+  40% { transform: translate(-4px, 1px) rotate(-1.1deg); }
+  60% { transform: translate(-2px, -3px) rotate(0.9deg); }
+  80% { transform: translate(3px, -2px) rotate(-0.6deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* Un mouvement permanent et non sollicité est exactement ce que ce réglage
+   demande de supprimer. */
+@media (prefers-reduced-motion: reduce) {
+  .drift {
+    animation: none;
+    will-change: auto;
+  }
 }
 
 /* Couleur de marque posée en style inline par composant (voir TechIcon) :
