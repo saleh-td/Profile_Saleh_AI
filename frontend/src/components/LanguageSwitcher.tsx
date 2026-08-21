@@ -24,10 +24,13 @@ export function LanguageSwitcher({ locale, dict }: Props) {
   const otherLocale: Locale = locale === "fr" ? "en" : "fr";
 
   return (
-    <div className={styles.wrap} aria-label={dict.nav.language}>
-      <Link className={styles.link} href={swapLocale(pathname, otherLocale)}>
-        {otherLocale === "fr" ? dict.language.switchToFr : dict.language.switchToEn}
-      </Link>
-    </div>
+    <Link
+      className={styles.link}
+      href={swapLocale(pathname, otherLocale)}
+      hrefLang={otherLocale}
+      aria-label={dict.nav.language}
+    >
+      {otherLocale === "fr" ? dict.language.switchToFr : dict.language.switchToEn}
+    </Link>
   );
 }

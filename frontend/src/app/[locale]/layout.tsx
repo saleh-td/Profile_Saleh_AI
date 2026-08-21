@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { Header } from "@/components/Header";
-import { Container } from "@/components/Container";
 import { getDictionary } from "@/i18n/getDictionary";
 import { isLocale, type Locale, SUPPORTED_LOCALES } from "@/i18n/locales";
 
@@ -24,6 +23,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
     title: dict.seo.siteTitle,
     description: dict.seo.siteDescription,
     alternates: {
+      canonical: `/${locale}`,
       languages: {
         fr: "/fr",
         en: "/en",
@@ -42,9 +42,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   return (
     <>
       <Header locale={locale} dict={dict} />
-      <main>
-        <Container>{children}</Container>
-      </main>
+      <main>{children}</main>
     </>
   );
 }

@@ -1,11 +1,17 @@
-.wrap {
-  display: flex;
+.link {
+  display: inline-flex;
   align-items: center;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius);
+  font-size: var(--text-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-label);
+  color: var(--color-muted);
+  transition: color var(--transition), border-color var(--transition);
 }
 
-.link {
-  font-size: 0.95rem;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid color-mix(in srgb, var(--foreground) 18%, transparent);
-  border-radius: 8px;
+.link:hover {
+  color: var(--color-fg);
+  border-color: var(--color-fg);
 }
