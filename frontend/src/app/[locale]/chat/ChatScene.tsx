@@ -223,16 +223,18 @@ export function ChatScene({ locale, dict }: Props) {
         {/* La région reste montée même vide : un `aria-live` qui apparaît en
             même temps que son premier contenu n'est pas annoncé. Seule son
             apparence change, pour ne pas afficher un cadre vide de 180px
-            avant que la conversation ait commencé. */}
+            avant que la conversation ait commencé.
+
+            Rien n'y est écrit tant qu'il n'y a pas de message : le label
+            « par exemple » qui suit et le champ de saisie disent déjà quoi
+            faire, une phrase d'invitation de plus ne fait que répéter. */}
         <div
           className={isEmpty ? s.streamIdle : s.stream}
           ref={streamRef}
           aria-live="polite"
           aria-busy={isSending}
         >
-          {isEmpty ? (
-            <p className={s.empty}>{dict.chat.emptyState}</p>
-          ) : (
+          {isEmpty ? null : (
             <ol className={s.messages}>
               {messages.map((message) => (
                 <li

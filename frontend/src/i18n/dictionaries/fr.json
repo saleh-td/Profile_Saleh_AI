@@ -155,8 +155,7 @@
     ],
     "disclaimer": "Réponses générées par un modèle de langage. Pour toute information contractuelle, écrivez-moi directement.",
     "clear": "Effacer la conversation",
-    "modelLabel": "Modèle",
-    "emptyState": "Choisissez une question ci-dessous ou écrivez la vôtre."
+    "modelLabel": "Modèle"
   },
   "language": {
     "switchToFr": "FR",

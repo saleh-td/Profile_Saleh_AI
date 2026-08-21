@@ -16,8 +16,15 @@
     color var(--transition);
 }
 
+/* Aplat neutre plutôt qu'accent délavé. Baisser l'opacité d'un bouton vert
+   plein donne un vert grisâtre qui se lit comme un rendu raté, pas comme
+   une action indisponible. En quittant complètement l'accent, la règle
+   devient lisible : la couleur signale l'action possible, son absence
+   signale l'attente. */
 .base:disabled {
-  opacity: 0.45;
+  background: var(--color-bg);
+  color: var(--color-muted);
+  border-color: var(--color-line);
   cursor: not-allowed;
 }
 

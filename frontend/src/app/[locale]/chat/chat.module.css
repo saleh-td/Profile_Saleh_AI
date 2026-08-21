@@ -28,11 +28,6 @@
   border: 0;
 }
 
-.empty {
-  font-size: var(--text-sm);
-  color: var(--color-muted);
-}
-
 .messages {
   display: flex;
   flex-direction: column;
