@@ -1,138 +1,227 @@
 {
   "seo": {
-    "siteTitle": "Saleh",
-    "siteDescription": "Architectures IA pragmatiques et déployables : LLM, RAG, bases vectorielles, APIs, monitoring, déploiement.",
-    "homeTitle": "Accueil",
-    "homeDescription": "Architectures IA pragmatiques et déployables : intégration LLM, RAG, bases vectorielles, APIs.",
-    "approachTitle": "Approche Architecture",
-    "approachDescription": "Méthodologie de conception d’architectures IA déployables en production.",
+    "siteTitle": "Saleh Minawi : Développeur backend, systèmes IA",
+    "siteDescription": "Développeur backend spécialisé dans les systèmes IA en production : RAG, bases vectorielles, APIs et pipelines de données.",
+    "homeTitle": "Développeur backend, systèmes IA",
+    "homeDescription": "Développeur backend et IA à Lyon : système RAG de recherche documentaire, bases vectorielles, intégration LLM et pipelines de données, conçus et déployés en production.",
+    "approachTitle": "Approche",
+    "approachDescription": "Comment je conçois un système IA destiné à la production, du besoin métier jusqu'au monitoring.",
     "projectsTitle": "Projets",
-    "projectsDescription": "Projets structurés : contexte, architecture, choix techniques, contraintes, résultats.",
+    "projectsDescription": "Projets détaillés : contexte, architecture, choix techniques, contraintes et résultats.",
     "contactTitle": "Contact",
-    "contactDescription": "Contact professionnel pour missions et échanges techniques.",
-    "chatTitle": "Chat IA",
-    "chatDescription": "Interface de dialogue IA — échange direct avec un agent conversationnel."
+    "contactDescription": "Me contacter pour une mission, un poste ou un échange technique.",
+    "chatTitle": "Assistant IA",
+    "chatDescription": "Posez vos questions sur mon parcours, mes projets et ma façon de travailler.",
+    "parcoursTitle": "Parcours",
+    "parcoursDescription": "Expérience détaillée et stack technique complète : systèmes RAG, bases vectorielles, migration de données et intégration LLM en production."
   },
   "nav": {
     "home": "Accueil",
-    "approach": "Approche Architecture",
+    "approach": "Approche",
     "projects": "Projets",
     "contact": "Contact",
-    "language": "Langue"
+    "assistant": "Assistant IA",
+    "language": "Passer en anglais",
+    "mainNavigation": "Navigation principale",
+    "career": "Parcours"
   },
   "home": {
-    "greeting": "Saleh Minawi",
-    "role": "Backend & AI Systems Engineering",
-    "goal": "En route vers un Master IA & Data - option Architectures de Systèmes Intelligents. Ce site documente ma démarche : concevoir, intégrer et déployer des systèmes IA robustes, de l'API LLM jusqu'au monitoring en production.",
-    "bioBullets": [
-      "3 ans d'expérience en développement backend",
-      "Conception d'API REST & microservices",
-      "Traitement de données & pipelines IA",
-      "Intégration de solutions d'intelligence artificielle",
-      "Déploiement en environnements de production",
-      "Travail en équipe & contraintes réelles"
-    ],
-    "termRole": "Développeur Backend",
-    "termTarget": "Master Architecture IA",
-    "termXp": "3 ans · production · équipe",
-    "termStack": "Python · FastAPI · LLM · RAG · Docker",
-    "stackBackend": "Python · FastAPI · Microservices",
-    "stackAi": "LLM · RAG · LangChain · Embeddings",
-    "stackInfra": "Docker · CI/CD · Monitoring",
-    "stackData": "PostgreSQL · pgvector · Pipelines",
-    "chatCta": "Initialiser Dialogue IA"
+    "name": "Saleh Minawi",
+    "role": "Développeur backend & IA",
+    "availability": "Disponible immédiatement · CDI ou CDD",
+    "location": "Lyon, France",
+    "summary": "Je conçois et déploie des systèmes IA qui tiennent en production : recherche documentaire par RAG, bases vectorielles, modèles de langage exposés par API. Aujourd'hui en freelance, sur Lyon ou en télétravail.",
+    "labels": {
+      "basedIn": "Basé à",
+      "languages": "Langues",
+      "languagesValue": "Français · Anglais (B2)"
+    },
+    "cta": {
+      "contact": "Me contacter",
+      "cv": "Télécharger le CV",
+      "projects": "Tous les projets",
+      "assistant": "Interroger l'assistant",
+      "career": "Voir le parcours complet",
+      "stack": "Voir toute la stack",
+      "allProjects": "Voir les 4 projets"
+    },
+    "sections": {
+      "experience": "Parcours",
+      "projects": "Projets",
+      "stack": "Stack"
+    },
+    "careerHighlight": "Système RAG déployé en production chez Go2cam International : temps de recherche documentaire réduit d'environ 50 %.",
+    "stackFeatured": [
+      "Python",
+      "FastAPI",
+      "Django",
+      "PostgreSQL",
+      "Docker",
+      "RAG",
+      "LLM"
+    ]
   },
   "approach": {
-    "title": "Approche Architecture",
-    "intro": "Méthodologie orientée production : on part du besoin métier, on explicite les contraintes, puis on choisit les briques IA et l’API layer avec une stratégie d’observabilité et de déploiement.",
+    "title": "Approche",
+    "intro": "Une méthode orientée production : partir du besoin métier, expliciter les contraintes, puis choisir les briques IA et la couche API avec une stratégie d'observabilité et de déploiement définie dès le départ.",
     "steps": [
       {
-        "title": "1) Analyse du besoin métier",
-        "detail": "Cas d’usage, criticité, SLA, données, contraintes légales, périmètre, critères d’acceptation."
+        "title": "Analyse du besoin métier",
+        "detail": "Cas d'usage, criticité, niveau de service attendu, données disponibles, contraintes légales, périmètre et critères d'acceptation."
       },
       {
-        "title": "2) Choix modèle (API vs local)",
-        "detail": "Trade-offs coût/latence/confidentialité, disponibilité, governance, contraintes GPU, fallback et modes dégradés."
+        "title": "Choix du modèle : API ou local",
+        "detail": "Arbitrage entre coût, latence et confidentialité. Disponibilité, gouvernance, contraintes GPU, stratégie de repli et modes dégradés."
       },
       {
-        "title": "3) Stratégie embeddings",
-        "detail": "Granularité, chunking, versioning, évaluation, gestion des mises à jour et qualité des sources."
+        "title": "Stratégie d'embeddings",
+        "detail": "Granularité, découpage, versionnage, évaluation, gestion des mises à jour et qualité des sources."
       },
       {
-        "title": "4) Vector database",
-        "detail": "Choix de stockage, index, filtrage, multi-tenant, rétention, performances et coûts."
+        "title": "Base vectorielle",
+        "detail": "Choix du stockage, index, filtrage, cloisonnement par client, rétention, performances et coûts."
       },
       {
-        "title": "5) API layer",
-        "detail": "FastAPI/REST, auth, rate limiting, schémas, idempotence, traçabilité, contrats."
+        "title": "Couche API",
+        "detail": "FastAPI et REST, authentification, limitation de débit, schémas, idempotence, traçabilité et contrats stables."
       },
       {
-        "title": "6) Monitoring",
-        "detail": "Logs structurés, métriques, traces, monitoring qualité (prompt/version, retrieval, hallucinations)."
+        "title": "Observabilité",
+        "detail": "Logs structurés, métriques, traces, et suivi de la qualité : version de prompt, pertinence du retrieval, dérives constatées."
       },
       {
-        "title": "7) Déploiement",
-        "detail": "CI/CD, environnements, secrets, scalabilité, observabilité, runbooks et opérations."
+        "title": "Déploiement",
+        "detail": "CI/CD, environnements, gestion des secrets, montée en charge, observabilité et procédures d'exploitation."
       }
-    ]
+    ],
+    "teaser": "Je pars du besoin métier et des contraintes réelles avant de choisir la moindre brique technique. Coût, latence, confidentialité et exploitabilité se décident au début, pas après la mise en production."
   },
   "projects": {
     "title": "Projets",
-    "intro": "Chaque projet est présenté avec un format orienté architecture et contraintes réelles.",
+    "intro": "Chaque projet est présenté avec son contexte, son architecture et les contraintes qui ont dicté les choix techniques.",
     "labels": {
       "context": "Contexte",
       "architecture": "Architecture",
       "choices": "Choix techniques",
       "constraints": "Contraintes",
       "results": "Résultats"
+    },
+    "engagement": {
+      "professional": "Mission professionnelle",
+      "personal": "Projet personnel"
+    },
+    "diagram": {
+      "title": "Pipeline de traitement des offres",
+      "sourcesLabel": "Sources",
+      "dedup": "Déduplication",
+      "scoring": "Scoring LLM local",
+      "scoringDetail": "Qwen 2.5 7B via Ollama",
+      "storage": "PostgreSQL",
+      "ui": "Interface Vue 3"
     }
   },
   "contact": {
-    "ghostLine1": "Connecter",
-    "ghostLine2": "Avec Le",
-    "ghostLine3": "Système",
-    "tagProfessional": "Professionnel",
-    "tagDirectMail": "Direct_Mail",
-    "tagCurriculum": "Curriculum",
-    "tagCode": "Code_Source",
-    "linkedinDesc": "Consulter mon profil et mes recommandations.",
-    "githubDesc": "Projets open-source et contributions techniques.",
+    "title": "Contact",
+    "intro": "Pour une mission, un poste ou une question technique, l'e-mail est le plus simple. Je réponds sous quelques jours.",
+    "emailLabel": "E-mail",
+    "emailCopy": "Copier",
+    "emailCopied": "Copié",
+    "emailWrite": "Écrire un e-mail",
+    "linkedinTitle": "LinkedIn",
+    "linkedinDesc": "Parcours détaillé et recommandations.",
+    "githubTitle": "GitHub",
+    "githubDesc": "Code source de mes projets, dont celui de ce site.",
+    "cvTitle": "Curriculum vitae",
+    "cvDesc": "Parcours, expérience et compétences en une page.",
     "cvLabel": "Consulter le CV",
-    "cvHint": "Ouvrir en modal · télécharger",
-    "cvModalTitle": "CV // Saleh Minawi",
+    "cvModalTitle": "CV de Saleh Minawi",
     "cvModalClose": "Fermer",
-    "cvModalDownload": "Télécharger",
-    "emailCopy": "COPY",
-    "emailCopied": "COPIÉ ✓",
-    "chatTestTitle": "Test API /chat (stub)",
-    "chatTestPlaceholder": "Message (ex: ping)",
-    "chatTestSend": "Envoyer",
-    "chatTestOkPrefix": "Réponse:",
-    "chatTestErrorPrefix": "Erreur:"
+    "cvModalDownload": "Télécharger"
   },
   "chat": {
-    "title": "CHAT_LLM",
-    "subtitle": "Interface de dialogue IA — en cours de déploiement.",
-    "comingSoon": "[ MODULE EN PRÉPARATION ]",
-    "inputPrefix": "> USER_INPUT:",
-    "inputPlaceholder": "Entrez votre requête...",
-    "disconnect": "DISCONNECT_SESSION",
-    "boot1": "Interface neurale initialisée.",
-    "boot2": "Connexion au modèle SALEH_ARCH v1.2 établie.",
-    "boot3": "Mémoire contextuelle chargée — 4096 tokens.",
-    "boot4": "En attente de requête utilisateur...",
-    "sidebarTitle": "SYS_MONITOR",
-    "contextTitle": "CONTEXT",
-    "statusIdle": "IDLE",
-    "statusProcessing": "PROCESSING...",
-    "statusComplete": "COMPLETE",
-    "modelName": "SALEH_ARCH_v1.2",
-    "noSources": "Aucune source active",
-    "sessionLabel": "SESSION",
-    "uptimeLabel": "UPTIME"
+    "title": "Assistant IA",
+    "intro": "Cet assistant répond à partir d'informations vérifiées sur mon parcours et mes projets. Il ne devine pas : s'il ne sait pas, il le dit.",
+    "inputPlaceholder": "Posez votre question…",
+    "send": "Envoyer",
+    "sendingLabel": "Rédaction de la réponse",
+    "you": "Vous",
+    "assistant": "Assistant",
+    "suggestionsTitle": "Par exemple",
+    "suggestions": [
+      "Quelle est son expérience en production ?",
+      "Comment a-t-il construit son système RAG ?",
+      "Est-il disponible pour une mission ?",
+      "Quelle est sa stack backend ?"
+    ],
+    "disclaimer": "Réponses générées par un modèle de langage. Pour toute information contractuelle, écrivez-moi directement.",
+    "clear": "Effacer la conversation",
+    "modelLabel": "Modèle",
+    "emptyState": "Choisissez une question ci-dessous ou écrivez la vôtre."
   },
   "language": {
     "switchToFr": "FR",
     "switchToEn": "EN"
+  },
+  "parcours": {
+    "title": "Parcours",
+    "intro": "Une même chaîne, portée d'abord au sein d'un éditeur logiciel puis en autonomie chez des clients : partir d'un besoin métier réel, construire le système, et rester responsable du résultat une fois en production.",
+    "experienceLabel": "Expérience",
+    "stackLabel": "Stack technique",
+    "stackIntro": "Les outils que j'utilise réellement en production, pas une liste de veille.",
+    "experience": [
+      {
+        "role": "Développeur backend & IA, freelance",
+        "company": "En partenariat avec SY Solutions",
+        "period": "2026 –",
+        "place": "Lyon",
+        "current": true,
+        "bullets": [
+          "Missions au forfait en backend et intégration IA : Python, FastAPI, API REST.",
+          "Prospection et qualification de clients auprès de startups early-stage et d'incubateurs."
+        ]
+      },
+      {
+        "role": "Développeur backend & IA",
+        "company": "Go2cam International",
+        "period": "Septembre 2022 – Août 2025",
+        "place": "Lyon · Éditeur de logiciels CAO/FAO",
+        "current": false,
+        "bullets": [
+          "Conception et déploiement d'un système RAG pour la recherche documentaire interne : temps de recherche réduit d'environ 50 %.",
+          "Mise en production d'un LLM interne exposé par API REST, consommé par plusieurs applications métier.",
+          "Bases vectorielles Qdrant, ChromaDB et PostgreSQL avec pgvector.",
+          "Modèles prédictifs Random Forest et XGBoost pour la prévision de demande, jusqu'à 87 % de précision sur le jeu de test.",
+          "Refonte du portail interne Django : authentification, workflows, API REST.",
+          "Automatisation des pipelines de données et IA, déploiement et maintenance en production avec les équipes techniques."
+        ]
+      }
+    ],
+    "stack": [
+      "Python",
+      "FastAPI",
+      "Django",
+      "API REST",
+      "PostgreSQL",
+      "MongoDB",
+      "pgvector",
+      "Qdrant",
+      "ChromaDB",
+      "RAG",
+      "LLM",
+      "Embeddings",
+      "PyTorch",
+      "TensorFlow",
+      "scikit-learn",
+      "XGBoost",
+      "MLflow",
+      "Airflow",
+      "Docker",
+      "Kubernetes",
+      "CI/CD",
+      "n8n",
+      "React",
+      "Vue 3",
+      "Next.js"
+    ]
   }
 }

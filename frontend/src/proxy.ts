@@ -25,7 +25,7 @@ export function proxy(request: NextRequest) {
   }
 
   const firstSegment = pathname.split("/").filter(Boolean)[0];
-  const hasLocale = SUPPORTED_LOCALES.includes(firstSegment as any);
+  const hasLocale = (SUPPORTED_LOCALES as readonly string[]).includes(firstSegment);
 
   // Toute route sans locale est considérée FR.
   if (!hasLocale) {
