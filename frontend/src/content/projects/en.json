@@ -1,26 +1,76 @@
 [
   {
-    "name": "Secure multi-tenant RAG over internal knowledge base",
-    "context": "Search assistant for Support/CS teams. Goal: reliable, traceable and auditable answers while controlling exposure of sensitive data.",
-    "architecture": "Sources (Drive/Confluence/S3) → ingestion pipeline (parsers + normalization) → chunking + versioning → embeddings → vector DB (+ metadata/ACL) → filtered retrieval (tenant + permissions) → re-ranking → generation with citations → FastAPI layer → observability (logs/metrics/traces + quality signals).",
-    "choices": "Versioned embeddings (controlled rebuilds), separation of vector index and metadata store, strict ACL filtering before retrieval, mandatory citations, retrieval evaluation tests (question sets + ground truth), BFF (Next API routes) to isolate the backend.",
-    "constraints": "Sensitive data, heterogeneous documents, latency, inference costs, updates/invalidations, audit requirements (who accessed what / which sources).",
-    "results": "Operated as a service: stable API contracts, traceable answers (sources), and a continuous improvement loop driven by measurements (retrieval quality + user feedback)."
+    "name": "Internal AI platform: document search and LLM exposed through an API",
+    "origin": "Go2cam International · 2022 – 2025",
+    "engagement": "professional",
+    "spotlight": false,
+    "context": "Teams were losing time searching dense technical documentation spread across several internal sources. The goal was context-aware, verifiable answers without leaving the business tools people already used, then making that capability available company-wide, not to a single application.",
+    "architecture": "Document ingestion and normalisation pipeline, chunking and embedding, storage in a vector database (Qdrant, ChromaDB, then PostgreSQL with pgvector). Semantic search is exposed through a REST API alongside the in-house LLM itself: a single entry point consumed by several business applications, rather than an integration reimplemented by every team. A support chatbot was built on top of it to absorb first-line technical questions.",
+    "choices": "One access layer for AI across the company: applications consume a stable API contract and stay unaware of the model behind it, so the model can be replaced without touching any client. Answers are always tied back to their source, so they remain verifiable.",
+    "results": "Internal research time cut by roughly 50%, with context-aware, auditable answers. The chatbot absorbs recurring support requests.",
+    "stack": [
+      "RAG",
+      "Python",
+      "Qdrant",
+      "pgvector",
+      "REST API",
+      "Django"
+    ]
   },
   {
-    "name": "Business workflow automation via tool-using agent (HITL)",
-    "context": "Automate repetitive tasks (triage, extraction, drafting, preparing tickets/CRM) while keeping human control over sensitive actions.",
-    "architecture": "UI (Next) → API (FastAPI) → orchestrator (agent + policies) → tools (CRM/ERP connectors, internal search, doc generation) → state store (idempotency keys + audit log) → human validation (HITL) → execution → monitoring (latency, error rate, cost, escalation rate).",
-    "choices": "Tool-calling with strict schemas, idempotency and controlled retries, separation of planning vs execution, guardrails (policies) before actions, structured audit logs, degraded modes (manual fallback) when uncertain.",
-    "constraints": "Risk of wrong actions, compliance/traceability, cost/latency, noisy inputs, external API reliability, need for reproducible decisions.",
-    "results": "Production-friendly workflow: traceable, controlled, and reversible actions; improved reliability thanks to human approval on critical steps and strict tool contracts."
+    "name": "Migrating and unlocking a legacy data estate",
+    "origin": "Go2cam International · 2022 – 2025",
+    "engagement": "professional",
+    "spotlight": false,
+    "context": "Three production databases fed since 2008, several million records, unusable as they stood: heterogeneous formats, duplicates, history never cleaned, and page loads that ran past ten seconds. The point was not to archive them but to make them useful to the reseller network and to their own clients.",
+    "architecture": "Cleaning and normalisation of the three databases, then migration to a unified target. Results surfaced through dashboards built for each reseller profile rather than one generic report. At the core of the chain, a Python and Redis orchestration mechanism lets several independent scripts run in parallel and pull data in a synchronised way, without overlapping.",
+    "choices": "Redis as the synchronisation point between scripts that stay independent: each one knows what the others are processing, with no direct coupling between them. Sandboxed execution before any write to real data, and a guardrail blocking any job that falls outside expected bounds. With data accumulated since 2008, a failed migration cannot simply be replayed.",
+    "constraints": "Volume and age of the estate, formats accumulated across the whole period, and the requirement never to corrupt production during the migration. Delivered as a two-person project.",
+    "results": "Three legacy databases cleaned, migrated and made usable. Data views that took more than ten seconds a page came back to normal response times. The dashboards became usable day to day.",
+    "stack": [
+      "Python",
+      "Redis",
+      "SQL",
+      "Data engineering"
+    ]
   },
   {
-    "name": "Observability & continuous evaluation for LLM applications",
-    "context": "Put an LLM/RAG application under control: understand quality, detect regressions, and continuously manage cost/latency.",
-    "architecture": "Instrumentation (frontend+backend) → correlated traces (request_id) → structured logs (prompt/version, sources, retrieval scores) → metrics (latency, estimated cost, error rate) → offline evaluation sets → alerting + dashboards → release process (quality gates).",
-    "choices": "Prompt and embedding versioning, domain-specific evaluation sets, separate retrieval vs generation signals, basic red-team prompts (injection/jailbreak), budgets/quotas at the API layer.",
-    "constraints": "Evaluation without perfect ground truth, model variability, data drift, risk of leaking data through logs, need for comparability between versions.",
-    "results": "Operational framework: safer releases (gates), clear visibility on quality/cost/latency trade-offs, and faster incident diagnosis (retrieval vs generation)."
+    "name": "Ourtiguet Naturel: laboratory management",
+    "origin": "Business application for a laboratory · Private codebase",
+    "engagement": "professional",
+    "spotlight": false,
+    "context": "A natural cosmetics laboratory needs to track what goes into every product: plants, raw materials and active ingredients, then the formulations and recipes that combine them, through to production. Stock levels and their alerts sit on top of that. It all had to live in a single tool, usable day to day from a web interface.",
+    "architecture": "A Django and Django REST Framework backend exposes the business API, consumed by a React frontend built with Vite. PostgreSQL for data, Redis for cache and sessions. The whole stack is containerised and orchestrated with Docker Compose, with continuous integration and deployment on GitHub Actions.",
+    "choices": "A strict split between API and interface: the backend exposes an automatically documented REST API, consumed by an independent frontend. Each side evolves on its own. Authentication and resource filtering rely on proven building blocks from the Django ecosystem rather than in-house implementations, which keeps the maintained surface small on sensitive functions.",
+    "results": "A complete, working application from data model to web interface: raw materials, formulations and stock brought together in one tool, served by a documented API and shipped through an automated pipeline.",
+    "stack": [
+      "Django REST",
+      "React",
+      "Vite",
+      "PostgreSQL",
+      "Redis",
+      "Docker Compose"
+    ]
+  },
+  {
+    "name": "jobsearch-platform: job search platform",
+    "origin": "Personal project · 2026 · Public repository",
+    "engagement": "personal",
+    "spotlight": true,
+    "diagram": "jobsearch",
+    "context": "Automating a job search end to end: daily collection of postings, AI ranking, assisted application preparation and tracking, the whole thing launched with a single command.",
+    "architecture": "Two applications. An n8n pipeline queries EURES, Adzuna and Himalayas daily, deduplicates, then has each posting scored from 0 to 10 by a locally hosted LLM (Qwen 2.5 7B via Ollama) against a precise candidate profile; only postings scoring 6 or above are kept. Alongside it, a Vue 3 and Flask web application, authenticated with JWT, serves as catalogue, application preparation (tailored CV, cover letter, interview questions via the Claude API) and tracking register.",
+    "choices": "Two separate PostgreSQL instances, deliberately: on one side a volatile catalogue the pipeline refills on every run and can wipe without consequence, on the other a persistent register of applications that no run may ever erase. The consequence is owned: no foreign key is possible between the two. The backend opens two connections and joins in Python, and every application copies the posting's fields at creation time. That snapshot is what keeps it readable once the posting is gone. A posting therefore counts as handled because an application exists, never because it carries a given status.",
+    "constraints": "A self-hosted LLM rather than a third-party API: no inference cost and no rate limits, at the price of a local GPU requirement. All ports bound to 127.0.0.1: nothing is reachable from the network. JWTs signed and expiring after 24 h, passwords hashed with bcrypt, service token compared in constant time and limited to a single route.",
+    "results": "A complete, autonomous chain from collection through to application tracking. Five services orchestrated with Docker Compose, public code, runs with a single command.",
+    "stack": [
+      "n8n",
+      "Ollama",
+      "Flask",
+      "Vue 3",
+      "PostgreSQL",
+      "Docker Compose"
+    ],
+    "url": "https://github.com/saleh-td/jobsearch-platform"
   }
 ]

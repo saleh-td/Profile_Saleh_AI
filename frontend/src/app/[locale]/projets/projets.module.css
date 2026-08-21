@@ -1,0 +1,121 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding-bottom: var(--space-3xl);
+  max-width: 860px;
+}
+
+/* Carte : mêmes tokens de surface que Card, plus un filet de gauche qui
+   n'apparaît qu'au survol — l'accent secondaire, ponctuel, jamais posé
+   en permanence. transform + border-color seulement : pas de reflow. */
+.project {
+  /* Le header est collant : sans cette marge, une arrivée par ancre place le
+     haut de la fiche derrière lui. La hauteur vient du token mesuré. */
+  scroll-margin-top: calc(var(--header-height) + var(--space-lg));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg) var(--space-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-left: 2px solid transparent;
+  border-radius: var(--radius);
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.project:hover {
+  border-left-color: var(--color-secondary);
+  transform: translateX(2px);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.headTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs) var(--space-md);
+}
+
+.title {
+  font-size: var(--text-h2);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-heading);
+}
+
+.origin {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  max-width: none;
+}
+
+/* Lien vers le dépôt : la seule preuve directement vérifiable d'une fiche. */
+.repo {
+  align-self: flex-start;
+  margin-top: var(--space-2xs);
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  word-break: break-all;
+  transition: color var(--transition);
+}
+
+.repo:hover {
+  color: var(--color-accent-hover);
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Label à gauche, contenu à droite : la structure du projet se lit
+   en diagonale sans avoir à tout parcourir. */
+.row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+.rowLabel {
+  font-size: var(--text-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  padding-top: 0.3em;
+}
+
+.rowValue {
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  color: var(--color-fg);
+  max-width: 62ch;
+}
+
+@media (max-width: 720px) {
+  .project {
+    padding: var(--space-md);
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+
+  .rowLabel {
+    padding-top: 0;
+  }
+}

@@ -1,26 +1,76 @@
 [
   {
-    "name": "RAG sécurisé (multi-tenant) sur base documentaire interne",
-    "context": "Assistant de recherche pour équipes Support/CS. Objectif: réponses fiables, traçables et auditables, tout en maîtrisant l’exposition de données sensibles.",
-    "architecture": "Sources (Drive/Confluence/S3) → pipeline d’ingestion (parsers + normalisation) → chunking + versioning → embeddings → vector DB (+ métadonnées/ACL) → retrieval filtré (tenant + permissions) → re-ranking → génération avec citations → API FastAPI → observabilité (logs/métriques/traces + quality signals).",
-    "choices": "Embeddings versionnés (rebuild contrôlé), séparation index / metadata store, filtrage strict par ACL avant retrieval, citations obligatoires, tests d’évaluation retrieval (jeux de questions + ground truth), BFF (Next API routes) pour isoler le backend.",
-    "constraints": "Données sensibles, hétérogénéité des documents, latence, coût d’inférence, gestion des mises à jour et invalidations, exigences d’audit (qui a consulté quoi / quelle source).",
-    "results": "Système opéré comme un service: contrats d’API stables, traçabilité des réponses (sources), et une boucle d’amélioration continue basée sur mesures (qualité retrieval + retours utilisateurs)."
+    "name": "Plateforme IA interne : recherche documentaire et LLM exposé par API",
+    "origin": "Go2cam International · 2022 – 2025",
+    "engagement": "professional",
+    "spotlight": false,
+    "context": "Les équipes perdaient du temps à chercher dans une documentation technique dense, répartie sur plusieurs sources internes. L'objectif était d'obtenir des réponses contextualisées et vérifiables, sans quitter les outils métier existants, puis de rendre cette capacité disponible à toute l'entreprise, pas à une seule application.",
+    "architecture": "Pipeline d'ingestion et de normalisation des documents, découpage et calcul d'embeddings, stockage en base vectorielle (Qdrant, ChromaDB, puis PostgreSQL avec pgvector). La recherche sémantique est exposée par une API REST, aux côtés du LLM interne lui-même : un point d'entrée unique consommé par plusieurs applications métier, plutôt qu'une intégration réimplémentée par chaque équipe. Un chatbot d'assistance a été construit par-dessus pour absorber les questions techniques de premier niveau.",
+    "choices": "Une seule couche d'accès à l'IA pour toute l'entreprise : les applications consomment un contrat d'API stable et ignorent le modèle qui se trouve derrière, ce qui permet de le remplacer sans toucher aux clients. Réponses systématiquement rattachées à leur source, pour rester vérifiables.",
+    "results": "Temps de recherche documentaire réduit d'environ 50 %, avec des réponses contextualisées et auditables. Le chatbot absorbe les demandes de support récurrentes.",
+    "stack": [
+      "RAG",
+      "Python",
+      "Qdrant",
+      "pgvector",
+      "API REST",
+      "Django"
+    ]
   },
   {
-    "name": "Automatisation de workflows métier via agent outillé (HITL)",
-    "context": "Automatiser des tâches répétitives (triage, extraction, rédaction, préparation de tickets/CRM) tout en gardant un contrôle humain sur les actions sensibles.",
-    "architecture": "UI (Next) → API (FastAPI) → orchestrateur (agent + politiques) → outils (connecteurs CRM/ERP, recherche interne, génération de documents) → store d’état (idempotency keys + audit log) → validation humaine (HITL) → exécution → monitoring (latence, taux d’erreur, coûts, taux d’escalade).",
-    "choices": "Tool-calling avec schémas stricts, idempotence et retry contrôlés, séparation planification/exécution, garde-fous (policies) avant action, journalisation structurée pour audit, modes dégradés (fallback manuel) si l’agent est incertain.",
-    "constraints": "Risque d’actions incorrectes, conformité (trace), coût/latence, qualité variable des entrées, robustesse réseau (APIs externes), besoin de reproductibilité des décisions.",
-    "results": "Workflow “production-friendly”: actions traçables, contrôlées, et réversibles; meilleure fiabilité grâce à la validation humaine sur les étapes critiques et à des contrats d’outils stricts."
+    "name": "Migration et valorisation d'un patrimoine de données",
+    "origin": "Go2cam International · 2022 – 2025",
+    "engagement": "professional",
+    "spotlight": false,
+    "context": "Trois bases de production alimentées depuis 2008, plusieurs millions d'enregistrements, inexploitables en l'état : formats hétérogènes, doublons, historique jamais nettoyé, et des temps d'affichage qui dépassaient dix secondes par page. L'enjeu n'était pas de les archiver mais de les rendre utiles au réseau de revendeurs et à leurs propres clients.",
+    "architecture": "Nettoyage et normalisation des trois bases, puis migration vers une cible unifiée. Restitution par des tableaux de bord construits pour chaque profil de revendeur plutôt qu'un rapport générique. Au cœur de la chaîne, un mécanisme d'orchestration en Python et Redis permet à plusieurs scripts indépendants de s'exécuter en parallèle et de récupérer les données de façon synchronisée, sans se recouvrir.",
+    "choices": "Redis comme point de synchronisation entre des scripts qui restent indépendants : chacun sait ce que les autres traitent, sans couplage direct entre eux. Exécution en bac à sable avant toute écriture sur les données réelles, et garde-fou bloquant les traitements qui sortent des bornes attendues. Sur des données accumulées depuis 2008, une migration ratée ne se rejoue pas.",
+    "constraints": "Volume et ancienneté du patrimoine, formats accumulés sur toute la période, et obligation de ne jamais corrompre la production pendant la migration. Projet mené en binôme.",
+    "results": "Trois bases historiques nettoyées, migrées et rendues exploitables. L'affichage des données, qui dépassait dix secondes par page, est revenu à un temps de réponse normal. Les tableaux de bord sont devenus utilisables au quotidien.",
+    "stack": [
+      "Python",
+      "Redis",
+      "SQL",
+      "Data engineering"
+    ]
   },
   {
-    "name": "Observabilité & évaluation continue pour applications LLM",
-    "context": "Mettre sous contrôle une application LLM/RAG: comprendre la qualité, détecter les régressions, et piloter coûts/latence en continu.",
-    "architecture": "Instrumentation (frontend+backend) → traces corrélées (request_id) → logs structurés (prompt/version, sources, scores retrieval) → métriques (latence, coût estimé, taux d’erreur) → jeux d’évaluation (offline) → alerting + dashboards → process de release (gates qualité).",
-    "choices": "Versioning des prompts et des embeddings, jeux d’évaluation par domaine, séparation signaux “rétrieval” vs “génération”, red-team prompts basiques (injection / jailbreak), budget/quotas côté API.",
-    "constraints": "Évaluer sans vérité absolue, variabilité des modèles, dérive des données, risques de fuite de données dans les logs, besoin de comparabilité entre versions.",
-    "results": "Cadre d’exploitation: releases plus sûres (gates), visibilité claire sur les compromis qualité/coût/latence, et capacité à diagnostiquer rapidement les incidents (retrieval vs génération)."
+    "name": "Ourtiguet Naturel : gestion de laboratoire",
+    "origin": "Application métier pour un laboratoire · Code non public",
+    "engagement": "professional",
+    "spotlight": false,
+    "context": "Un laboratoire de cosmétique naturelle doit suivre ce qui entre dans chacun de ses produits : plantes, matières premières et actifs, puis les formulations et recettes qui les combinent, jusqu'à la production. À cela s'ajoute le suivi des stocks et les alertes associées. L'ensemble devait tenir dans un seul outil, exploitable au quotidien depuis une interface web.",
+    "architecture": "Backend Django et Django REST Framework exposant l'API métier, consommée par un frontend React construit avec Vite. PostgreSQL pour les données, Redis pour le cache et les sessions. L'ensemble est conteneurisé et orchestré par Docker Compose, avec une chaîne d'intégration et de déploiement continus sur GitHub Actions.",
+    "choices": "Séparation stricte entre l'API et l'interface : le backend expose une API REST documentée automatiquement, consommée par un frontend indépendant. Les deux évoluent chacun de leur côté. L'authentification et le filtrage des ressources s'appuient sur des briques éprouvées de l'écosystème Django plutôt que sur des implémentations maison, ce qui réduit la surface de code à maintenir sur des fonctions sensibles.",
+    "results": "Application complète et fonctionnelle, du modèle de données à l'interface web : matières premières, formulations et stocks réunis dans un seul outil, servi par une API documentée et déployé par une chaîne automatisée.",
+    "stack": [
+      "Django REST",
+      "React",
+      "Vite",
+      "PostgreSQL",
+      "Redis",
+      "Docker Compose"
+    ]
+  },
+  {
+    "name": "jobsearch-platform : plateforme de recherche d'emploi",
+    "origin": "Projet personnel · 2026 · Dépôt public",
+    "engagement": "personal",
+    "spotlight": true,
+    "diagram": "jobsearch",
+    "context": "Automatiser une recherche d'emploi de bout en bout : collecte quotidienne des offres, tri par IA, préparation de candidature assistée et suivi des démarches, le tout lancé en une seule commande.",
+    "architecture": "Deux applications. Un pipeline n8n interroge chaque jour EURES, Adzuna et Himalayas, déduplique, puis fait noter chaque offre de 0 à 10 par un LLM exécuté en local (Qwen 2.5 7B via Ollama) selon un profil de candidat précis ; seules les offres au score supérieur ou égal à 6 sont retenues. À côté, une application web Vue 3 et Flask, authentifiée par JWT, sert de catalogue, de préparation de candidature (CV adapté, lettre, questions d'entretien via l'API Claude) et de registre des démarches.",
+    "choices": "Deux instances PostgreSQL distinctes, et c'est délibéré : d'un côté un catalogue volatile que le pipeline réalimente à chaque exécution et peut vider sans conséquence, de l'autre un registre persistant de candidatures qu'aucune exécution ne doit effacer. La conséquence est assumée : aucune clé étrangère n'est possible entre les deux. Le backend ouvre deux connexions et fait les jointures en Python, et chaque candidature recopie les champs de l'offre au moment de sa création. Cet instantané est ce qui la garde lisible une fois l'offre disparue. Une offre est donc considérée comme traitée parce qu'une candidature existe, jamais parce qu'elle porte tel statut.",
+    "constraints": "LLM auto-hébergé plutôt qu'une API tierce : aucun coût d'inférence ni limite de débit, au prix d'une contrainte GPU locale. Tous les ports liés à 127.0.0.1 : rien n'est joignable depuis le réseau. Jetons JWT signés et expirés à 24 h, mots de passe hachés en bcrypt, jeton de service comparé en temps constant et limité à une seule route.",
+    "results": "Chaîne complète et autonome, de la collecte jusqu'au suivi des candidatures. Cinq services orchestrés par Docker Compose, code public et exécutable en une commande.",
+    "stack": [
+      "n8n",
+      "Ollama",
+      "Flask",
+      "Vue 3",
+      "PostgreSQL",
+      "Docker Compose"
+    ],
+    "url": "https://github.com/saleh-td/jobsearch-platform"
   }
 ]
