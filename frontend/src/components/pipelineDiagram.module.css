@@ -1,0 +1,158 @@
+/* Panneau en retrait : la carte projet est en `surface` (blanc), le
+   schéma redescend sur le fond de page. Les boîtes en `surface` ressortent
+   alors d'elles-mêmes, sans ombre ni couleur supplémentaire. */
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  align-items: center;
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+.svg {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+/* Sur petit écran, le SVG se réduit à la largeur disponible et son texte
+   avec lui. On lui rend la marge latérale du panneau pour qu'il reste
+   au-dessus du seuil de lisibilité. */
+@media (max-width: 600px) {
+  .figure {
+    padding: var(--space-lg) var(--space-xs);
+  }
+}
+
+.caption {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+/* ── Boîtes ── */
+
+.box {
+  fill: var(--color-surface);
+  stroke: var(--color-line-strong);
+  stroke-width: 1;
+}
+
+/* Le scoring LLM local est le choix qui définit le projet : c'est la seule
+   étape encadrée en accent, pour qu'elle se distingue sans texte en plus. */
+.boxAccent {
+  fill: var(--color-accent-wash);
+  stroke: var(--color-accent);
+  stroke-width: 1;
+}
+
+.boxLabel {
+  fill: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  text-anchor: middle;
+}
+
+.boxLabelAccent {
+  fill: var(--color-accent);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  text-anchor: middle;
+}
+
+.boxDetail {
+  fill: var(--color-muted);
+  font-family: var(--font-sans);
+  font-size: 9px;
+  text-anchor: middle;
+}
+
+.sectionLabel {
+  fill: var(--color-muted);
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.12em;
+}
+
+/* ── Liens ── */
+
+.link {
+  fill: none;
+  stroke: var(--color-line-strong);
+  stroke-width: 1;
+}
+
+.arrow {
+  fill: var(--color-line-strong);
+}
+
+/* Point de fusion des trois sources : matérialise le moment où les flux
+   n'en font plus qu'un, avant la déduplication. */
+.junction {
+  fill: var(--color-line-strong);
+}
+
+/* ── Flux ──────────────────────────────────────────────────────
+   Uniquement des translations : aucune propriété qui déclenche un
+   recalcul de mise en page. Les unités px valent des unités du viewBox
+   à l'intérieur d'un SVG. */
+
+.dot {
+  fill: var(--color-accent);
+  animation-duration: 1.15s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.5, 1);
+  animation-iteration-count: infinite;
+}
+
+@keyframes fanLeft {
+  from { transform: translate(0, 0); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  to   { transform: translate(112.5px, 28px); opacity: 0; }
+}
+
+@keyframes fanMiddle {
+  from { transform: translate(0, 0); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  to   { transform: translate(0, 28px); opacity: 0; }
+}
+
+@keyframes fanRight {
+  from { transform: translate(0, 0); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  to   { transform: translate(-112.5px, 28px); opacity: 0; }
+}
+
+@keyframes spine {
+  from { transform: translateY(0); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  to   { transform: translateY(34px); opacity: 0; }
+}
+
+/* Décalages successifs : le point atteint une étape au moment où le
+   précédent en repart, ce qui donne un écoulement continu. */
+.dotFanLeft { animation-name: fanLeft; }
+.dotFanMiddle { animation-name: fanMiddle; animation-delay: 0.1s; }
+.dotFanRight { animation-name: fanRight; animation-delay: 0.2s; }
+.dotSpine1 { animation-name: spine; animation-delay: 0.75s; }
+.dotSpine2 { animation-name: spine; animation-delay: 1.35s; }
+.dotSpine3 { animation-name: spine; animation-delay: 1.95s; }
+
+/* Le flux disparaît entièrement plutôt que de se figer à mi-parcours :
+   un point arrêté au milieu d'une flèche ressemblerait à un défaut. */
+@media (prefers-reduced-motion: reduce) {
+  .flow {
+    display: none;
+  }
+}
