@@ -1,0 +1,30 @@
+/* Cadre net et sombre autour d'une capture sombre : sans filet, l'image se
+   découpe brutalement sur le fond clair du site. Le filet la pose comme un
+   document inséré dans la page plutôt que comme un aplat de couleur. */
+.thumb {
+  flex: none;
+  width: 280px;
+  max-width: 100%;
+  margin: 0;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+  /* La capture porte ses propres couleurs, elle échappe donc à la règle
+     « un seul accent ». Elle reste cantonnée à l'intérieur du cadre. */
+  line-height: 0;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Sous 720px la vignette passe au-dessus du texte et prend toute la largeur :
+   280px à côté d'un paragraphe laisserait deux colonnes illisibles. */
+@media (max-width: 720px) {
+  .thumb {
+    width: 100%;
+    order: -1;
+  }
+}

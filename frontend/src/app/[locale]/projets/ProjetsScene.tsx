@@ -2,6 +2,7 @@
 
 import { motion, type Variants } from "framer-motion";
 
+import { ProjectThumb } from "@/components/ProjectThumb";
 import { Badge } from "@/components/Badge";
 import { Highlight } from "@/components/Highlight";
 import { PipelineDiagram } from "@/components/PipelineDiagram";
@@ -88,6 +89,11 @@ export function ProjetsScene({ dict, projects }: Props) {
                   </a>
                 ) : null}
               </header>
+
+              {/* Sous l'en-tête plutôt qu'à côté : la fiche est déjà une
+                  colonne de définitions large, y insérer une vignette
+                  latérale casserait l'alignement des libellés. */}
+              <ProjectThumb thumbnail={project.thumbnail} />
 
               <dl className={s.detail}>
                 {rows.map((row) => (

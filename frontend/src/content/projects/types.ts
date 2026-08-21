@@ -34,4 +34,19 @@ export type Project = {
   stack: string[];
   /** Dépôt public ou démo. Omis si le projet n'est pas consultable. */
   url?: string;
+  /**
+   * Capture réelle de l'interface, en vignette. Volontairement optionnelle
+   * et sans valeur de repli : un projet sans capture n'affiche rien plutôt
+   * qu'une image d'illustration générique, qui ne prouverait rien.
+   *
+   * `width` et `height` sont les dimensions natives du fichier, exigées par
+   * next/image pour réserver la place avant chargement et éviter que le
+   * texte ne saute quand l'image arrive.
+   */
+  thumbnail?: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
 };

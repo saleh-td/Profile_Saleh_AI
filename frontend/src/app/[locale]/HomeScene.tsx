@@ -6,6 +6,7 @@ import { motion, type Variants } from "framer-motion";
 
 import { ButtonLink } from "@/components/Button";
 import { Highlight } from "@/components/Highlight";
+import { ProjectThumb } from "@/components/ProjectThumb";
 import { Section } from "@/components/Section";
 import { StackGrid } from "@/components/StackGrid";
 import { getCvPath, profile } from "@/config/profile";
@@ -159,6 +160,7 @@ export function HomeScene({ locale, dict, projects }: Props) {
                   ::after. Envelopper la carte dans un <a> aurait imbriqué
                   le lien du dépôt dans un autre lien, ce qui est invalide
                   et casse la navigation au clavier. */}
+              <div className={s.spotlightBody}>
               <h3 className={s.spotlightTitle}>
                 <Link
                   href={`/${locale}/projets#${SPOTLIGHT_ANCHOR}`}
@@ -179,6 +181,11 @@ export function HomeScene({ locale, dict, projects }: Props) {
                   {spotlight.url.replace(/^https?:\/\//, "")} ↗
                 </a>
               ) : null}
+              </div>
+              {/* La vignette ne s'affiche que si le projet a une vraie
+                  capture. Elle reste sous la surface cliquable de la carte :
+                  cliquer l'image mène à la fiche, ce qui est attendu. */}
+              <ProjectThumb thumbnail={spotlight.thumbnail} />
             </motion.article>
           ) : null}
 

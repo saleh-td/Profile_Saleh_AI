@@ -163,11 +163,14 @@
    Un seul, celui dont le code est public. Les 4 fiches complètes
    sont sur /projets. */
 
+/* Rangée : colonne de texte à gauche, vignette à droite quand le projet en
+   a une. Sans vignette, la colonne occupe seule toute la largeur et le rendu
+   est identique à l'ancienne mise en page verticale. */
 .spotlight {
   position: relative;
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2xs);
+  gap: var(--space-lg);
+  align-items: flex-start;
   padding: var(--space-lg);
   background: var(--color-surface);
   border: 1px solid var(--color-line);
@@ -189,6 +192,20 @@
 /* Lien étendu : la surface cliquable couvre la carte entière, mais le seul
    <a> réellement présent enveloppe le titre. C'est ce qu'un lecteur d'écran
    annonce, et ça laisse le lien du dépôt cliquable par-dessus. */
+.spotlightBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  min-width: 0;
+  flex: 1;
+}
+
+@media (max-width: 720px) {
+  .spotlight {
+    flex-direction: column;
+  }
+}
+
 .spotlightLink {
   color: inherit;
   text-decoration: none;
