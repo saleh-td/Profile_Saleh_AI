@@ -1,84 +1,61 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import { Button } from "@/components/Button";
+import { Page, PageHeader } from "@/components/Section";
 import type { Dictionary } from "@/i18n/getDictionary";
 import type { Locale } from "@/i18n/locales";
 import s from "./chat.module.css";
 
-/* ── Types ── */
 type Message = {
   id: string;
-  role: "user" | "system" | "ai";
+  role: "user" | "assistant";
   content: string;
-  ts: string;
 };
 
 type Props = { locale: Locale; dict: Dictionary };
 
-/* ── Helpers ── */
-const ts = () =>
-  new Date().toLocaleTimeString("fr-FR", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
-
-const hexId = () => Math.random().toString(16).slice(2, 6);
-
-const REQUEST_TIMEOUT_MS = 15000;
-const MAX_CHAT_ATTEMPTS = 2;
+const REQUEST_TIMEOUT_MS = 20000;
+const MAX_ATTEMPTS = 2;
 const RETRYABLE_STATUSES = new Set([502, 503, 504]);
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function isFrench(locale: Locale): boolean {
-  return locale.startsWith("fr");
-}
-
+/**
+ * Messages d'erreur destinés au visiteur : ils disent ce qui s'est
+ * passé et ce qu'il peut faire, sans jargon ni code HTTP.
+ */
 function toUserErrorMessage(locale: Locale, detail: string, status?: number): string {
-  const fr = isFrench(locale);
+  const fr = locale.startsWith("fr");
 
   if (detail === "timeout") {
     return fr
-      ? "[ERR] Le serveur met trop de temps à répondre. Réessaie dans quelques secondes."
-      : "[ERR] The server took too long to respond. Please try again in a few seconds.";
+      ? "Le serveur met trop de temps à répondre. Réessayez dans quelques secondes."
+      : "The server is taking too long to respond. Please try again in a few seconds.";
   }
 
-  if (status && RETRYABLE_STATUSES.has(status)) {
+  if (/quota|rate limit/i.test(detail) || status === 429) {
     return fr
-      ? "[ERR] Service IA temporairement indisponible. Réessaie dans quelques secondes."
-      : "[ERR] AI service is temporarily unavailable. Please try again in a few seconds.";
+      ? "Trop de questions en peu de temps. Patientez une minute avant de réessayer."
+      : "Too many questions in a short time. Please wait a minute before trying again.";
   }
 
-  if (/backend unreachable/i.test(detail)) {
+  if ((status && RETRYABLE_STATUSES.has(status)) || /unreachable/i.test(detail)) {
     return fr
-      ? "[ERR] Connexion au backend indisponible pour le moment."
-      : "[ERR] Backend connection is currently unavailable.";
-  }
-
-  if (/quota|rate limit/i.test(detail)) {
-    return fr
-      ? "[ERR] Limite temporaire atteinte côté service IA. Réessaie un peu plus tard."
-      : "[ERR] Temporary rate limit reached on the AI service. Please try again later.";
+      ? "L'assistant est momentanément indisponible. Vous pouvez m'écrire directement à sminawi24@gmail.com."
+      : "The assistant is temporarily unavailable. You can email me directly at sminawi24@gmail.com.";
   }
 
   return fr
-    ? "[ERR] Une erreur temporaire est survenue. Merci de réessayer."
-    : "[ERR] A temporary error occurred. Please try again.";
+    ? "Une erreur est survenue. Réessayez, ou écrivez-moi à sminawi24@gmail.com."
+    : "Something went wrong. Please try again, or email me at sminawi24@gmail.com.";
 }
 
-async function postChatWithRetry(params: {
-  message: string;
-  sessionId: string;
-  locale: Locale;
-}) {
-  let lastStatus: number | undefined;
+async function postChat(params: { message: string; sessionId: string; locale: Locale }) {
   let lastDetail = "";
 
-  for (let attempt = 1; attempt <= MAX_CHAT_ATTEMPTS; attempt++) {
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
@@ -97,17 +74,13 @@ async function postChatWithRetry(params: {
       const data = await res.json().catch(() => ({}));
       clearTimeout(timeout);
 
-      if (res.ok) {
-        return data;
-      }
+      if (res.ok) return data;
 
-      lastStatus = res.status;
       lastDetail =
         (typeof data.detail === "string" && data.detail) || `HTTP_${res.status}`;
 
-      const retryable = RETRYABLE_STATUSES.has(res.status);
-      if (retryable && attempt < MAX_CHAT_ATTEMPTS) {
-        await sleep(300 * attempt);
+      if (RETRYABLE_STATUSES.has(res.status) && attempt < MAX_ATTEMPTS) {
+        await sleep(400 * attempt);
         continue;
       }
 
@@ -116,524 +89,221 @@ async function postChatWithRetry(params: {
       clearTimeout(timeout);
 
       if (error instanceof DOMException && error.name === "AbortError") {
-        lastDetail = "timeout";
-        if (attempt < MAX_CHAT_ATTEMPTS) {
-          await sleep(300 * attempt);
+        if (attempt < MAX_ATTEMPTS) {
+          await sleep(400 * attempt);
           continue;
         }
         throw new Error("timeout");
       }
 
-      const isNetworkError = error instanceof TypeError;
-      if (isNetworkError && attempt < MAX_CHAT_ATTEMPTS) {
-        await sleep(300 * attempt);
+      // TypeError = coupure réseau : une seconde tentative vaut le coup.
+      if (error instanceof TypeError && attempt < MAX_ATTEMPTS) {
+        await sleep(400 * attempt);
         continue;
       }
 
-      if (error instanceof Error && error.message) {
-        throw error;
+      throw error instanceof Error ? error : new Error(lastDetail || "request_failed");
+    }
+  }
+
+  throw new Error(lastDetail || "request_failed");
+}
+
+/**
+ * Le backend renvoie du texte brut avec des listes en tirets.
+ * On reconstruit des paragraphes et des listes, sans plus.
+ */
+function renderContent(content: string) {
+  return content
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block, blockIndex) => {
+      const lines = block
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+      const isList = lines.length > 0 && lines.every((line) => /^[-–]\s+/.test(line));
+
+      if (isList) {
+        return (
+          <ul key={blockIndex} className={s.list}>
+            {lines.map((line, lineIndex) => (
+              <li key={lineIndex}>{line.replace(/^[-–]\s+/, "")}</li>
+            ))}
+          </ul>
+        );
       }
 
-      throw new Error(lastDetail || "request_failed");
-    }
-  }
-
-  throw new Error(lastDetail || (lastStatus ? `HTTP_${lastStatus}` : "request_failed"));
-}
-
-function renderMessageContent(content: string) {
-  const normalized = (content || "")
-    .replace(/([.:])\s(?=(?:[2-9]|10)\)\s)/g, "$1\n")
-    .replace(/([.:])\s(?=(?:[2-9]|10)\.\s)/g, "$1\n");
-
-  const paragraphs = normalized
-    .split(/\n{2,}/)
-    .map((p) => p.trim())
-    .filter(Boolean);
-
-  if (paragraphs.length === 0) {
-    return [<p key="0">{content}</p>];
-  }
-
-  return paragraphs.map((paragraph, pIndex) => {
-    const lines = paragraph
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean);
-
-    const bulletLines = lines.filter((line) => /^[-*]\s+/.test(line));
-    const numberedLines = lines.filter((line) => /^\d+[).]\s+/.test(line));
-
-    if (lines.length > 0 && bulletLines.length === lines.length) {
       return (
-        <ul key={`${pIndex}-${paragraph.slice(0, 12)}`} className={s.msgList}>
-          {lines.map((line, lIndex) => (
-            <li key={`${pIndex}-${lIndex}`} className={s.msgListItem}>
-              {line.replace(/^[-*]\s+/, "")}
-            </li>
+        <p key={blockIndex}>
+          {lines.map((line, lineIndex) => (
+            <span key={lineIndex}>
+              {line}
+              {lineIndex < lines.length - 1 ? <br /> : null}
+            </span>
           ))}
-        </ul>
-      );
-    }
-
-    if (lines.length > 0 && numberedLines.length === lines.length) {
-      return (
-        <ol key={`${pIndex}-${paragraph.slice(0, 12)}`} className={s.msgList}>
-          {lines.map((line, lIndex) => (
-            <li key={`${pIndex}-${lIndex}`} className={s.msgListItem}>
-              {line.replace(/^\d+[).]\s+/, "")}
-            </li>
-          ))}
-        </ol>
-      );
-    }
-
-    return (
-      <p key={`${pIndex}-${paragraph.slice(0, 12)}`} className={s.msgParagraph}>
-        {lines.map((line, lIndex) => (
-          <span
-            key={`${pIndex}-${lIndex}`}
-            className={/^[A-Za-zÀ-ÿ0-9\s'()_-]{3,40}:$/.test(line) ? s.msgHeadingLine : undefined}
-          >
-            {line}
-            {lIndex < lines.length - 1 ? <br /> : null}
-          </span>
-        ))}
-      </p>
-    );
-  });
-}
-
-/* ═══════════════════════════════════════
-   ChatScene — Neural Interface
-   ═══════════════════════════════════════ */
-export function ChatScene({ locale, dict }: Props) {
-  const router = useRouter();
-  const chatRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const pendingTextRef = useRef("");
-
-  /* ── State ── */
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [typingText, setTypingText] = useState("");
-  const [typingId, setTypingId] = useState<string | null>(null);
-  const [isDisconnecting, setIsDisconnecting] = useState(false);
-  const [booted, setBooted] = useState(false);
-  const [sessionId, setSessionId] = useState("0000");
-
-  /* hydration-safe: generate random session id on client only */
-  useEffect(() => { setSessionId(hexId()); }, []);
-
-  /* ── Lock body scroll (chat is full-screen) ── */
-  useEffect(() => {
-    const html = document.documentElement;
-    const prev = html.style.overflow;
-    html.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
-    return () => {
-      html.style.overflow = prev;
-      document.body.style.overflow = "";
-    };
-  }, []);
-
-  /* ── Live metrics ── */
-  const [metrics, setMetrics] = useState({
-    latency: 42,
-    tokenGen: 38,
-    memory: 4.2,
-    tokensUsed: 0,
-  });
-
-  /* ── Uptime ── */
-  const [uptime, setUptime] = useState(0);
-  useEffect(() => {
-    const t = setInterval(() => setUptime((p) => p + 1), 1000);
-    return () => clearInterval(t);
-  }, []);
-
-  const fmtUptime = useCallback(() => {
-    const m = String(Math.floor(uptime / 60)).padStart(2, "0");
-    const sec = String(uptime % 60).padStart(2, "0");
-    return `00:${m}:${sec}`;
-  }, [uptime]);
-
-  /* ── Boot sequence ── */
-  useEffect(() => {
-    let cancelled = false;
-    const boots = [
-      dict.chat.boot1,
-      dict.chat.boot2,
-      dict.chat.boot3,
-      dict.chat.boot4,
-    ];
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    boots.forEach((text, i) => {
-      timers.push(
-        setTimeout(() => {
-          if (cancelled) return;
-          setMessages((prev) => [
-            ...prev,
-            { id: `boot-${hexId()}-${i}`, role: "system", content: text, ts: ts() },
-          ]);
-          if (i === boots.length - 1) {
-            setBooted(true);
-            setTimeout(() => inputRef.current?.focus(), 100);
-          }
-        }, 400 + i * 550)
+        </p>
       );
     });
-    return () => {
-      cancelled = true;
-      timers.forEach(clearTimeout);
-      setMessages([]);
-      setBooted(false);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /* ── Auto-scroll (smooth) ── */
-  useEffect(() => {
-    if (chatRef.current) {
-      chatRef.current.scrollTo({
-        top: chatRef.current.scrollHeight,
-        behavior: "smooth",
-      });
-    }
-  }, [messages, typingText]);
-
-  /* ── Typewriter effect ── */
-  useEffect(() => {
-    if (!typingId) return;
-    const fullText = pendingTextRef.current;
-    if (!fullText) return;
-
-    let idx = 0;
-    setTypingText("");
-
-    const interval = setInterval(() => {
-      idx++;
-      setTypingText(fullText.slice(0, idx));
-      if (idx >= fullText.length) {
-        clearInterval(interval);
-        setTypingId(null);
-        setIsProcessing(false);
-      }
-    }, 16);
-
-    return () => clearInterval(interval);
-  }, [typingId]);
-
-  /* ── Refocus input after AI response ── */
-  useEffect(() => {
-    if (!isProcessing && booted) {
-      inputRef.current?.focus();
-    }
-  }, [isProcessing, booted]);
-
-  /* ── Metrics jitter ── */
-  useEffect(() => {
-    const t = setInterval(() => {
-      setMetrics((p) => ({
-        ...p,
-        latency: Math.floor(Math.random() * 40 + 20),
-        tokenGen: Math.floor(Math.random() * 30 + 25),
-        memory: +(Math.random() * 0.5 + 4.0).toFixed(1),
-      }));
-    }, 2500);
-    return () => clearInterval(t);
-  }, []);
-
-  /* ── Send message ── */
-  const handleSend = async () => {
-    const trimmed = input.trim();
-    if (!trimmed || isProcessing || !booted) return;
-
-    const userMsg: Message = {
-      id: `u-${Date.now()}`,
-      role: "user",
-      content: trimmed,
-      ts: ts(),
-    };
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
-    setIsProcessing(true);
-    setMetrics((p) => ({
-      ...p,
-      tokensUsed: p.tokensUsed + trimmed.split(/\s+/).length * 3,
-    }));
-
-    try {
-      const data = await postChatWithRetry({
-        message: trimmed,
-        sessionId,
-        locale,
-      });
-
-      const reply =
-        data.response || data.reply || data.message || "No response received.";
-
-      const aiMsg: Message = {
-        id: `ai-${Date.now()}`,
-        role: "ai",
-        content: reply,
-        ts: ts(),
-      };
-      setMessages((prev) => [...prev, aiMsg]);
-      pendingTextRef.current = reply;
-      setTypingId(aiMsg.id);
-      setMetrics((p) => ({
-        ...p,
-        tokensUsed: p.tokensUsed + reply.split(/\s+/).length * 3,
-      }));
-    } catch (e) {
-      const raw = e instanceof Error ? e.message : "request_failed";
-      const statusMatch = raw.match(/^HTTP_(\d{3})$/);
-      const status = statusMatch ? Number(statusMatch[1]) : undefined;
-      const errText = toUserErrorMessage(locale, raw, status);
-      const errMsg: Message = {
-        id: `ai-${Date.now()}`,
-        role: "ai",
-        content: errText,
-        ts: ts(),
-      };
-      setMessages((prev) => [...prev, errMsg]);
-      pendingTextRef.current = errText;
-      setTypingId(errMsg.id);
-    }
-  };
-
-  /* ── Disconnect ── */
-  const handleDisconnect = () => {
-    setIsDisconnecting(true);
-    setTimeout(() => router.push(`/${locale}`), 250);
-  };
-
-  /* ── Key handler ── */
-  const onKey = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleSend();
-    }
-  };
-
-  /* ── Role → CSS class ── */
-  const roleClass: Record<Message["role"], string> = {
-    user: s.msgUser,
-    system: s.msgSystem,
-    ai: s.msgAi,
-  };
-
-  const rolePrefix: Record<Message["role"], string> = {
-    user: "> ",
-    system: "[SYS] ",
-    ai: "[AI] ",
-  };
-
-  /* ═══════════════════════════════════
-     Render
-     ═══════════════════════════════════ */
-  return (
-    <>
-      {/* Power-off overlay */}
-      <AnimatePresence>
-        {isDisconnecting && (
-          <motion.div
-            className={s.powerOff}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.15 }}
-          />
-        )}
-      </AnimatePresence>
-
-      <div className={`${s.scene} ${isProcessing ? s.thinking : ""}`}>
-        {/* ── Background ── */}
-        <div className={s.bgWrap}>
-          <Image src="/bg.jpg" alt="" fill className={s.bgImg} priority />
-          <div className={s.bgRadial} />
-          <div
-            className={`${s.bgPulse} ${isProcessing ? s.bgPulseActive : ""}`}
-          />
-        </div>
-
-        {/* ── CRT scanline ── */}
-        <div className={s.scanline} />
-
-        {/* ── 3-column grid ── */}
-        <div className={s.grid}>
-          {/* LEFT — System Monitor */}
-          <aside className={s.sidebar}>
-            <div className={s.sidebarHead}>
-              <span className={s.dot} />
-              {dict.chat.sidebarTitle}
-            </div>
-
-            <div className={s.logGroup}>
-              <LogRow k="MODEL" v={dict.chat.modelName} />
-              <LogRow
-                k="STATUS"
-                v={isProcessing ? dict.chat.statusProcessing : dict.chat.statusIdle}
-                active={isProcessing}
-              />
-              <LogRow k="LATENCY" v={`${metrics.latency}ms`} />
-              <LogRow k="TOKEN_GEN" v={`${metrics.tokenGen}ms`} />
-              <LogRow k="MEMORY" v={`${metrics.memory}GB`} />
-              <LogRow k="TOKENS" v={`${metrics.tokensUsed}`} />
-              <LogRow k="CTX_WIN" v="4096" />
-              <LogRow k="TEMP" v="0.7" />
-            </div>
-
-            <div className={s.sidebarFooter}>
-              <LogRow k={dict.chat.sessionLabel} v={`#${sessionId}`} />
-              <LogRow k={dict.chat.uptimeLabel} v={fmtUptime()} />
-            </div>
-          </aside>
-
-          {/* CENTER — Chat stream */}
-          <main className={s.chatZone}>
-            <div className={s.chatScroll} ref={chatRef}>
-              <div className={s.chatContent}>
-              <AnimatePresence>
-                {messages.map((msg) => (
-                  <motion.div
-                    key={msg.id}
-                    className={`${s.msgRow} ${roleClass[msg.role]}`}
-                    initial={{ opacity: 0, y: 10, filter: "blur(3px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                  >
-                    <span className={s.msgTs}>{msg.ts}</span>
-                    <span className={s.msgPrefix}>{rolePrefix[msg.role]}</span>
-                    <div className={s.msgText}>
-                      {renderMessageContent(msg.id === typingId ? typingText : msg.content)}
-                      {msg.id === typingId && (
-                        <span className={s.cursor}>_</span>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-
-              {/* idle blinking cursor */}
-              {booted && !isProcessing && (
-                <div className={s.idleLine}>
-                  <span className={s.cursor}>_</span>
-                </div>
-              )}
-              </div>
-            </div>
-
-            {/* Input bar */}
-            <div className={s.inputBar}>
-              <span className={s.inputPrefix}>{dict.chat.inputPrefix}</span>
-              <div className={s.inputFrame}>
-                <div className={s.inputWrapper}>
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    className={s.input}
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={onKey}
-                    placeholder={dict.chat.inputPlaceholder}
-                    disabled={isProcessing || !booted}
-                    autoComplete="off"
-                    spellCheck={false}
-                  />
-                  {input.length > 0 && (
-                    <button
-                      className={s.clearBtn}
-                      onClick={() => { setInput(""); inputRef.current?.focus(); }}
-                      tabIndex={-1}
-                      aria-label="Clear"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-              </div>
-              <button
-                className={`${s.sendBtn} ${(!input.trim() || isProcessing || !booted) ? s.sendBtnDimmed : ""}`}
-                onClick={handleSend}
-                disabled={isProcessing || !booted || !input.trim()}
-                aria-label="Send"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13" />
-                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                </svg>
-                <span className={s.sendLabel}>EXEC</span>
-              </button>
-            </div>
-          </main>
-
-          {/* RIGHT — Context panel */}
-          <aside className={s.contextPanel}>
-            <div className={s.contextHead}>{dict.chat.contextTitle}</div>
-
-            <div className={s.contextBody}>
-              <div className={s.contextSection}>
-                <span className={s.contextLabel}>{dict.chat.sessionLabel}</span>
-                <span className={s.contextVal}>#{sessionId}</span>
-              </div>
-              <div className={s.contextSection}>
-                <span className={s.contextLabel}>{dict.chat.uptimeLabel}</span>
-                <span className={s.contextVal}>{fmtUptime()}</span>
-              </div>
-              <div className={s.contextSection}>
-                <span className={s.contextLabel}>TOKENS</span>
-                <span className={s.contextVal}>{metrics.tokensUsed}</span>
-              </div>
-
-              <div className={s.contextDivider} />
-
-              <div className={s.contextSection}>
-                <span className={s.contextLabel}>SOURCES</span>
-              </div>
-              <div className={s.noSources}>{dict.chat.noSources}</div>
-            </div>
-          </aside>
-        </div>
-
-        {/* ── Return button — same as contact page ── */}
-        <motion.div
-          className={s.terminate}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1 }}
-        >
-          <button onClick={handleDisconnect} className={s.terminateBtn}>
-            <span className={s.terminateLabel}>Return to Core</span>
-            <span className={s.terminateIcon}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="19" y1="12" x2="5" y2="12" />
-                <polyline points="12 19 5 12 12 5" />
-              </svg>
-            </span>
-            <span className={s.terminateCode}>[TERMINATE_SESSION]</span>
-          </button>
-        </motion.div>
-      </div>
-    </>
-  );
 }
 
-/* ── Small helper ── */
-function LogRow({
-  k,
-  v,
-  active,
-}: {
-  k: string;
-  v: string;
-  active?: boolean;
-}) {
+export function ChatScene({ locale, dict }: Props) {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const [sessionId, setSessionId] = useState("");
+
+  const streamRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Identifiant de session généré côté client uniquement, pour éviter
+  // une différence entre le rendu serveur et l'hydratation.
+  useEffect(() => {
+    setSessionId(Math.random().toString(36).slice(2, 10));
+  }, []);
+
+  useEffect(() => {
+    const node = streamRef.current;
+    if (node) node.scrollTop = node.scrollHeight;
+  }, [messages, isSending]);
+
+  const send = useCallback(
+    async (raw: string) => {
+      const text = raw.trim();
+      if (!text || isSending) return;
+
+      setMessages((prev) => [
+        ...prev,
+        { id: `u-${Date.now()}`, role: "user", content: text },
+      ]);
+      setInput("");
+      setIsSending(true);
+
+      try {
+        const data = await postChat({ message: text, sessionId, locale });
+        const reply = data.response ?? data.message ?? "";
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `a-${Date.now()}`,
+            role: "assistant",
+            content: reply || toUserErrorMessage(locale, "empty"),
+          },
+        ]);
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : "request_failed";
+        const status = Number(detail.match(/^HTTP_(\d{3})$/)?.[1]) || undefined;
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `a-${Date.now()}`,
+            role: "assistant",
+            content: toUserErrorMessage(locale, detail, status),
+          },
+        ]);
+      } finally {
+        setIsSending(false);
+        inputRef.current?.focus();
+      }
+    },
+    [isSending, locale, sessionId]
+  );
+
+  const isEmpty = messages.length === 0;
+
   return (
-    <div className={s.logRow}>
-      <span className={s.logKey}>{k}</span>
-      <span className={`${s.logVal} ${active ? s.logValActive : ""}`}>{v}</span>
-    </div>
+    <Page>
+      <PageHeader title={dict.chat.title} lede={dict.chat.intro} />
+
+      <div className={s.chat}>
+        {/* La région reste montée même vide : un `aria-live` qui apparaît en
+            même temps que son premier contenu n'est pas annoncé. Seule son
+            apparence change, pour ne pas afficher un cadre vide de 180px
+            avant que la conversation ait commencé. */}
+        <div
+          className={isEmpty ? s.streamIdle : s.stream}
+          ref={streamRef}
+          aria-live="polite"
+          aria-busy={isSending}
+        >
+          {isEmpty ? (
+            <p className={s.empty}>{dict.chat.emptyState}</p>
+          ) : (
+            <ol className={s.messages}>
+              {messages.map((message) => (
+                <li
+                  key={message.id}
+                  className={message.role === "user" ? s.fromUser : s.fromAssistant}
+                >
+                  <span className={s.author}>
+                    {message.role === "user" ? dict.chat.you : dict.chat.assistant}
+                  </span>
+                  <div className={s.bubble}>{renderContent(message.content)}</div>
+                </li>
+              ))}
+            </ol>
+          )}
+
+          {isSending ? (
+            <p className={s.pending}>
+              <span className={s.pendingDot} aria-hidden="true" />
+              {dict.chat.sendingLabel}…
+            </p>
+          ) : null}
+        </div>
+
+        {isEmpty ? (
+          <div className={s.suggestions}>
+            <span className={s.suggestionsTitle}>{dict.chat.suggestionsTitle}</span>
+            <div className={s.suggestionList}>
+              {dict.chat.suggestions.map((suggestion: string) => (
+                <button
+                  key={suggestion}
+                  type="button"
+                  className={s.suggestion}
+                  onClick={() => send(suggestion)}
+                  disabled={isSending}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        <form
+          className={s.composer}
+          onSubmit={(e) => {
+            e.preventDefault();
+            send(input);
+          }}
+        >
+          <label htmlFor="chat-input" className="srOnly">
+            {dict.chat.inputPlaceholder}
+          </label>
+          <input
+            id="chat-input"
+            ref={inputRef}
+            type="text"
+            className={s.input}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={dict.chat.inputPlaceholder}
+            disabled={isSending}
+            autoComplete="off"
+            maxLength={1200}
+          />
+          <Button type="submit" disabled={isSending || !input.trim()}>
+            {dict.chat.send}
+          </Button>
+        </form>
+
+        <p className={s.disclaimer}>{dict.chat.disclaimer}</p>
+      </div>
+    </Page>
   );
 }

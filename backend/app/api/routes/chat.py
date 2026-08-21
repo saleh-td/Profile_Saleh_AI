@@ -153,11 +153,11 @@ def _greeting_answer(lang: str = "fr") -> str:
     if lang == "en":
         return (
             "Hello, I am the AI assistant for Saleh Minawi's portfolio.\n"
-            "I can present his background, his deep learning projects, his AI architecture approach, or his work on CI/CD log analysis systems."
+            "I can tell you about his experience, his projects, his availability, or how he approaches building an AI system."
         )
     return (
         "Bonjour, je suis l’assistant IA du portfolio de Saleh Minawi.\n"
-        "Je peux vous présenter son parcours, ses projets en deep learning, son approche architecture IA ou ses travaux autour des systèmes d’analyse de logs CI/CD."
+        "Je peux vous parler de son expérience, de ses projets, de sa disponibilité, ou de sa façon de concevoir un système IA."
     )
 
 
@@ -205,22 +205,23 @@ def _identity_answer(lang: str = "fr") -> str:
 def _saleh_intro_answer(lang: str = "fr") -> str:
     if lang == "en":
         return (
-            "Saleh Minawi is a backend developer specialized in AI architecture.\n\n"
-            "He is moving toward a Master's in AI Architecture (2026 intake), with a strong technical approach based on:\n"
-            "- mathematical foundations of machine learning\n"
-            "- internal understanding of backpropagation\n"
-            "- building MLP and CNN models with PyTorch\n"
-            "- CI log analysis with LLMs to automate error understanding\n\n"
-            "His goal is to design robust AI systems that can be integrated into production, especially in DevOps and CI/CD environments."
+            "Saleh Minawi is a backend and AI developer based in Lyon.\n\n"
+            "From September 2022 to August 2025 he built AI systems at Go2cam International, a CAD/CAM "
+            "software vendor; then from 2026 onwards he carried the same work independently, in partnership with "
+            "SY Solutions. He is available immediately for a permanent or fixed-term role.\n\n"
+            "What he builds: RAG document search, vector databases, language models exposed through REST "
+            "APIs, and automated data pipelines. He designs systems meant to be operated: stable API "
+            "contracts, traceable answers, and deployment handled from the start."
         )
     return (
-        "Saleh Minawi est un développeur backend spécialisé en architecture IA.\n\n"
-        "Il s’oriente vers un Master Architecte en Intelligence Artificielle (rentrée 2026) avec une approche technique solide basée sur :\n"
-        "- les fondements mathématiques du machine learning\n"
-        "- la compréhension interne de la backpropagation\n"
-        "- la construction de modèles MLP et CNN avec PyTorch\n"
-        "- l’analyse de logs CI via LLM pour automatiser la compréhension d’erreurs\n\n"
-        "Son objectif est de concevoir des systèmes IA robustes et intégrables en production, notamment dans des environnements DevOps et CI/CD."
+        "Saleh Minawi est développeur backend et IA, basé à Lyon.\n\n"
+        "De septembre 2022 à août 2025, il construit des systèmes IA chez Go2cam International, éditeur "
+        "de logiciels CAO/FAO ; puis, à partir de 2026, il porte le même travail en autonomie, en partenariat avec "
+        "SY Solutions. Il est disponible immédiatement pour un poste en CDI ou CDD.\n\n"
+        "Ce qu'il construit : de la recherche documentaire par RAG, des bases vectorielles, des modèles "
+        "de langage exposés par API REST, et des pipelines de données automatisés. Il conçoit des systèmes "
+        "faits pour être exploités : contrats d'API stables, réponses traçables, et déploiement pensé dès "
+        "le départ."
     )
 
 
@@ -257,22 +258,24 @@ def _is_work_experience_question(message: str) -> bool:
 def _work_experience_answer(lang: str = "fr") -> str:
     if lang == "en":
         return (
-            "He completed a work-study (alternance) experience at Go2cam International in Lyon, from November 2022 to August 2025, as a backend developer oriented to AI systems.\n"
-            "Main contributions:\n"
-            "- designed and deployed a RAG system for internal document search\n"
-            "- integrated internal AI tools via APIs into business workflows\n"
-            "- implemented and operated vector databases (PostgreSQL + pgvector)\n"
-            "- revamped and evolved the internal Django portal (auth, workflows, API)\n"
-            "- automated and optimized data/AI pipelines"
+            "In 2026 he moved to freelance work as a backend and AI developer, in partnership with SY Solutions in Lyon.\n\n"
+            "Before that, at Go2cam International (Lyon, September 2022 to August 2025), a CAD/CAM software vendor:\n"
+            "- designed and deployed a RAG system for internal document search, cutting research time by roughly 50%\n"
+            "- exposed an in-house LLM through REST APIs consumed by several business applications\n"
+            "- built and operated vector databases (Qdrant, ChromaDB, PostgreSQL with pgvector)\n"
+            "- developed predictive machine learning models for demand forecasting\n"
+            "- rebuilt the internal Django portal (authentication, workflows, REST APIs)\n"
+            "- automated data pipelines and maintained services in production"
         )
 
     return (
-        "Il a fait son alternance chez Go2cam International (Lyon), de novembre 2022 à août 2025, comme développeur backend orienté systèmes IA.\n"
-        "Ses missions principales :\n"
-        "- conception et déploiement d'un système RAG pour la recherche documentaire interne\n"
-        "- intégration d'outils IA internes via API dans les workflows métier\n"
-        "- mise en place et exploitation de bases vectorielles (PostgreSQL + pgvector)\n"
-        "- refonte et évolution du portail interne Django (authentification, workflows, API)\n"
+        "En 2026, il passe en freelance comme développeur backend et IA, en partenariat avec SY Solutions à Lyon.\n\n"
+        "Avant cela, chez Go2cam International (Lyon, septembre 2022 à août 2025), éditeur de logiciels CAO/FAO :\n"
+        "- conception et déploiement d'un système RAG pour la recherche documentaire interne, réduisant le temps de recherche d'environ 50 %\n"
+        "- LLM interne exposé par API REST et consommé par plusieurs applications métier\n"
+        "- mise en place et exploitation de bases vectorielles (Qdrant, ChromaDB, PostgreSQL avec pgvector)\n"
+        "- développement de modèles de machine learning prédictifs pour la prévision de demande\n"
+        "- refonte du portail interne Django (authentification, workflows, API REST)\n"
         "- automatisation et optimisation des pipelines de données et IA"
     )
 
@@ -293,171 +296,40 @@ def _is_parcours_question(message: str) -> bool:
 
 
 def _parcours_answer(lang: str = "fr") -> str:
+    """
+    Un seul fil, pas une énumération de postes.
+
+    Les faits sont datés plutôt que comptés en durée : « septembre 2022 à
+    août 2025 » reste vrai indéfiniment, « trois ans d'expérience » se périme
+    silencieusement si la page n'est pas remise à jour.
+    """
     if lang == "en":
         return (
-            "He first strengthened his foundations in computer science and applied mathematics, with a focus on algorithms and backend system design.\n\n"
-            "Then he deliberately approached AI through fundamentals:\n"
-            "- derivatives and optimization\n"
-            "- gradient descent\n"
-            "- linear and logistic regression\n"
-            "- implementation of a first fully connected network in PyTorch\n"
-            "- detailed understanding of backpropagation\n\n"
-            "He then progressed to:\n"
-            "- multi-layer neural networks (MLP)\n"
-            "- convolutional neural networks (CNN)\n"
-            "- first NLP experiments\n"
-            "- end-to-end AI project structuring\n\n"
-            "In parallel, he moved toward a systems-oriented approach:\n"
-            "- AI integration in backend environments\n"
-            "- automated CI/CD log analysis using LLMs\n"
-            "- design of scalable hybrid architectures (specific → multi-systems)\n\n"
-            "His goal is clear: become an AI Architect by designing robust, understandable, and production-ready systems."
+            "Saleh's career follows a single line: design AI systems, then take them all the way "
+            "to production and keep them running.\n\n"
+            "Between September 2022 and August 2025, at Go2cam International in Lyon, a CAD/CAM "
+            "software vendor, he designed and deployed a RAG system for internal documentation "
+            "search: research time dropped by roughly 50%. He then exposed an in-house language "
+            "model through REST APIs for several business applications, built the vector databases "
+            "feeding them, and rebuilt the internal Django portal.\n\n"
+            "In 2026 he moved to freelance work and carried the same chain independently: "
+            "fixed-scope engagements in partnership with SY Solutions, on backend development and "
+            "AI integration in Python and FastAPI.\n\n"
+            "The thread is constant: start from a real business need, build, and stay accountable "
+            "for the result once it runs in production."
         )
     return (
-        "Il a d’abord consolidé ses bases en informatique et en mathématiques appliquées, avec un focus sur l’algorithmique et la structuration des systèmes backend.\n\n"
-        "Ensuite, il a volontairement abordé l’intelligence artificielle par les fondements :\n"
-        "- dérivées et optimisation\n"
-        "- descente de gradient\n"
-        "- régression linéaire et logistique\n"
-        "- implémentation d’un premier réseau fully connected en PyTorch\n"
-        "- compréhension détaillée de la backpropagation\n\n"
-        "Il a ensuite évolué vers :\n"
-        "- réseaux de neurones multi-couches (MLP)\n"
-        "- réseaux convolutifs (CNN)\n"
-        "- premières expérimentations en NLP\n"
-        "- structuration de projets IA de bout en bout\n\n"
-        "Parallèlement, il s’est orienté vers une approche plus système :\n"
-        "- intégration d’IA dans des environnements backend\n"
-        "- analyse automatisée de logs CI/CD via LLM\n"
-        "- conception d’architectures hybrides évolutives (spécifique → multi-systèmes)\n\n"
-        "Son objectif est clair : devenir Architecte IA en concevant des systèmes robustes, compréhensibles et intégrables en production."
-    )
-
-
-def _is_technical_path_question(message: str) -> bool:
-    text = _normalize_text(message)
-    has_parcours_like = bool(re.search(r"\bparcour\w*\b", text))
-    has_tech_marker = any(token in text for token in ["tech", "technique", "techniq", "technical"])
-    explicit_forms = {
-        "sur son parcour technique",
-        "sur son parcours technique",
-        "parcours technique",
-        "parcour technique",
-        "technical background",
-        "technical path",
-    }
-    return text in explicit_forms or (has_parcours_like and has_tech_marker)
-
-
-def _technical_path_answer(lang: str = "fr") -> str:
-    if lang == "en":
-        return (
-            "Technical path of Saleh (high-level view):\n"
-            "- Math and optimization foundations: derivatives, chain rule, gradient descent behavior, and loss curve visualization.\n"
-            "- ML foundations: linear/logistic regression implemented and analyzed to understand convergence and hyperparameter impact.\n"
-            "- Deep learning engineering: first fully connected network (MLP) and CNN models with PyTorch, with practical training/debug workflow.\n"
-            "- Early NLP steps: tokenization, embeddings, and text classification experiments.\n"
-            "- Systems approach: backend integration, CI/CD log analysis with LLMs, and production-oriented architecture decisions.\n"
-            "If you want, I can now zoom in only on his gradient descent work with a concrete step-by-step example."
-        )
-    return (
-        "Parcours technique de Saleh (vue d'ensemble):\n"
-        "- Fondations math/optimisation: dérivées, règle de la chaîne, comportement de la descente de gradient, visualisation des courbes de coût.\n"
-        "- Bases ML: régression linéaire/logistique implémentées et analysées pour comprendre convergence et impact des hyperparamètres.\n"
-        "- Ingénierie deep learning: premier réseau fully connected (MLP) puis CNN en PyTorch, avec workflow d'entraînement et de debug.\n"
-        "- Premiers travaux NLP: tokenisation, embeddings, classification de texte.\n"
-        "- Approche système: intégration backend, analyse de logs CI/CD via LLM, et décisions d'architecture orientées production.\n"
-        "Si vous voulez, je peux maintenant zoomer uniquement sur sa descente de gradient avec un exemple concret étape par étape."
-    )
-
-
-def _is_gradient_focus_question(message: str) -> bool:
-    text = _normalize_text(message)
-    markers = [
-        "descente de gradient",
-        "gradient descent",
-        "gradiant",
-        "gradient",
-        "optimisation",
-    ]
-    if any(token in text for token in markers):
-        return True
-    # Handle natural follow-ups after assistant asks about gradient.
-    return bool(re.search(r"\boui\b.*\b(parle|explique|detail|détail|zoom)\b", text)) and "gradient" in text
-
-
-def _gradient_focus_answer(lang: str = "fr") -> str:
-    if lang == "en":
-        return (
-            "Saleh's gradient descent work (concrete view):\n"
-            "- He starts with f(x)=2x^2-3x+4 and computes numerical slope with h=0.0001.\n"
-            "- Numerical checks: derivative at x=-1 is about -6.9998, and at x=2 is about 5.0002.\n"
-            "- He then derives f'(x)=4x-3 and runs iterative updates from x=2.0 with alpha=0.01 over 250 iterations.\n"
-            "- Observed result: approximate minimum x≈0.76 (close to analytical optimum x=0.75).\n"
-            "- Chain-rule phase: with derivative 6x-3, same loop converges near x≈0.50.\n"
-            "- Multi-variable optimization: updates a,b,c with partial derivatives; observed values a≈0.30, b≈0, c≈-11.5 after iterations.\n"
-            "- Interpretation: because c has a constant positive gradient in his setup, c keeps decreasing with more iterations.\n"
-            "Outcome: he built intuition from math to code, then reused it in linear/logistic regression and PyTorch training workflows."
-        )
-    return (
-        "Descente de gradient de Saleh (version concrète):\n"
-        "- Il part d'une fonction simple f(x)=2x^2-3x+4 et estime la dérivée numériquement avec h=0.0001.\n"
-        "- Vérifications numériques: dérivée en x=-1 ≈ -6.9998 et en x=2 ≈ 5.0002.\n"
-        "- Ensuite il pose la dérivée analytique f'(x)=4x-3 et lance une boucle d'optimisation depuis x=2.0, alpha=0.01, 250 itérations.\n"
-        "- Résultat observé: minimum approché x≈0.76 (proche de l'optimum théorique x=0.75).\n"
-        "- Partie règle de la chaîne: avec la dérivée 6x-3, la boucle converge vers x≈0.50.\n"
-        "- Optimisation multi-variables: mise à jour de a,b,c avec dérivées partielles; valeurs observées a≈0.30, b≈0, c≈-11.5 après itérations.\n"
-        "- Interprétation: dans son setup, c a un gradient constant positif, donc c continue de diminuer si on itère davantage.\n"
-        "Résultat: il relie les maths, l'implémentation et l'interprétation terrain, puis réutilise cette base dans la régression et l'entraînement PyTorch."
-    )
-
-
-def _is_logistic_regression_question(message: str) -> bool:
-    text = _normalize_text(message)
-    markers = [
-        "regression logistique",
-        "régression logistique",
-        "logistic regression",
-        "neurone artificiel",
-        "artificial neuron",
-        "sigmoid",
-        "sigmoide",
-        "sigmoïde",
-        "admis",
-        "w0",
-        "w1",
-        "w2",
-        "log vraisemblance",
-    ]
-    return any(token in text for token in markers)
-
-
-def _logistic_regression_answer(lang: str = "fr") -> str:
-    if lang == "en":
-        return (
-            "Saleh's logistic regression work (concrete):\n"
-            "- He starts from the artificial neuron formula: weighted sum + bias, then sigmoid activation for binary probability output.\n"
-            "- Practical use case: predict university admission from 3 normalized inputs (exam, average grade, motivation), with labels 0/1.\n"
-            "- He implements the model from scratch: parameters w0,w1,w2,b, negative log-likelihood loss, and gradient updates:\n"
-            "  dL/dw0=(pred-y)*x0, dL/dw1=(pred-y)*x1, dL/dw2=(pred-y)*x2, dL/db=(pred-y).\n"
-            "- Before training, predictions are uncertain (~60% and ~59%).\n"
-            "- Training setup: learning_rate=0.01, long run up to 40,000 epochs, with loss decreasing from ~0.01468 to ~0.00728.\n"
-            "- Learned parameters observed: w0=19.4643, w1=-3.2723, w2=-8.2449, b=-4.9032.\n"
-            "- After training, test predictions become coherent: ~93% admission for (0.8,0.7,0.7) and ~0% for (0.4,0.5,0.9).\n"
-            "Outcome: he connected the math (sigmoid + chain rule + NLL) to a fully working training loop with interpretable model behavior."
-        )
-
-    return (
-        "Régression logistique de Saleh (version concrète):\n"
-        "- Il part du neurone artificiel: somme pondérée + biais, puis activation sigmoïde pour obtenir une probabilité binaire.\n"
-        "- Cas pratique: prédire l'admission d'un étudiant à partir de 3 entrées normalisées (examen, moyenne, motivation), avec labels 0/1.\n"
-        "- Implémentation from scratch: paramètres w0,w1,w2,b, loss de log-vraisemblance négative, et dérivées:\n"
-        "  dL/dw0=(pred-y)*x0, dL/dw1=(pred-y)*x1, dL/dw2=(pred-y)*x2, dL/db=(pred-y).\n"
-        "- Avant entraînement, les prédictions sont incertaines (~60% et ~59%).\n"
-        "- Configuration d'entraînement: learning_rate=0.01, montée en itérations jusqu'à 40 000 epochs, avec une loss qui diminue de ~0.01468 à ~0.00728.\n"
-        "- Paramètres appris observés: w0=19.4643, w1=-3.2723, w2=-8.2449, b=-4.9032.\n"
-        "- Après entraînement, prédictions cohérentes: ~93% d'admission pour (0.8,0.7,0.7) et ~0% pour (0.4,0.5,0.9).\n"
-        "Résultat: il relie les fondements mathématiques (sigmoïde, chaîne, NLL) à une boucle d'entraînement complète et interprétable."
+        "Le parcours de Saleh suit une seule ligne : concevoir des systèmes IA, puis les amener "
+        "jusqu'à la production et les y maintenir.\n\n"
+        "Entre septembre 2022 et août 2025, chez Go2cam International à Lyon, éditeur de logiciels "
+        "CAO/FAO, il conçoit et déploie un système RAG pour la recherche documentaire interne : le "
+        "temps de recherche baisse d'environ 50 %. Il expose ensuite un LLM interne par API REST "
+        "pour plusieurs applications métier, met en place les bases vectorielles qui les alimentent, "
+        "et refond le portail interne Django.\n\n"
+        "En 2026, il passe en freelance et porte la même chaîne en autonomie : missions au forfait "
+        "en partenariat avec SY Solutions, sur du backend et de l'intégration IA en Python et FastAPI.\n\n"
+        "Le fil est constant : partir d'un besoin métier réel, construire, et rester responsable du "
+        "résultat une fois en production."
     )
 
 
@@ -479,16 +351,14 @@ def _is_parcours_scolaire_question(message: str) -> bool:
 def _parcours_scolaire_answer(lang: str = "fr") -> str:
     if lang == "en":
         return (
-            "Saleh has an academic path focused on computer science and artificial intelligence.\n\n"
-            "He first completed a Bachelor's degree in application development with specialization in algorithms and data science, where he built strong foundations in programming, applied mathematics, and optimization.\n\n"
-            "He is currently preparing for a Master's in AI Architecture (2026 intake), with a clear objective: design and integrate complete AI systems, from model development to production deployment.\n\n"
-            "His trajectory logically evolves from software development toward advanced AI systems architecture."
+            "Saleh holds a Bachelor's degree in Application Design and Development, specialising in data science and algorithms, from Afip Formation in Villeurbanne (2023-2025, RNCP level 6).\n\n"
+            "He previously completed a diploma in Mathematics and Computer Science at IUT La Doua, Villeurbanne (2022-2023).\n\n"
+            "He studied while already working in the field, which is why his professional experience overlaps with the years of his degree."
         )
     return (
-        "Saleh a un parcours orienté informatique et intelligence artificielle.\n\n"
-        "Il a d’abord suivi un Bachelor en développement d’applications avec une spécialisation en algorithmique et data science, où il a construit des bases solides en programmation, mathématiques appliquées et optimisation.\n\n"
-        "Il prépare actuellement un Master Architecte en Intelligence Artificielle (rentrée 2026), avec un objectif clair : concevoir et intégrer des systèmes IA complets, du modèle jusqu’à la mise en production.\n\n"
-        "Son parcours évolue logiquement du développement logiciel vers l’architecture avancée de systèmes IA."
+        "Saleh est titulaire d'un Bachelor Concepteur Développeur d'Applications, spécialité science des données et algorithmique, obtenu à Afip Formation à Villeurbanne (2023-2025, niveau RNCP 6).\n\n"
+        "Il a auparavant suivi un DUT Mathématiques Informatique à l'IUT La Doua, Villeurbanne (2022-2023).\n\n"
+        "Il s'est formé tout en travaillant déjà dans le domaine, ce qui explique que son expérience professionnelle recouvre les années de ses études."
     )
 
 
@@ -593,13 +463,14 @@ def _pick_project_from_recent_context(session_id: str | None) -> dict[str, str] 
         return None
 
     idx = _extract_project_index(recent)
-    if idx in {1, 2, 3}:
+    if idx in {1, 2, 3, 4}:
         return PROJECTS_CATALOG[idx - 1]
 
     project_keywords = {
-        0: ["ia training", "pytorch", "mlp", "cnn", "wavenet", "regression", "régression"],
-        1: ["teamcity", "build", "logs", "ci", "cd", "jenkins", "github actions"],
-        2: ["ourtiguet", "django", "react", "rag", "vector", "quadrant", "openai"],
+        0: ["rag", "documentaire", "recherche", "qdrant", "pgvector", "vectoriel", "embedding", "llm interne", "chatbot"],
+        1: ["migration", "donnees", "données", "redis", "dashboard", "revendeur", "nettoyage"],
+        2: ["ourtiguet", "laboratoire", "huile", "formulation", "recette", "stock", "plante"],
+        3: ["veille", "emploi", "jobsearch", "ollama", "qwen", "himalayas", "eures", "adzuna", "vue"],
     }
     for index, keywords in project_keywords.items():
         if any(token in recent for token in keywords):
@@ -609,98 +480,87 @@ def _pick_project_from_recent_context(session_id: str | None) -> dict[str, str] 
 
 
 def _project_example_answer(project: dict[str, str], lang: str = "fr") -> str:
-    name = project["name"]
+    """Reformule un projet en problème → approche → résultat."""
     if lang == "en":
-        if name.startswith("IA Training"):
-            return (
-                "Concrete example (project 1):\n"
-                "Problem: unstable learning because features were not normalized and learning rate was too high.\n"
-                "Approach: apply StandardScaler, lower learning rate, track loss curve every epoch, and compare SGD vs Adam.\n"
-                "Result: stable convergence, lower loss, and reproducible training behavior with clearer model interpretation."
-            )
         return (
-            f"Concrete example ({name}):\n"
-            "Problem: noisy input and unclear root cause.\n"
-            "Approach: structure data, classify error type, and generate a focused corrective action.\n"
-            "Result: faster diagnosis and clearer technical decisions."
-        )
-
-    if name.startswith("IA Training"):
-        return (
-            "Exemple concret (projet 1):\n"
-            "Problème: l'apprentissage était instable car les variables n'étaient pas normalisées et le learning rate était trop élevé.\n"
-            "Approche: application de StandardScaler, réduction du learning rate, suivi de la loss à chaque époque, puis comparaison SGD vs Adam.\n"
-            "Résultat: convergence stable, loss plus faible, et comportement du modèle plus lisible et reproductible."
+            f"{project['name']}\n"
+            f"Problem: {project['context']}\n"
+            f"Approach: {project['architecture']}\n"
+            f"Result: {project['result']}"
         )
 
     return (
-        f"Exemple concret ({name}):\n"
-        "Problème: données bruyantes et cause racine peu claire.\n"
-        "Approche: structuration du contexte, classification de l'erreur, puis proposition d'action corrective ciblée.\n"
-        "Résultat: diagnostic plus rapide et décisions techniques plus nettes."
+        f"{project['name']}\n"
+        f"Problème : {project['context']}\n"
+        f"Approche : {project['architecture']}\n"
+        f"Résultat : {project['result']}"
     )
 
 
 def _positive_feedback_answer(session_id: str | None, lang: str = "fr") -> str:
     recent = " ".join(_normalize_text(m) for m in _recent_user_messages(session_id)[-4:])
 
-    if any(token in recent for token in ["parcours", "saleh", "profil"]):
+    if any(token in recent for token in ["parcours", "saleh", "profil", "experience", "expérience"]):
         if lang == "en":
             return (
                 "Glad this is useful.\n"
-                "Would you like a more technical version of his journey,\n"
-                "or should I switch to concrete projects one by one?"
+                "Would you like more detail on one of his projects, or on his availability?"
             )
         return (
             "Avec plaisir.\n"
-            "Vous voulez que je continue sur son parcours avec une version encore plus technique,\n"
-            "ou que je bascule sur ses réalisations concrètes projet par projet ?"
+            "Voulez-vous plus de détails sur l'un de ses projets, ou sur sa disponibilité ?"
         )
 
-    if any(token in recent for token in ["projet", "project", "realisation", "réalisation", "teamcity", "wavenet", "pytorch"]):
+    if any(token in recent for token in ["projet", "project", "realisation", "réalisation", "rag", "llm"]):
         if lang == "en":
             return (
                 "Great.\n"
-                "Would you like me to detail project 1 (IA Training), project 2 (CI/CD log analysis),\n"
-                "or project 3 (Ourtiguet Naturel)?"
+                "Would you like me to detail the RAG document search system, the in-house LLM\n"
+                "exposed through an API, or the automated job intelligence pipeline?"
             )
         return (
             "Ravi que ça vous intéresse.\n"
-            "Souhaitez-vous que je détaille le projet 1 (IA Training), le projet 2 (analyse de logs CI/CD),\n"
-            "ou le projet 3 (Ourtiguet Naturel) ?"
+            "Souhaitez-vous que je détaille le système RAG de recherche documentaire, le LLM interne\n"
+            "exposé par API, ou le pipeline automatisé de veille emploi ?"
         )
 
     if lang == "en":
         return (
             "With pleasure.\n"
-            "Would you like me to present his background, his projects,\n"
-            "or his technical deep learning approach?"
+            "Would you like me to cover his experience, his projects, or his availability?"
         )
     return (
         "Avec plaisir.\n"
-        "Voulez-vous que je vous présente son parcours, ses réalisations,\n"
-        "ou son approche technique en deep learning ?"
+        "Voulez-vous que je vous présente son expérience, ses projets, ou sa disponibilité ?"
     )
 
 
+# Doit rester aligné sur frontend/src/content/projects/*.json : c'est le même
+# contenu présenté à deux endroits, et une divergence se voit immédiatement.
 PROJECTS_CATALOG = [
     {
-    "name": "IA Training – Deep Learning Foundations",
-    "context": "Projet personnel structuré comme un parcours progressif pour maîtriser les fondements mathématiques et techniques du machine learning puis du deep learning, avec une approche orientée compréhension des mécanismes internes plutôt que simple utilisation de librairies.",
-    "architecture": "1) Reprise des bases mathématiques : dérivées, gradients, règle de la chaîne, implémentation manuelle de la descente de gradient et visualisation des fonctions de coût (MSE, log-loss) avec Matplotlib. 2) Implémentation from scratch de régression linéaire et logistique en NumPy pour comprendre l'optimisation et la convergence. 3) Construction d’un réseau de neurones fully connected (MLP) en PyTorch : forward pass, fonctions d’activation (ReLU, Sigmoid), backpropagation, choix d’optimiseur (SGD, Adam), régularisation et early stopping. 4) Réseaux convolutifs (CNN) pour classification d’images : couches Conv2D, pooling, normalisation, analyse des cartes d’activation. 5) Premières expérimentations en NLP : tokenisation, embeddings, classification de texte simple, compréhension des pipelines séquentiels et de la représentation vectorielle du langage.",
-    "result": "Maîtrise opérationnelle des concepts d’optimisation, compréhension concrète de la backpropagation, capacité à construire et entraîner des architectures MLP et CNN avec PyTorch, lecture et interprétation de courbes de loss/accuracy, et compréhension des bases nécessaires pour évoluer vers des architectures plus avancées (RNN, modèles génératifs ou architectures inspirées de WaveNet)."
+        "name": "Plateforme IA interne : recherche documentaire et LLM exposé par API",
+        "context": "Chez Go2cam International, de 2022 à 2025. Les équipes perdaient du temps à chercher dans une documentation technique dense, répartie sur plusieurs sources internes, et chaque application réimplémentait son propre accès au modèle.",
+        "architecture": "Pipeline d'ingestion et de normalisation, découpage et embeddings, stockage en base vectorielle (Qdrant, ChromaDB, PostgreSQL avec pgvector). Recherche sémantique et LLM interne exposés par une même API REST, point d'entrée unique consommé par plusieurs applications métier. Un chatbot d'assistance a été construit par-dessus.",
+        "result": "Temps de recherche documentaire réduit d'environ 50 %, réponses rattachées à leur source donc vérifiables, et un contrat d'API stable qui permet de changer de modèle sans toucher aux applications clientes.",
     },
     {
-        "name": "Extension IA – Analyse des builds échoués",
-        "context": "Module d'assistance LLM intégré pour diagnostiquer rapidement les échecs de build TeamCity.",
-        "architecture": "Collecte des logs via API TeamCity → structuration du contexte → envoi au LLM → résumé technique + cause probable + classification (compilation/test/dépendance) + suggestion de correction.",
-        "result": "Diagnostic accéléré grâce à une reformulation claire des erreurs, avec une base technique généralisable à d'autres CI/CD (GitHub Actions, GitLab CI, Jenkins).",
+        "name": "Migration et valorisation d'un patrimoine de données",
+        "context": "Chez Go2cam International, de 2022 à 2025. Trois bases de production alimentées depuis 2008, plusieurs millions d'enregistrements, inexploitables en l'état : formats hétérogènes, doublons, historique jamais nettoyé. Projet mené en binôme.",
+        "architecture": "Nettoyage et normalisation des trois bases, migration vers une cible unifiée, puis restitution par des tableaux de bord construits pour chaque profil de revendeur. Un mécanisme d'orchestration en Python et Redis fait tourner plusieurs scripts indépendants en parallèle, synchronisés lors de la récupération des données. Exécution en bac à sable avant toute écriture réelle, et garde-fou bloquant les traitements hors des bornes attendues.",
+        "result": "Trois bases historiques nettoyées, migrées et rendues exploitables. L'affichage des données, qui dépassait dix secondes par page, est revenu à un temps de réponse normal. Les tableaux de bord sont devenus utilisables au quotidien.",
     },
     {
-        "name": "Ourtiguet Naturel – Laboratoire intelligent d’huiles essentielles",
-        "context": "Projet de formation pour un laboratoire interne où l'IA assiste la création des recettes et le contrôle des dosages.",
-        "architecture": "Frontend React + backend Django, intégration OpenAI avec RAG et base vectorielle Quadrant, CI/CD avec GitHub Runner sur serveur local, stack Docker + Redis + Nginx, sauvegardes locales chiffrées automatisées via scripts Python.",
-        "result": "Assistant métier opérationnel en environnement interne, avec automatisation, confidentialité renforcée et couverture complète du cycle dev → IA → déploiement.",
+        "name": "Ourtiguet Naturel : gestion de laboratoire",
+        "context": "Application métier pour un laboratoire de cosmétique naturelle, code non public. Suivre ce qui entre dans chaque produit : plantes, matières premières et actifs, puis les formulations et recettes qui les combinent, jusqu'à la production, avec le suivi des stocks et les alertes associées.",
+        "architecture": "Backend Django et Django REST Framework exposant l'API métier, consommée par un frontend React construit avec Vite. PostgreSQL pour les données, Redis pour le cache et les sessions. Conteneurisation et orchestration par Docker Compose, avec intégration et déploiement continus sur GitHub Actions.",
+        "result": "Application complète et fonctionnelle, du modèle de données à l'interface web : matières premières, formulations et stocks réunis dans un seul outil, servi par une API documentée.",
+    },
+    {
+        "name": "jobsearch-platform : plateforme de recherche d'emploi",
+        "context": "Projet personnel (2026), dépôt public sur github.com/saleh-td/jobsearch-platform. Agréger et trier automatiquement des offres d'emploi dispersées sur plusieurs plateformes, sans dépendre d'une API de LLM payante.",
+        "architecture": "Agrégation de trois sources (EURES, Adzuna et Himalayas), puis scoring automatique de pertinence par un LLM exécuté en local (Qwen 2.5 7B via Ollama, sur GPU). Interface de consultation en Vue 3, l'ensemble orchestré par Docker Compose.",
+        "result": "Chaîne complète et autonome, de la collecte au tri. Le code est public et exécutable en une commande.",
     },
 ]
 
@@ -757,7 +617,7 @@ def _project_detail_level(message: str, session_id: str | None) -> str:
         return "deep"
 
     recent = " ".join(_normalize_text(m) for m in _recent_user_messages(session_id)[-3:])
-    if any(token in recent for token in ["approfond", "detail", "technique", "deep learning"]):
+    if any(token in recent for token in ["approfond", "detail", "technique", "architecture"]):
         return "deep"
     return "standard"
 
@@ -772,18 +632,6 @@ def _project_answer_short(project: dict[str, str]) -> str:
 
 
 def _project_answer_deep(project: dict[str, str]) -> str:
-    if project["name"].startswith("IA Training"):
-        return (
-            "IA Training – Deep Learning Foundations\n"
-            "Contexte: projet fondateur de son parcours IA, conçu pour comprendre les mécanismes internes des modèles et pas seulement utiliser des librairies.\n"
-            "Approche mathématique: dérivées, règle de la chaîne, descente de gradient, visualisation des fonctions de coût et des tangentes avec Matplotlib.\n"
-            "Machine learning de base: implémentations from scratch (NumPy) de régression linéaire et logistique pour analyser convergence, learning rate et epochs.\n"
-            "Deep learning avec PyTorch: premier réseau fully connected (MLP), activations, backpropagation, choix d'optimiseurs (SGD/Adam), régularisation et early stopping.\n"
-            "Vision par ordinateur: CNN avec couches convolution/pooling, lecture des cartes d'activation et interprétation des performances.\n"
-            "NLP: premières expérimentations sur tokenisation, embeddings et classification de texte, avec transition progressive vers des architectures plus avancées comme WaveNet.\n"
-            "Résultat: il sait expliquer de bout en bout comment un modèle apprend, pourquoi il converge (ou non), et comment structurer un pipeline d'entraînement robuste."
-        )
-
     return (
         f"{project['name']}\n"
         f"Contexte détaillé: {project['context']}\n"
@@ -795,18 +643,18 @@ def _project_answer_deep(project: dict[str, str]) -> str:
 
 def _is_project_selector(message: str) -> bool:
     text = (message or "").strip().lower()
-    if text in {"1", "2", "3", "projet 1", "projet 2", "projet 3", "project 1", "project 2", "project 3"}:
+    if text in {"1", "2", "3", "4", "projet 1", "projet 2", "projet 3", "projet 4", "project 1", "project 2", "project 3", "project 4"}:
         return True
 
     normalized = _normalize_text(text)
     if any(token in normalized for token in ["premier", "deuxieme", "deuxième", "troisieme", "troisième"]):
         return True
 
-    if re.search(r"\b(?:projet|project)\s*([123])\b", normalized):
+    if re.search(r"\b(?:projet|project)\s*([1234])\b", normalized):
         return True
 
     # Accept natural references like "parle de la 1".
-    if re.search(r"\b(?:la|le|du|de|d|celui)\s*([123])\b", normalized):
+    if re.search(r"\b(?:la|le|du|de|d|celui)\s*([1234])\b", normalized):
         return True
 
     return False
@@ -821,16 +669,18 @@ def _extract_project_index(message: str) -> int | None:
         return 2
     if "troisieme" in text or "troisième" in text:
         return 3
+    if "quatrieme" in text or "quatrième" in text:
+        return 4
 
-    explicit = re.search(r"\b(?:projet|project)\s*([123])\b", text)
+    explicit = re.search(r"\b(?:projet|project)\s*([1234])\b", text)
     if explicit:
         return int(explicit.group(1))
 
-    natural = re.search(r"\b(?:la|le|du|de|d|celui)\s*([123])\b", text)
+    natural = re.search(r"\b(?:la|le|du|de|d|celui)\s*([1234])\b", text)
     if natural:
         return int(natural.group(1))
 
-    standalone = re.search(r"\b([123])\b", text)
+    standalone = re.search(r"\b([1234])\b", text)
     if standalone and len(text.split()) <= 4:
         return int(standalone.group(1))
 
@@ -841,7 +691,7 @@ def _pick_project(message: str) -> dict[str, str]:
     text = message.lower()
 
     selected_index = _extract_project_index(text)
-    if selected_index in {1, 2, 3}:
+    if selected_index in {1, 2, 3, 4}:
         return PROJECTS_CATALOG[selected_index - 1]
 
     if text.strip() in {"1", "projet 1", "project 1"}:
@@ -850,56 +700,71 @@ def _pick_project(message: str) -> dict[str, str]:
         return PROJECTS_CATALOG[1]
     if text.strip() in {"3", "projet 3", "project 3"}:
         return PROJECTS_CATALOG[2]
+    if text.strip() in {"4", "projet 4", "project 4"}:
+        return PROJECTS_CATALOG[3]
 
     if any(token in text for token in [
-        "ia training",
-        "training",
-        "régression",
-        "regression",
-        "linéaire",
-        "lineaire",
-        "logistique",
-        "sigmoid",
-        "classification",
-        "standardscaler",
+        "rag",
+        "documentaire",
+        "documentation",
+        "recherche",
+        "qdrant",
+        "pgvector",
+        "chromadb",
+        "vectoriel",
+        "vectorielle",
+        "vector",
+        "embedding",
+        "semantique",
+        "sémantique",
+        "llm interne",
+        "chatbot",
+        "api rest",
     ]):
         return PROJECTS_CATALOG[0]
     if any(token in text for token in [
-        "teamcity",
-        "build",
-        "logs",
-        "log",
-        "ci",
-        "cd",
-        "github actions",
-        "gitlab ci",
-        "jenkins",
-        "compilation",
-        "dépendance",
-        "dependance",
-        "test",
+        "migration",
+        "migrer",
+        "donnees",
+        "données",
+        "data",
+        "redis",
+        "tableau de bord",
+        "dashboard",
+        "revendeur",
+        "nettoyage",
+        "sql",
     ]):
         return PROJECTS_CATALOG[1]
     if any(token in text for token in [
         "ourtiguet",
-        "huiles essentielles",
         "laboratoire",
-        "dosage",
+        "huile",
+        "cosmetique",
+        "cosmétique",
+        "plante",
+        "formulation",
         "recette",
-        "django",
-        "react",
-        "quadrant",
-        "vectorielle",
-        "rag",
-        "openai",
-        "runner",
-        "github runner",
-        "redis",
-        "nginx",
-        "sauvegarde",
-        "chiffr",
+        "stock",
+        "matiere premiere",
+        "matière première",
+        "vite",
     ]):
         return PROJECTS_CATALOG[2]
+    if any(token in text for token in [
+        "veille",
+        "emploi",
+        "offres",
+        "jobsearch",
+        "ollama",
+        "qwen",
+        "himalayas",
+        "eures",
+        "adzuna",
+        "vue 3",
+        "automatisation",
+    ]):
+        return PROJECTS_CATALOG[3]
 
     # Default to first project when user asks generically.
     return PROJECTS_CATALOG[0]
@@ -936,20 +801,19 @@ def _is_generic_projects_request(message: str) -> bool:
             "1",
             "2",
             "3",
-            "ia training",
-            "teamcity",
-            "ourtiguet",
-            "django",
-            "react",
             "rag",
+            "documentaire",
+            "qdrant",
+            "pgvector",
             "vector",
-            "quadrant",
-            "build",
-            "logs",
-            "ci",
-            "cd",
-            "régression",
-            "regression",
+            "llm interne",
+            "chatbot",
+            "portail",
+            "django",
+            "veille",
+            "emploi",
+            "jobsearch",
+            "ollama",
         ]
     )
     return not any_keywords
@@ -959,28 +823,33 @@ def _projects_menu_answer(lang: str = "fr") -> str:
     # Keep it short and natural; no Markdown.
     if lang == "en":
         return (
-            "Saleh worked on several AI projects. Which one would you like me to detail?\n"
-            "1) IA Training — deep learning foundations (linear/logistic regression, MLP/CNN)\n"
-            "2) AI Extension — failed build analysis (TeamCity / CI/CD logs)\n"
-            "3) Ourtiguet Naturel — domain AI assistant (Django/React, RAG, vectors)\n"
-            "You can reply with: 'project 2' or 'TeamCity'."
+            "Saleh has worked on several AI systems. Which one would you like me to detail?\n"
+            "1) Internal AI platform: RAG search and an LLM exposed through a REST API\n"
+            "2) Migrating a legacy data estate: three databases, Python and Redis\n"
+            "3) Ourtiguet Naturel: laboratory management (Django REST, React, PostgreSQL)\n"
+            "4) jobsearch-platform: job search platform (Ollama, Vue 3, Docker Compose)\n"
+            "You can reply with: 'project 2' or 'RAG'."
         )
     return (
-        "Saleh a travaillé sur plusieurs projets IA. Lequel veux-tu que je détaille ?\n"
-        "1) IA Training — apprentissage des bases (régression linéaire/logistique)\n"
-        "2) Extension IA — analyse de builds échoués (TeamCity / logs CI/CD)\n"
-        "3) Ourtiguet Naturel — assistant IA métier (Django/React, RAG, vecteurs)\n"
-        "Réponds par exemple: 'projet 2' ou 'TeamCity'."
+        "Saleh a travaillé sur plusieurs systèmes IA. Lequel voulez-vous que je détaille ?\n"
+        "1) Plateforme IA interne : recherche documentaire RAG et LLM exposé par API\n"
+        "2) Migration d'un patrimoine de données : trois bases, Python et Redis\n"
+        "3) Ourtiguet Naturel : gestion de laboratoire (Django REST, React, PostgreSQL)\n"
+        "4) jobsearch-platform : plateforme de recherche d'emploi (Ollama, Vue 3, Docker Compose)\n"
+        "Répondez par exemple : « projet 2 » ou « RAG »."
     )
 
 
 def _conversation_follow_up(lang: str = "fr") -> str:
+    # La relance doit rester dans le registre de la personne qui pose la
+    # question : un recruteur veut la suite du parcours ou un projet, pas un
+    # exercice de maths.
     if lang == "en":
         return (
-            "Would you like to dive deeper into Saleh's gradient descent work, his first PyTorch neural network, or his progression toward WaveNet?"
+            "Would you like more detail on his work at Go2cam, or on one of his projects?"
         )
     return (
-        "Voulez-vous approfondir la descente de gradient de Saleh, son premier réseau de neurones PyTorch, ou sa progression vers WaveNet ?"
+        "Souhaitez-vous plus de détails sur son travail chez Go2cam, ou sur l'un de ses projets ?"
     )
 
 
@@ -989,12 +858,12 @@ def _extract_topics(text: str) -> set[str]:
     topics: set[str] = set()
 
     mapping = {
-        "gradient": ["gradient", "descente"],
-        "pytorch": ["pytorch", "mlp", "cnn"],
-        "wavenet": ["wavenet"],
+        "rag": ["rag", "documentaire", "vectoriel", "embedding"],
+        "llm": ["llm", "chatbot", "api"],
+        "pipeline": ["jobsearch", "veille", "emploi", "ollama"],
         "project": ["projet", "project"],
         "example": ["exemple", "cas concret", "concret", "example"],
-        "logistic": ["logistique", "logistic", "sigmoid", "sigmoide", "sigmoïde"],
+        "availability": ["disponible", "disponibilite", "mission", "cdi", "poste", "available"],
     }
 
     for topic, markers in mapping.items():
@@ -1076,32 +945,34 @@ def _is_scope_guardrail_response(text: str, lang: str) -> bool:
     return normalized.startswith(_scope_guardrail_text(lang))
 
 
-def _project_answer(project: dict[str, str]) -> str:
-    return _project_answer_with_level(project=project, detail_level="standard", lang="fr")
-
-
 def _project_translated_fields(project: dict[str, str], lang: str) -> dict[str, str]:
     if lang != "en":
         return project
 
     translated = {
-        "IA Training – Deep Learning Foundations": {
-            "name": "IA Training – Deep Learning Foundations",
-            "context": "Personal project built as a progressive learning path to master machine learning and deep learning foundations through internal understanding of model behavior.",
-            "architecture": "From math fundamentals and gradient descent to NumPy implementations of linear/logistic regression, then PyTorch MLP/CNN models and first NLP experiments.",
-            "result": "Strong understanding of optimization, backpropagation, and practical model training workflows for production-oriented AI systems.",
+        "Plateforme IA interne : recherche documentaire et LLM exposé par API": {
+            "name": "Internal AI platform: document search and LLM exposed through an API",
+            "context": "At Go2cam International, from 2022 to 2025. Teams were losing time searching dense technical documentation spread across several internal sources, and each application reimplemented its own access to the model.",
+            "architecture": "Ingestion and normalisation pipeline, chunking and embeddings, storage in a vector database (Qdrant, ChromaDB, PostgreSQL with pgvector). Semantic search and the in-house LLM exposed through one REST API, a single entry point consumed by several business applications. A support chatbot was built on top of it.",
+            "result": "Internal research time cut by roughly 50%, answers tied back to their source so they stay verifiable, and a stable API contract that allows the model to be swapped without touching client applications.",
         },
-        "Extension IA – Analyse des builds échoués": {
-            "name": "AI Extension – Failed Build Analysis",
-            "context": "LLM-powered assistant module to diagnose TeamCity build failures faster.",
-            "architecture": "Collect logs from TeamCity API, structure context, send to LLM, then produce technical summary, probable root cause, error category, and fix suggestions.",
-            "result": "Faster troubleshooting with reusable architecture for CI/CD ecosystems such as GitHub Actions, GitLab CI, and Jenkins.",
+        "Migration et valorisation d'un patrimoine de données": {
+            "name": "Migrating and unlocking a legacy data estate",
+            "context": "At Go2cam International, from 2022 to 2025. Three production databases fed since 2008, several million records, unusable as they stood: heterogeneous formats, duplicates, history never cleaned. Delivered as a two-person project.",
+            "architecture": "Cleaning and normalisation of the three databases, migration to a unified target, then results surfaced through dashboards built for each reseller profile. A Python and Redis orchestration mechanism runs several independent scripts in parallel, synchronised when pulling data. Sandboxed execution before any real write, and a guardrail blocking jobs that fall outside expected bounds.",
+            "result": "Three legacy databases cleaned, migrated and made usable. Data views that took more than ten seconds a page came back to normal response times. The dashboards became usable day to day.",
         },
-        "Ourtiguet Naturel – Laboratoire intelligent d’huiles essentielles": {
-            "name": "Ourtiguet Naturel – Intelligent Essential Oils Lab",
-            "context": "Training project where AI assists recipe creation and dosage control for an internal lab environment.",
-            "architecture": "React frontend, Django backend, OpenAI + RAG + vector database, local CI/CD runner, Docker stack with Redis/Nginx, and encrypted local backups.",
-            "result": "Operational internal assistant with automation, confidentiality, and full dev-to-deployment AI lifecycle coverage.",
+        "Ourtiguet Naturel : gestion de laboratoire": {
+            "name": "Ourtiguet Naturel: laboratory management",
+            "context": "Business application for a natural cosmetics laboratory, private codebase. Tracking what goes into every product: plants, raw materials and active ingredients, then the formulations and recipes combining them, through to production, with stock levels and their alerts.",
+            "architecture": "A Django and Django REST Framework backend exposes the business API, consumed by a React frontend built with Vite. PostgreSQL for data, Redis for cache and sessions. Containerised and orchestrated with Docker Compose, with continuous integration and deployment on GitHub Actions.",
+            "result": "A complete, working application from data model to web interface: raw materials, formulations and stock brought together in one tool, served by a documented API.",
+        },
+        "jobsearch-platform : plateforme de recherche d'emploi": {
+            "name": "jobsearch-platform: job search platform",
+            "context": "Personal project (2026), public repository at github.com/saleh-td/jobsearch-platform. Automating a job search end to end, without depending on a paid LLM API.",
+            "architecture": "An n8n pipeline queries EURES, Adzuna and Himalayas daily, then has each posting scored from 0 to 10 by a locally hosted LLM (Qwen 2.5 7B via Ollama, on GPU). Alongside it, a Vue 3 and Flask application authenticated with JWT serves as catalogue, application preparation and tracking register. Two separate PostgreSQL instances: a volatile catalogue and a persistent register.",
+            "result": "A complete, autonomous chain from collection through to application tracking. Five services orchestrated with Docker Compose, public code.",
         },
     }
 
@@ -1113,19 +984,8 @@ def _project_answer_with_level(project: dict[str, str], detail_level: str, lang:
 
     if detail_level == "short":
         return _project_answer_short(project_data)
-    if detail_level == "deep" and lang == "en" and project_data["name"].startswith("IA Training"):
-        return (
-            "IA Training – Deep Learning Foundations\n"
-            "Context: foundational project built to understand how models learn internally, not only how to use libraries.\n"
-            "Math layer: derivatives, chain rule, gradient descent, and loss/tangent visualization with Matplotlib.\n"
-            "ML base: from-scratch NumPy implementations of linear and logistic regression to study convergence, learning rate, and epochs.\n"
-            "Deep learning with PyTorch: first fully connected network (MLP), activations, backpropagation, optimizer choices (SGD/Adam), regularization, and early stopping.\n"
-            "Computer vision: CNN experiments with convolution/pooling layers and activation-map interpretation.\n"
-            "NLP: first experiments in tokenization, embeddings, and text classification, with progression toward advanced architectures like WaveNet.\n"
-            "Outcome: practical ability to explain and build robust end-to-end AI training pipelines."
-        )
     if detail_level == "deep":
-        return _project_answer_deep(project)
+        return _project_answer_deep(project_data)
 
     if lang == "en":
         return (
@@ -1133,28 +993,15 @@ def _project_answer_with_level(project: dict[str, str], detail_level: str, lang:
             f"Context: {project_data['context']}\n"
             f"What he built: {project_data['architecture']}\n"
             f"Impact: {project_data['result']}\n"
-            "If you want, I can also provide a concrete breakdown (problem → approach → result) for this project."
+            "If you want, I can also break this down as problem, approach and result."
         )
 
-    if project_data["name"].startswith("IA Training"):
-        return (
-            "IA Training\n"
-            "Contexte: projet fondateur de son parcours IA, commencé pour comprendre les mathématiques de l'apprentissage et aller jusqu'aux premiers réseaux de neurones.\n"
-            "Ce qu'il a appris étape par étape:\n"
-            "- Descente de gradient à partir de dérivées simples, avec visualisation des courbes et tangentes (Matplotlib).\n"
-            "- Régression linéaire et logistique, avec impact du learning rate, des epochs et du scaling.\n"
-            "- Premier réseau fully connected en PyTorch, puis réseaux convolutifs (CNN) et compréhension des couches.\n"
-            "- Premières bases NLP et ouverture vers des architectures plus avancées comme WaveNet.\n"
-            "Ce que ça apporte: une base concrète et structurée pour concevoir, entraîner et expliquer un modèle IA de bout en bout."
-        )
-
-    # Natural, human-ish, still deterministic.
     return (
-        f"{project['name']}\n"
-        f"Contexte: {project['context']}\n"
-        f"Ce qu'il a construit: {project['architecture']}\n"
-        f"Ce que ça apporte: {project['result']}\n"
-        "Si tu veux, je peux aussi te donner un exemple concret (problème → approche → résultat) sur ce projet."
+        f"{project_data['name']}\n"
+        f"Contexte : {project_data['context']}\n"
+        f"Ce qu'il a construit : {project_data['architecture']}\n"
+        f"Ce que ça apporte : {project_data['result']}\n"
+        "Si vous voulez, je peux aussi le décomposer en problème, approche et résultat."
     )
 
 
@@ -1167,9 +1014,6 @@ def _detect_intent(message: str, session_id: str | None) -> str:
         "work_experience": 0,
         "parcours_scolaire": 0,
         "parcours": 0,
-        "technical_path": 0,
-        "gradient_focus": 0,
-        "logistic_focus": 0,
         "positive_feedback": 0,
         "example_request": 0,
         "projects": 0,
@@ -1189,12 +1033,6 @@ def _detect_intent(message: str, session_id: str | None) -> str:
         scores["parcours_scolaire"] += 10
     if _is_parcours_question(text):
         scores["parcours"] += 8
-    if _is_technical_path_question(text):
-        scores["technical_path"] += 10
-    if _is_gradient_focus_question(text):
-        scores["gradient_focus"] += 12
-    if _is_logistic_regression_question(text):
-        scores["logistic_focus"] += 13
     if _is_positive_feedback(text):
         scores["positive_feedback"] += 9
     if _is_example_request(text):
@@ -1204,21 +1042,17 @@ def _detect_intent(message: str, session_id: str | None) -> str:
     if _is_project_selector(text):
         scores["project_selector"] += 10
 
-    if _extract_project_index(text) in {1, 2, 3}:
+    if _extract_project_index(text) in {1, 2, 3, 4}:
         scores["project_selector"] += 6
 
-    if any(token in text for token in ["gradient", "pytorch", "wavenet", "cnn", "mlp", "deep learning"]) and any(
+    if any(token in text for token in ["rag", "llm", "vectoriel", "vector", "pipeline", "embedding"]) and any(
         token in text for token in ["projet", "project", "saleh", "son"]
     ):
         scores["projects"] += 4
-    if any(token in text for token in ["sigmoid", "sigmoide", "sigmoïde", "logistique", "logistic", "admis", "nll"]):
-        scores["logistic_focus"] += 4
-    if any(token in text for token in ["gradient", "gradiant", "descente"]):
-        scores["gradient_focus"] += 3
 
     recent = " ".join(_normalize_text(m) for m in _recent_user_messages(session_id)[-2:])
     if recent and any(token in recent for token in ["projet", "project"]):
-        if _extract_project_index(text) in {1, 2, 3}:
+        if _extract_project_index(text) in {1, 2, 3, 4}:
             scores["project_selector"] += 8
         if any(token in text for token in ["approfond", "detail", "plus", "encore", "explique"]):
             scores["projects"] += 4
@@ -1231,14 +1065,84 @@ def _detect_intent(message: str, session_id: str | None) -> str:
     return best_intent
 
 
+# Source de vérité du profil, alignée sur les deux CV publiés dans
+# frontend/public. Toute mise à jour du CV doit être répercutée ici.
+PROFILE_FACTS = dedent("""
+PROFIL VÉRIFIÉ (source unique, ne rien ajouter à cette liste) :
+- Saleh Minawi, développeur backend & IA. Basé à Lyon, France.
+- Autonome sur tout le cycle : conception, développement, déploiement, maintenance.
+
+RÈGLE DE FORMULATION (obligatoire) :
+- Décris ce qui a été fait et QUAND, jamais depuis combien de temps.
+- Interdit : « 3 ans d'expérience », « trois ans », « depuis X années ».
+- À la place, cite les périodes : « de septembre 2022 à août 2025 », « en 2026 ».
+- Le parcours est UNE trajectoire continue, pas deux expériences séparées :
+  la même chaîne portée d'abord en entreprise, puis en autonomie.
+
+TRAJECTOIRE (2026 à aujourd'hui) :
+- Développeur backend & IA en freelance, en partenariat avec SY Solutions (Lyon).
+  Missions de développement au forfait : backend et intégration IA en Python,
+  FastAPI, API REST. Prospection et qualification de clients auprès de startups
+  early-stage et d'incubateurs.
+- Disponible immédiatement pour un poste en CDI ou CDD, sur Lyon ou en télétravail.
+- Citoyen de l'Union européenne : aucun permis de travail requis en Europe.
+
+TRAJECTOIRE (septembre 2022 à août 2025), Go2cam International (Lyon),
+éditeur de logiciels CAO/FAO, comme développeur backend & IA :
+- système RAG pour la recherche documentaire interne, qui a réduit le temps de
+  recherche d'environ 50 %
+- bases vectorielles : Qdrant, ChromaDB, PostgreSQL avec pgvector
+- LLM interne exposé par API REST et consommé par plusieurs applications métier
+- migration de trois bases de production alimentées depuis 2008, plusieurs
+  millions d'enregistrements : nettoyage, normalisation, puis restitution par
+  des tableaux de bord adaptés à chaque revendeur. Orchestration en Python et
+  Redis, exécution en bac à sable et garde-fou avant toute écriture réelle.
+  Projet mené en binôme
+- modèles de machine learning prédictifs pour la prévision de demande, jusqu'à
+  87 % de précision sur le jeu de test
+- chatbot d'assistance utilisateur pour les questions techniques de premier niveau
+- refonte du portail interne Django (authentification, workflows, API REST)
+- automatisation des pipelines de données et déploiement en production
+
+STACK :
+- IA & data : RAG, intégration et déploiement de LLM, embeddings, fine-tuning,
+  machine learning (classification, régression), deep learning
+- Frameworks ML : PyTorch, TensorFlow, scikit-learn, XGBoost
+- MLOps : MLflow, Airflow, Docker, Kubernetes, CI/CD, n8n
+- Backend : Python, FastAPI, Django, API REST, PostgreSQL, MongoDB, SQL
+- Bases vectorielles : Qdrant, ChromaDB, pgvector
+- Frontend : JavaScript, React, Vue 3, Next.js
+- Langues : français natif, anglais B2
+
+FORMATION :
+- Bachelor Concepteur Développeur d'Applications, spécialité science des données
+  et algorithmique, Afip Formation, Villeurbanne, 2023-2025 (Bac+3/4, RNCP 6)
+- DUT Mathématiques Informatique, IUT La Doua, Villeurbanne, 2022-2023
+
+CONTACT : pour toute question de disponibilité précise, de tarif, de contrat ou
+de recrutement, invite à écrire à sminawi24@gmail.com.
+""").strip()
+
+
 SYSTEM_PROMPT_BASE = dedent("""
 Tu es l’assistant IA du portfolio de Saleh Minawi.
 
-Ton rôle est strictement limité à :
-- Présenter Saleh brièvement (Développeur backend orienté systèmes IA)
-- Expliquer sa manière de structurer un projet IA
-- Décrire uniquement les projets fournis dans la section PROJETS AUTORISÉS
-- Répondre à des questions techniques IA (Architecture IA, RAG, LLM)
+Ton rôle est de répondre aux questions sur :
+- Son parcours, son expérience professionnelle et ses compétences (section PROFIL VÉRIFIÉ)
+- Sa disponibilité et le type de missions ou de postes qui l'intéressent
+- Sa manière de structurer un projet IA
+- Les projets fournis dans la section PROJETS AUTORISÉS
+- Des questions techniques IA (architecture IA, RAG, LLM)
+
+Règle de vérité (la plus importante) :
+- Toutes tes affirmations sur Saleh doivent venir de PROFIL VÉRIFIÉ ou de
+  PROJETS AUTORISÉS. Ce sont les seules sources.
+- N'invente jamais une technologie, un client, un chiffre ou une compétence qui
+  n'y figure pas. Si l'information manque, dis simplement que tu ne l'as pas et
+  renvoie vers sminawi24@gmail.com.
+- Ne minimise jamais son expérience. Il travaille en entreprise depuis
+  septembre 2022 : ne dis jamais le contraire, ni qu'il serait débutant, ni que
+  son parcours serait uniquement scolaire ou académique.
 
 Règles de format (obligatoires) :
 - Réponds uniquement en texte brut (pas de Markdown).
@@ -1257,24 +1161,37 @@ Ce qu'il a construit: <1 ligne>
 Ce que ça apporte: <1 ligne>
 
 Tu ne dois jamais :
-- Exagérer son niveau
+- Exagérer son niveau, ni le sous-estimer
 - Dire qu’il est Architecte IA
 - Inventer des projets, des clients, ou des résultats non fournis
-- Répondre hors sujet (hors IA)
 - Réutiliser des formulations vagues de type "etc." ou des listes interminables
 
-Si une question sort du cadre IA :
-Réponds : "Cet espace est dédié uniquement aux échanges autour de l’architecture et des projets IA."
+Si la question n'a aucun rapport avec Saleh, son travail ou l'IA :
+Réponds : "Cet espace est dédié aux échanges autour du parcours de Saleh et de ses projets IA."
 """).strip()
 
 
 def _build_system_prompt(lang: str) -> str:
-    language_rule = (
-        "LANGUAGE RULE: You must answer only in English."
-        if lang == "en"
-        else "LANGUAGE RULE: Tu dois répondre uniquement en français."
+    # La règle de langue est placée en tête et répétée en fin de prompt :
+    # un modèle de petite taille suit mal une consigne isolée au milieu d'un
+    # prompt entièrement rédigé dans l'autre langue.
+    if lang == "en":
+        language_rule = (
+            "LANGUAGE: Answer only in English, regardless of the language of these "
+            "instructions. Never answer in French."
+        )
+    else:
+        language_rule = "LANGUE : réponds uniquement en français."
+
+    return "\n\n".join(
+        [
+            language_rule,
+            SYSTEM_PROMPT_BASE,
+            PROFILE_FACTS,
+            _projects_block(),
+            language_rule,
+        ]
     )
-    return f"{SYSTEM_PROMPT_BASE}\n\n{language_rule}\n\n{_projects_block()}"
 
 
 @router.post("/chat", response_model=ChatResponse, status_code=status.HTTP_200_OK)
@@ -1323,29 +1240,8 @@ def chat(payload: ChatRequest) -> ChatResponse:
         _remember_ai_turn(session_id, response_text)
         return ChatResponse(response=response_text)
 
-    # Keep parcours intentionally long and detailed.
     if detected_intent == "parcours":
         response_text = _parcours_answer(response_lang)
-        _remember_ai_turn(session_id, response_text)
-        return ChatResponse(response=response_text)
-
-    if detected_intent == "technical_path":
-        response_text = _technical_path_answer(response_lang)
-        _remember_ai_turn(session_id, response_text)
-        return ChatResponse(response=response_text)
-
-    if detected_intent == "gradient_focus":
-        response_text = _append_follow_up(
-            _gradient_focus_answer(response_lang),
-            response_lang,
-            session_id=session_id,
-            user_message=message,
-        )
-        _remember_ai_turn(session_id, response_text)
-        return ChatResponse(response=response_text)
-
-    if detected_intent == "logistic_focus":
-        response_text = _logistic_regression_answer(response_lang)
         _remember_ai_turn(session_id, response_text)
         return ChatResponse(response=response_text)
 
