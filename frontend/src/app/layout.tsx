@@ -1,13 +1,26 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+
+import { MotionProvider } from "@/components/MotionProvider";
 import "./globals.css";
 
+// Inter est auto-hébergée par next/font : pas de requête vers un CDN
+// tiers au chargement de la page, pas de FOUT.
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600"],
+  variable: "--font-inter",
+});
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://profile-saleh-ai.vercel.app"),
   title: {
-    default: "Architecte IA | Portfolio technique",
-    template: "%s | Architecte IA",
+    default: "Saleh Minawi — Développeur backend, systèmes IA",
+    template: "%s — Saleh Minawi",
   },
   description:
-    "Architectures IA pragmatiques et déployables : LLM, RAG, bases vectorielles, APIs, monitoring, déploiement.",
+    "Développeur backend spécialisé dans les systèmes IA en production : RAG, bases vectorielles, APIs et pipelines de données.",
 };
 
 export default function RootLayout({
@@ -16,16 +29,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body>{children}</body>
+    <html lang="fr" className={inter.variable}>
+      <body>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }

@@ -1,0 +1,5 @@
+.metric {
+  color: var(--color-accent);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}

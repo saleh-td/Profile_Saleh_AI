@@ -1,0 +1,65 @@
+.base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 0.6875rem 1.125rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: 1.2;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  transition: background-color var(--transition), border-color var(--transition),
+    color var(--transition);
+}
+
+.base:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Variantes ─────────────────────────────────────────────────── */
+
+.primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--color-fg);
+  border-color: var(--color-line-strong);
+}
+
+.secondary:hover:not(:disabled) {
+  border-color: var(--color-fg);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-muted);
+  padding-left: var(--space-xs);
+  padding-right: var(--space-xs);
+}
+
+.ghost:hover:not(:disabled) {
+  color: var(--color-fg);
+}
+
+/* ── Modificateurs ─────────────────────────────────────────────── */
+
+.sm {
+  padding: 0.4375rem 0.75rem;
+  font-size: var(--text-xs);
+}
+
+.block {
+  width: 100%;
+}

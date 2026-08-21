@@ -1,0 +1,46 @@
+.page {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* En-tête de section : label en capitales posé sur un filet. */
+.label {
+  font-size: var(--text-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-2xl) 0 var(--space-xl);
+}
+
+.lede {
+  font-size: var(--text-lede);
+  line-height: 1.55;
+  color: var(--color-muted);
+  max-width: 60ch;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 0 var(--space-md);
+  }
+
+  .pageHeader {
+    padding: var(--space-xl) 0 var(--space-lg);
+  }
+}
