@@ -1,0 +1,69 @@
+/* Conteneur fixe séparé du lien : framer-motion écrit son transform ici,
+   le survol écrit le sien sur le lien. Sur un seul nœud, le transform
+   inline laissé par l'animation d'entrée annulerait le survol. */
+.wrap {
+  position: fixed;
+  right: var(--space-lg);
+  bottom: var(--space-lg);
+  z-index: 40;
+}
+
+.fab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0.6875rem 1.125rem;
+  background: var(--color-surface);
+  color: var(--color-fg);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  /* Le bouton flotte au-dessus du contenu : sans ombre, il se confond avec
+     un bloc de la page au lieu de se lire comme une surface posée dessus. */
+  box-shadow: var(--shadow-float);
+  transition: background-color var(--transition), transform var(--transition);
+}
+
+.fab:hover {
+  border-color: var(--color-fg);
+  transform: translateY(-1px);
+}
+
+.fab:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Même pastille que l'état de disponibilité de l'accueil, en version posée
+   sur l'accent. */
+.pip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  flex: none;
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    right: var(--space-md);
+    bottom: var(--space-md);
+  }
+
+  .fab {
+    padding: 0.625rem 0.875rem;
+    font-size: var(--text-xs);
+  }
+}
+
+/* Le survol déplace le bouton d'un pixel : c'est un retour d'interaction,
+   pas une animation permanente, mais il se coupe quand même. */
+@media (prefers-reduced-motion: reduce) {
+  .fab:hover {
+    transform: none;
+  }
+}

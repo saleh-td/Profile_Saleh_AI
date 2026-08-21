@@ -21,6 +21,7 @@
     "projects": "Projects",
     "contact": "Contact",
     "assistant": "AI assistant",
+    "assistantHint": "Talk to my AI assistant",
     "language": "Switch to French",
     "mainNavigation": "Main navigation",
     "career": "Career"
@@ -171,7 +172,7 @@
       {
         "role": "Backend & AI developer, freelance",
         "company": "SY Solutions partnership",
-        "period": "2026 –",
+        "period": "2026",
         "place": "Lyon",
         "current": true,
         "bullets": [

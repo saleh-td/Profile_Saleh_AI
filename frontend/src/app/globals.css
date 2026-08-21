@@ -84,6 +84,11 @@
   --header-height: 57px;
 
   --transition: 0.15s ease;
+
+  /* Seule ombre du site, réservée à ce qui flotte réellement au-dessus de la
+     page (le raccourci vers l'assistant). Les cartes et les panneaux restent
+     plats, délimités par un filet. */
+  --shadow-float: 0 2px 12px rgb(31 77 54 / 0.18);
 }
 
 /* Sous 900px la navigation passe à la ligne : le header occupe deux rangées.

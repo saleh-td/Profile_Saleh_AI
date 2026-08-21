@@ -21,6 +21,7 @@
     "projects": "Projets",
     "contact": "Contact",
     "assistant": "Assistant IA",
+    "assistantHint": "Parler à mon assistant IA",
     "language": "Passer en anglais",
     "mainNavigation": "Navigation principale",
     "career": "Parcours"
@@ -171,7 +172,7 @@
       {
         "role": "Développeur backend & IA, freelance",
         "company": "En partenariat avec SY Solutions",
-        "period": "2026 –",
+        "period": "2026",
         "place": "Lyon",
         "current": true,
         "bullets": [
