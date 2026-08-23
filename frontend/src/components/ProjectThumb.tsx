@@ -31,7 +31,13 @@ export function ProjectThumb({ thumbnail, wide }: Props) {
         width={thumbnail.width}
         height={thumbnail.height}
         className={s.image}
-        sizes={wide ? "(max-width: 760px) 100vw, 700px" : "(max-width: 720px) 100vw, 280px"}
+        sizes={
+          // Largeurs mesurées sur le rendu, pas estimées : 775px pour la
+          // colonne de la fiche, 280px pour la vignette de l'accueil. Un
+          // `sizes` sous-évalué fait choisir au navigateur une image plus
+          // petite que la place réelle, qui est ensuite étirée.
+          wide ? "(max-width: 820px) 100vw, 800px" : "(max-width: 720px) 100vw, 300px"
+        }
       />
     </figure>
   );
