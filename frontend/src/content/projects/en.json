@@ -71,6 +71,12 @@
       "PostgreSQL",
       "Docker Compose"
     ],
-    "url": "https://github.com/saleh-td/jobsearch-platform"
+    "url": "https://github.com/saleh-td/jobsearch-platform",
+    "thumbnail": {
+      "src": "/projets/jobsearch-offres.png",
+      "alt": "Collected job listings table: model-assigned score, source, status and a prepare action on each row.",
+      "width": 1828,
+      "height": 858
+    }
   }
 ]

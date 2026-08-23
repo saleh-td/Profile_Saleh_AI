@@ -93,7 +93,7 @@ export function ProjetsScene({ dict, projects }: Props) {
               {/* Sous l'en-tête plutôt qu'à côté : la fiche est déjà une
                   colonne de définitions large, y insérer une vignette
                   latérale casserait l'alignement des libellés. */}
-              <ProjectThumb thumbnail={project.thumbnail} />
+              <ProjectThumb thumbnail={project.thumbnail} wide />
 
               <dl className={s.detail}>
                 {rows.map((row) => (
