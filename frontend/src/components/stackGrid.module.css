@@ -1,12 +1,22 @@
+/* Une seule rangée qui se replie, tuiles puis badges. Les deux registres
+   restent distincts par leur forme, mais ils appartiennent visiblement à la
+   même stack au lieu d'occuper deux blocs superposés.
+
+   Ce n'est plus une grille : `repeat(auto-fill, minmax(84px, 1fr))` créait
+   autant de colonnes que la largeur en permettait et n'en remplissait que
+   les premières. Mesuré sur l'accueil, huit colonnes pour cinq tuiles, soit
+   288px morts sur 756, 38 % de la rangée. Le `1fr` se répartissait sur les
+   pistes vides comprises, donc les tuiles ne s'élargissaient même pas. */
 .wrap {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-sm);
 }
 
@@ -15,6 +25,7 @@
    la dérive. */
 .cell {
   display: flex;
+  width: 84px;
 }
 
 .tile {
