@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { ButtonLink } from "@/components/Button";
 import { Highlight } from "@/components/Highlight";
@@ -18,6 +18,7 @@ import type { Project } from "@/content/projects/types";
 import type { Dictionary } from "@/i18n/getDictionary";
 import type { Locale } from "@/i18n/locales";
 import s from "./home.module.css";
+import { fadeUp, REVEAL, REVEAL_VIEWPORT, stagger } from "@/components/motion";
 
 type Props = {
   locale: Locale;
@@ -27,16 +28,6 @@ type Props = {
 
 // Un seul rythme de révélation réutilisé partout : léger déplacement + fondu,
 // jamais plus de 16px, assez pour se voir sans distraire.
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  shown: { opacity: 1, y: 0 },
-};
-
-const stagger: Variants = {
-  hidden: {},
-  shown: { transition: { staggerChildren: 0.06 } },
-};
-
 export function HomeScene({ locale, dict, projects }: Props) {
   const { home, parcours } = dict;
 
@@ -59,7 +50,7 @@ export function HomeScene({ locale, dict, projects }: Props) {
           animate="shown"
           variants={stagger}
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.4 }}>
+          <motion.div variants={fadeUp} transition={REVEAL}>
             <h1 className={s.name}>{home.name}</h1>
             <p className={s.role}>{home.role}</p>
           </motion.div>
@@ -67,7 +58,7 @@ export function HomeScene({ locale, dict, projects }: Props) {
           <motion.p
             className={s.availability}
             variants={fadeUp}
-            transition={{ duration: 0.4 }}
+            transition={REVEAL}
           >
             <span className={s.pip} aria-hidden="true" />
             {home.availability}
@@ -75,7 +66,7 @@ export function HomeScene({ locale, dict, projects }: Props) {
 
           <hr className={s.rule} />
 
-          <motion.dl className={s.meta} variants={fadeUp} transition={{ duration: 0.4 }}>
+          <motion.dl className={s.meta} variants={fadeUp} transition={REVEAL}>
             <div className={s.metaRow}>
               <dt>{home.labels.basedIn}</dt>
               <dd>{home.location}</dd>
@@ -88,7 +79,7 @@ export function HomeScene({ locale, dict, projects }: Props) {
 
           <hr className={s.rule} />
 
-          <motion.div className={s.actions} variants={fadeUp} transition={{ duration: 0.4 }}>
+          <motion.div className={s.actions} variants={fadeUp} transition={REVEAL}>
             <ButtonLink href={`/${locale}/contact`} block>
               {home.cta.contact}
             </ButtonLink>
@@ -103,9 +94,10 @@ export function HomeScene({ locale, dict, projects }: Props) {
       <div className={s.main}>
         <motion.p
           className={s.summary}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.1 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="shown"
+          transition={{ ...REVEAL, delay: 0.1 }}
         >
           {home.summary}
         </motion.p>
@@ -116,10 +108,10 @@ export function HomeScene({ locale, dict, projects }: Props) {
               className={s.career}
               initial="hidden"
               whileInView="shown"
-              viewport={{ once: true, margin: "-60px" }}
+              viewport={REVEAL_VIEWPORT}
               variants={stagger}
             >
-              <motion.div variants={fadeUp} transition={{ duration: 0.4 }}>
+              <motion.div variants={fadeUp} transition={REVEAL}>
                 <div className={s.careerHead}>
                   <h3 className={s.careerRole}>{currentJob.role}</h3>
                   <span className={`${s.careerPeriod} tabular`}>{currentJob.period}</span>
@@ -134,7 +126,7 @@ export function HomeScene({ locale, dict, projects }: Props) {
               <motion.p
                 className={s.careerHighlight}
                 variants={fadeUp}
-                transition={{ duration: 0.4 }}
+                transition={REVEAL}
               >
                 <Highlight>{home.careerHighlight}</Highlight>
               </motion.p>
@@ -153,8 +145,8 @@ export function HomeScene({ locale, dict, projects }: Props) {
               className={s.spotlight}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.4 }}
+              viewport={REVEAL_VIEWPORT}
+              transition={REVEAL}
             >
               {/* Le lien porte le titre et s'étend sur toute la carte via
                   ::after. Envelopper la carte dans un <a> aurait imbriqué

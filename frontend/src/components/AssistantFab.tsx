@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
 import type { Locale } from "@/i18n/locales";
+import { REVEAL } from "./motion";
 import s from "./assistantFab.module.css";
 
 type Props = {
@@ -39,7 +40,7 @@ export function AssistantFab({ locale, label, hint }: Props) {
       className={s.wrap}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: 0.5, ease: "easeOut" }}
+      transition={{ ...REVEAL, delay: 0.5, ease: "easeOut" }}
     >
       <Link href={`/${locale}/chat`} className={s.fab} aria-label={hint}>
         {/* Pastille fixe, pas clignotante. Une pastille qui pulse en

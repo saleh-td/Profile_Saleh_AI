@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { ProjectThumb } from "@/components/ProjectThumb";
 import { Badge } from "@/components/Badge";
@@ -13,20 +13,11 @@ import type { Project } from "@/content/projects/types";
 import type { Dictionary } from "@/i18n/getDictionary";
 import s from "./projets.module.css";
 import { useSpotlightArrival } from "./useSpotlightArrival";
+import { fadeUp, REVEAL, stagger } from "@/components/motion";
 
 type Props = {
   dict: Dictionary;
   projects: Project[];
-};
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 14 },
-  shown: { opacity: 1, y: 0 },
-};
-
-const stagger: Variants = {
-  hidden: {},
-  shown: { transition: { staggerChildren: 0.08 } },
 };
 
 export function ProjetsScene({ dict, projects }: Props) {
@@ -70,7 +61,7 @@ export function ProjetsScene({ dict, projects }: Props) {
               className={s.project}
               style={shared ? arrival.style : undefined}
               variants={shared ? undefined : fadeUp}
-              transition={shared ? undefined : { duration: 0.4 }}
+              transition={shared ? undefined : REVEAL}
             >
               <header className={s.head}>
                 <div className={s.headTop}>

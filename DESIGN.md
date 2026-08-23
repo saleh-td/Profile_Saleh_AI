@@ -270,17 +270,43 @@ framer-motion, où qu'elle soit ajoutée par la suite, respecte automatiquement
 `prefers-reduced-motion` sans qu'il faille revérifier le media query
 composant par composant.
 
+### `components/motion.ts`
+
+**Source unique des valeurs d'animation.** Toute page qui anime importe d'ici
+et ne redéclare rien. Cette règle vient d'une dérive réelle : les variants
+avaient fini redéclarés dans six fichiers, avec six échelonnements différents
+(0,04 · 0,05 · 0,06 · 0,08 · 0,08 · 0,09), trois durées et deux marges de
+déclenchement. Aucune de ces différences n'avait été décidée.
+
+| Export | Valeur | Emploi |
+| ------ | ------ | ------ |
+| `fadeUp` | fondu + 12px | Révélation d'un bloc, entrée comme défilement |
+| `stagger` | 70 ms | Cascade d'une liste courte, 2 à 6 éléments |
+| `staggerDense` | 30 ms | Cascade d'une grille dense, 15 éléments et plus |
+| `REVEAL` | 0,4 s | Durée de toute révélation |
+| `REVEAL_VIEWPORT` | `once: true`, marge −72px | Déclenchement au défilement |
+
+Deux échelonnements et pas un seul : la stack compte jusqu'à vingt-cinq
+tuiles, où 70 ms demanderaient près de deux secondes avant la dernière. Un
+délai propre (`delay`) reste permis par-dessus `REVEAL`, c'est un choix de
+mise en scène, pas une valeur concurrente.
+
 Convention pour toute nouvelle animation :
 
-- **Entrée de page** (hero, premier écran) : `animate` direct, léger fondu +
-  déplacement vertical ≤ 12px, `transform`/`opacity` uniquement.
+- **Entrée de page** (hero, premier écran) : `variants={fadeUp}` avec
+  `initial="hidden" animate="shown"`, `transform`/`opacity` uniquement.
 - **Révélée au scroll** (tout ce qui est sous la ligne de flottaison) :
-  `whileInView` avec `viewport={{ once: true }}` — jamais de boucle, une
-  révélation ne se répète pas.
+  `whileInView` avec `viewport={REVEAL_VIEWPORT}`. `once: true` n'est pas
+  négociable : sans lui le contenu se ré-anime à chaque passage et on ne peut
+  plus remonter relire un paragraphe sans qu'il clignote.
 - **Micro-interaction** (survol/clic) : en CSS pur si possible (`transition`
   sur `transform`/`color`/`border-color`), framer-motion seulement si l'état
   est piloté par React. Jamais de propriété qui déclenche un reflow
   (`width`, `height`, `top`, `left`, `margin`) dans une transition.
+
+Trois animations dérogent volontairement et sont documentées sur place : les
+points du schéma de pipeline, la dérive de la stack sur `/parcours`, et
+l'arrivée de la fiche mise en avant (`useSpotlightArrival`).
 
 ---
 

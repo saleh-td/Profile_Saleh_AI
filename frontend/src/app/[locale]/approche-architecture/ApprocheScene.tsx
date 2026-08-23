@@ -1,22 +1,13 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { PageHeader } from "@/components/Section";
 import type { Dictionary } from "@/i18n/getDictionary";
 import s from "./approche.module.css";
+import { fadeUp, REVEAL, REVEAL_VIEWPORT, stagger } from "@/components/motion";
 
 type Props = { dict: Dictionary };
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 14 },
-  shown: { opacity: 1, y: 0 },
-};
-
-const stagger: Variants = {
-  hidden: {},
-  shown: { transition: { staggerChildren: 0.09 } },
-};
 
 export function ApprocheScene({ dict }: Props) {
   return (
@@ -28,9 +19,10 @@ export function ApprocheScene({ dict }: Props) {
           les deux se complètent plutôt que de se répéter. */}
       <motion.p
         className={s.teaser}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, delay: 0.05 }}
+        variants={fadeUp}
+        initial="hidden"
+        animate="shown"
+        transition={{ ...REVEAL, delay: 0.05 }}
       >
         {dict.approach.teaser}
       </motion.p>
@@ -43,11 +35,11 @@ export function ApprocheScene({ dict }: Props) {
         className={s.steps}
         initial="hidden"
         whileInView="shown"
-        viewport={{ once: true, margin: "-80px" }}
+        viewport={REVEAL_VIEWPORT}
         variants={stagger}
       >
         {dict.approach.steps.map((step: { title: string; detail: string }, index: number) => (
-          <motion.li key={step.title} className={s.step} variants={fadeUp} transition={{ duration: 0.4 }}>
+          <motion.li key={step.title} className={s.step} variants={fadeUp} transition={REVEAL}>
             <span className={`${s.number} tabular`} aria-hidden="true">
               {String(index + 1).padStart(2, "0")}
             </span>

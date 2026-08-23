@@ -1,20 +1,11 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { getTechColor, getTechIcon, hasTechIcon } from "./TechIcon";
 import s from "./stackGrid.module.css";
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  shown: { opacity: 1, y: 0 },
-};
-
-const stagger: Variants = {
-  hidden: {},
-  shown: { transition: { staggerChildren: 0.05 } },
-};
+import { fadeUp, REVEAL, REVEAL_VIEWPORT, staggerDense } from "./motion";
 
 /**
  * Périodes de dérive, en secondes. Volontairement premières entre elles :
@@ -77,8 +68,8 @@ export function StackGrid({ items, drift = false }: Props) {
       className={drift ? `${s.grid} ${s.driftGrid}` : s.grid}
       initial="hidden"
       whileInView="shown"
-      viewport={{ once: true, margin: "-60px" }}
-      variants={stagger}
+      viewport={REVEAL_VIEWPORT}
+      variants={staggerDense}
     >
       {ordered.map((item, index) => {
         const Icon = getTechIcon(item);
@@ -98,7 +89,7 @@ export function StackGrid({ items, drift = false }: Props) {
             key={item}
             className={s.cell}
             variants={fadeUp}
-            transition={{ duration: 0.3 }}
+            transition={REVEAL}
           >
             <span className={classes} style={drift ? driftStyle(index) : undefined}>
               {Icon ? (

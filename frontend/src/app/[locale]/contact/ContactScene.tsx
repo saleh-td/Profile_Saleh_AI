@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
 
 import { Button, ButtonLink } from "@/components/Button";
@@ -12,18 +12,9 @@ import { getCvPath, profile } from "@/config/profile";
 import type { Dictionary } from "@/i18n/getDictionary";
 import type { Locale } from "@/i18n/locales";
 import s from "./contact.module.css";
+import { fadeUp, REVEAL, stagger } from "@/components/motion";
 
 type Props = { locale: Locale; dict: Dictionary };
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  shown: { opacity: 1, y: 0 },
-};
-
-const stagger: Variants = {
-  hidden: {},
-  shown: { transition: { staggerChildren: 0.08 } },
-};
 
 export function ContactScene({ locale, dict }: Props) {
   const cvPath = getCvPath(locale);
@@ -54,7 +45,7 @@ export function ContactScene({ locale, dict }: Props) {
         variants={stagger}
       >
         {/* ── Action principale : l'e-mail ── */}
-        <motion.section className={s.primary} variants={fadeUp} transition={{ duration: 0.4 }}>
+        <motion.section className={s.primary} variants={fadeUp} transition={REVEAL}>
           <h2 className={s.primaryLabel}>{contact.emailLabel}</h2>
           <a href={`mailto:${profile.email}`} className={s.email}>
             {profile.email}
@@ -68,7 +59,7 @@ export function ContactScene({ locale, dict }: Props) {
         </motion.section>
 
         {/* ── Le reste ── */}
-        <motion.div className={s.secondary} variants={fadeUp} transition={{ duration: 0.4 }}>
+        <motion.div className={s.secondary} variants={fadeUp} transition={REVEAL}>
           <Card href={profile.socials.linkedin.url}>
             <CardTitle>
               {/* Marque officielle, mais hors de TechIcon : ce n'est pas une

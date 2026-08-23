@@ -1,24 +1,15 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { Highlight } from "@/components/Highlight";
 import { PageHeader, Section } from "@/components/Section";
 import { StackGrid } from "@/components/StackGrid";
 import type { Dictionary } from "@/i18n/getDictionary";
 import s from "./parcours.module.css";
+import { fadeUp, REVEAL, REVEAL_VIEWPORT, stagger } from "@/components/motion";
 
 type Props = { dict: Dictionary };
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  shown: { opacity: 1, y: 0 },
-};
-
-const stagger: Variants = {
-  hidden: {},
-  shown: { transition: { staggerChildren: 0.08 } },
-};
 
 export function ParcoursScene({ dict }: Props) {
   const { parcours } = dict;
@@ -33,7 +24,7 @@ export function ParcoursScene({ dict }: Props) {
             className={s.track}
             initial="hidden"
             whileInView="shown"
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={REVEAL_VIEWPORT}
             variants={stagger}
           >
             {parcours.experience.map((job) => (
@@ -41,7 +32,7 @@ export function ParcoursScene({ dict }: Props) {
                 key={job.company}
                 className={`${s.step} ${job.current ? s.stepCurrent : ""}`}
                 variants={fadeUp}
-                transition={{ duration: 0.4 }}
+                transition={REVEAL}
               >
                 <div className={s.jobHead}>
                   <h3 className={s.jobTitle}>{job.role}</h3>
