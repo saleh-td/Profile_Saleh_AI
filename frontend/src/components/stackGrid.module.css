@@ -7,7 +7,33 @@
    les premières. Mesuré sur l'accueil, huit colonnes pour cinq tuiles, soit
    288px morts sur 756, 38 % de la rangée. Le `1fr` se répartissait sur les
    pistes vides comprises, donc les tuiles ne s'élargissaient même pas. */
+/* Conteneur du champ de trajectoires, posé uniquement en mode dérive. */
+.field {
+  position: relative;
+}
+
+/* Courbes de fond : elles suggèrent des trajectoires sans en décrire aucune.
+   Purement décoratives, donc masquées aux lecteurs d'écran, et tracées dans
+   le gris de filet du site, sans nouvelle couleur ni lueur. */
+.paths {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  color: var(--color-line);
+}
+
+/* `vector-effect` n'est pas héritée : posée sur le groupe, elle ne descend
+   pas sur les ellipses. Sans elle, le viewBox de 100x100 étiré sur 1700px
+   multiplie le trait par dix-sept et les courbes se lisent comme des tuyaux
+   reliant les tuiles, donc comme un flux de données qui n'existe pas. */
+.paths ellipse {
+  vector-effect: non-scaling-stroke;
+}
+
 .grid {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   /* Toutes les tuiles d'une rangée prennent la hauteur de la plus haute :
@@ -50,6 +76,13 @@
    de quelques pixels, très en dessous de la gouttière, donc rien ne se
    chevauche et la grille reste scannable d'un coup d'œil. */
 
+/* Gouttière élargie sur la grille qui dérive. C'est elle qui plafonne
+   l'amplitude : à 12px, deux voisines convergentes se touchaient dès 5px de
+   déplacement chacune. À 24px, on peut aller à 9px et 2deg. */
+.driftGrid {
+  gap: var(--space-lg);
+}
+
 .drift {
   animation-name: driftA;
   animation-duration: var(--drift-period, 19s);
@@ -80,37 +113,37 @@
 /* Trois trajectoires sans symétrie ni retour sur leurs pas, pour qu'aucune
    ne se lise comme un aller-retour.
 
-   L'amplitude est plafonnée à 4px de translation et 1.2deg de rotation, et
-   ce n'est pas un réglage esthétique : la gouttière de la grille fait 12px,
-   et deux tuiles voisines qui dérivent l'une vers l'autre en consomment
-   chacune environ 4.9px, rotation comprise. Au-delà, elles se touchent.
+   L'amplitude est plafonnée à 9px de translation et 2deg de rotation, et ce
+   n'est pas un réglage esthétique : la gouttière passe à 24px sur la grille
+   qui dérive, et deux tuiles voisines qui convergent en consomment chacune
+   environ 10.5px, rotation comprise. Au-delà, elles se touchent.
 
    C'est la rotation qui porte la sensation d'apesanteur. La translation
    seule se lit comme un bloc qui glisse. */
 @keyframes driftA {
   0% { transform: translate(0, 0) rotate(0deg); }
-  20% { transform: translate(3px, -3px) rotate(1deg); }
-  40% { transform: translate(4px, 2px) rotate(-0.5deg); }
-  60% { transform: translate(-1px, 4px) rotate(-1.2deg); }
-  80% { transform: translate(-4px, 0) rotate(0.6deg); }
+  20% { transform: translate(7px, -7px) rotate(1.7deg); }
+  40% { transform: translate(9px, 4px) rotate(-0.9deg); }
+  60% { transform: translate(-2px, 9px) rotate(-2deg); }
+  80% { transform: translate(-9px, 0) rotate(1deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 
 @keyframes driftB {
   0% { transform: translate(0, 0) rotate(0deg); }
-  20% { transform: translate(-3px, 2px) rotate(-0.9deg); }
-  40% { transform: translate(1px, 4px) rotate(0.7deg); }
-  60% { transform: translate(4px, -1px) rotate(1.2deg); }
-  80% { transform: translate(2px, -4px) rotate(-0.4deg); }
+  20% { transform: translate(-7px, 4px) rotate(-1.5deg); }
+  40% { transform: translate(2px, 9px) rotate(1.2deg); }
+  60% { transform: translate(9px, -2px) rotate(2deg); }
+  80% { transform: translate(4px, -9px) rotate(-0.7deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 
 @keyframes driftC {
   0% { transform: translate(0, 0) rotate(0deg); }
-  20% { transform: translate(2px, 4px) rotate(0.5deg); }
-  40% { transform: translate(-4px, 1px) rotate(-1.1deg); }
-  60% { transform: translate(-2px, -3px) rotate(0.9deg); }
-  80% { transform: translate(3px, -2px) rotate(-0.6deg); }
+  20% { transform: translate(4px, 9px) rotate(0.8deg); }
+  40% { transform: translate(-9px, 2px) rotate(-1.9deg); }
+  60% { transform: translate(-4px, -7px) rotate(1.5deg); }
+  80% { transform: translate(7px, -4px) rotate(-1deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 

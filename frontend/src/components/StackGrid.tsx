@@ -68,13 +68,13 @@ export function StackGrid({ items, drift = false }: Props) {
 
   if (ordered.length === 0) return null;
 
-  return (
+  const grid = (
     // Une seule liste, pas deux. Les outils et les notions forment la même
     // stack, et en deux `ul` distincts ils ne partagent pas la rangée flex :
     // les notions basculaient sur une ligne à part et n'héritaient pas de la
     // hauteur des tuiles à logo. Mesuré, 84x42 contre 84x74.
     <motion.ul
-      className={s.grid}
+      className={drift ? `${s.grid} ${s.driftGrid}` : s.grid}
       initial="hidden"
       whileInView="shown"
       viewport={{ once: true, margin: "-60px" }}
@@ -117,5 +117,31 @@ export function StackGrid({ items, drift = false }: Props) {
         );
       })}
     </motion.ul>
+  );
+
+  if (!drift) return grid;
+
+  return (
+    <div className={s.field}>
+      {/* Trajectoires suggérées, pas décrites : trois ellipses inclinées,
+          tracées dans le gris de filet du site. Aucune lueur, aucune couleur
+          nouvelle. Purement décoratives, donc retirées de l'arbre
+          d'accessibilité, et en trait d'épaisseur constante quelle que soit
+          la déformation imposée par la boîte. */}
+      <svg
+        className={s.paths}
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <g fill="none" stroke="currentColor" strokeWidth="1">
+          <ellipse cx="50" cy="50" rx="46" ry="30" transform="rotate(-8 50 50)" />
+          <ellipse cx="50" cy="50" rx="34" ry="44" transform="rotate(24 50 50)" />
+          <ellipse cx="50" cy="50" rx="44" ry="18" transform="rotate(9 50 50)" />
+        </g>
+      </svg>
+      {grid}
+    </div>
   );
 }
