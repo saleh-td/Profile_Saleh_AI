@@ -7,16 +7,13 @@
    les premières. Mesuré sur l'accueil, huit colonnes pour cinq tuiles, soit
    288px morts sur 756, 38 % de la rangée. Le `1fr` se répartissait sur les
    pistes vides comprises, donc les tuiles ne s'élargissaient même pas. */
-.wrap {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-sm);
-}
-
 .grid {
   display: flex;
   flex-wrap: wrap;
+  /* Toutes les tuiles d'une rangée prennent la hauteur de la plus haute :
+     une tuile de notion n'a pas de logo, elle serait sinon deux fois moins
+     haute que ses voisines. */
+  align-items: stretch;
   gap: var(--space-sm);
 }
 
@@ -141,8 +138,28 @@
   text-align: center;
 }
 
-.concepts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2xs);
+/* Notions sans marque : même gabarit que les tuiles à logo, parce qu'elles
+   font partie de la même stack et méritaient un support plutôt que d'être
+   posées à nu sur le fond.
+
+   Elles portent la troisième teinte du site, réservée à cet usage. C'est ce
+   qui remplace le logo absent : là où les autres tuiles sont identifiées par
+   une marque, celles-ci le sont par une couleur. Jamais un pictogramme
+   générique inventé pour combler le vide. */
+.concept {
+  justify-content: center;
+  background: var(--color-concept-wash);
+  border-color: color-mix(in srgb, var(--color-concept) 22%, transparent);
+}
+
+.concept:hover {
+  border-color: color-mix(in srgb, var(--color-concept) 55%, transparent);
+}
+
+.conceptLabel {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  line-height: 1.25;
+  color: var(--color-concept);
+  text-align: center;
 }
