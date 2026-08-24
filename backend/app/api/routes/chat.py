@@ -207,7 +207,7 @@ def _saleh_intro_answer(lang: str = "fr") -> str:
         return (
             "Saleh Minawi is a backend and AI developer based in Lyon.\n\n"
             "Since 2026 he has worked as a freelance developer, in partnership with SY Solutions; "
-            "before that, from September 2022 to August 2025, he built AI systems at Go2cam "
+            "before that, from 2022 to 2025, he built AI systems at Go2cam "
             "International, a CAD/CAM software vendor. He is available immediately for a permanent "
             "or fixed-term role.\n\n"
             "What he builds: RAG document search, vector databases, language models exposed through REST "
@@ -217,7 +217,7 @@ def _saleh_intro_answer(lang: str = "fr") -> str:
     return (
         "Saleh Minawi est développeur backend et IA, basé à Lyon.\n\n"
         "Depuis 2026, il travaille en freelance, en partenariat avec SY Solutions ; auparavant, de "
-        "septembre 2022 à août 2025, il construit des systèmes IA chez Go2cam International, éditeur "
+        "2022 à 2025, il construit des systèmes IA chez Go2cam International, éditeur "
         "de logiciels CAO/FAO. Il est disponible immédiatement pour un poste en CDI ou CDD.\n\n"
         "Ce qu'il construit : de la recherche documentaire par RAG, des bases vectorielles, des modèles "
         "de langage exposés par API REST, et des pipelines de données automatisés. Il conçoit des systèmes "
@@ -260,7 +260,7 @@ def _work_experience_answer(lang: str = "fr") -> str:
     if lang == "en":
         return (
             "In 2026 he moved to freelance work as a backend and AI developer, in partnership with SY Solutions in Lyon.\n\n"
-            "Before that, at Go2cam International (Lyon, September 2022 to August 2025), a CAD/CAM software vendor:\n"
+            "Before that, at Go2cam International (Lyon, 2022 to 2025), a CAD/CAM software vendor:\n"
             "- designed and deployed a RAG system for internal document search, cutting research time by roughly 50%\n"
             "- exposed an in-house LLM through REST APIs consumed by several business applications\n"
             "- built and operated vector databases (Qdrant, ChromaDB, PostgreSQL with pgvector)\n"
@@ -271,7 +271,7 @@ def _work_experience_answer(lang: str = "fr") -> str:
 
     return (
         "En 2026, il passe en freelance comme développeur backend et IA, en partenariat avec SY Solutions à Lyon.\n\n"
-        "Avant cela, chez Go2cam International (Lyon, septembre 2022 à août 2025), éditeur de logiciels CAO/FAO :\n"
+        "Avant cela, chez Go2cam International (Lyon, 2022 à 2025), éditeur de logiciels CAO/FAO :\n"
         "- conception et déploiement d'un système RAG pour la recherche documentaire interne, réduisant le temps de recherche d'environ 50 %\n"
         "- LLM interne exposé par API REST et consommé par plusieurs applications métier\n"
         "- mise en place et exploitation de bases vectorielles (Qdrant, ChromaDB, PostgreSQL avec pgvector)\n"
@@ -300,8 +300,8 @@ def _parcours_answer(lang: str = "fr") -> str:
     """
     Un seul fil, pas une énumération de postes.
 
-    Les faits sont datés plutôt que comptés en durée : « septembre 2022 à
-    août 2025 » reste vrai indéfiniment, « trois ans d'expérience » se périme
+    Les faits sont datés plutôt que comptés en durée : « 2022 à
+    2025 » reste vrai indéfiniment, « trois ans d'expérience » se périme
     silencieusement si la page n'est pas remise à jour.
     """
     if lang == "en":
@@ -311,7 +311,7 @@ def _parcours_answer(lang: str = "fr") -> str:
             "Since 2026 he has worked as a freelance developer: fixed-scope engagements in "
             "partnership with SY Solutions, on backend development and AI integration in Python "
             "and FastAPI.\n\n"
-            "He built that chain between September 2022 and August 2025, at Go2cam International "
+            "He built that chain between 2022 and 2025, at Go2cam International "
             "in Lyon, a CAD/CAM software vendor: he designed and deployed a RAG system for internal "
             "documentation search, and research time dropped by roughly 50%. He then exposed an "
             "in-house language model through REST APIs for several business applications, built the "
@@ -324,7 +324,7 @@ def _parcours_answer(lang: str = "fr") -> str:
         "jusqu'à la production et les y maintenir.\n\n"
         "Depuis 2026, il travaille en freelance : missions au forfait en partenariat avec SY "
         "Solutions, sur du backend et de l'intégration IA en Python et FastAPI.\n\n"
-        "Cette chaîne, il l'a construite entre septembre 2022 et août 2025, chez Go2cam "
+        "Cette chaîne, il l'a construite entre 2022 et 2025, chez Go2cam "
         "International à Lyon, éditeur de logiciels CAO/FAO : il y conçoit et déploie un système "
         "RAG pour la recherche documentaire interne, et le temps de recherche baisse d'environ "
         "50 %. Il expose ensuite un LLM interne par API REST pour plusieurs applications métier, "
@@ -1077,7 +1077,7 @@ PROFIL VÉRIFIÉ (source unique, ne rien ajouter à cette liste) :
 RÈGLE DE FORMULATION (obligatoire) :
 - Décris ce qui a été fait et QUAND, jamais depuis combien de temps.
 - Interdit : « 3 ans d'expérience », « trois ans », « depuis X années ».
-- À la place, cite les périodes : « de septembre 2022 à août 2025 », « en 2026 ».
+- À la place, cite les périodes : « de 2022 à 2025 », « en 2026 ».
 - Le parcours est UNE trajectoire continue, pas deux expériences séparées :
   la même chaîne portée d'abord en entreprise, puis en autonomie.
 
@@ -1089,7 +1089,7 @@ TRAJECTOIRE (2026 à aujourd'hui) :
 - Disponible immédiatement pour un poste en CDI ou CDD, sur Lyon ou en télétravail.
 - Citoyen de l'Union européenne : aucun permis de travail requis en Europe.
 
-TRAJECTOIRE (septembre 2022 à août 2025), Go2cam International (Lyon),
+TRAJECTOIRE (2022 à 2025), Go2cam International (Lyon),
 éditeur de logiciels CAO/FAO, comme développeur backend & IA :
 - système RAG pour la recherche documentaire interne, qui a réduit le temps de
   recherche d'environ 50 %
@@ -1135,8 +1135,8 @@ vient EN PREMIER et Go2cam ensuite. N'ordonne jamais ces deux périodes par
 chronologie. Commence par « Depuis 2026 » / « Since 2026 », puis enchaîne sur
 Go2cam avec « auparavant » / « before that ».
 Correct : « Depuis 2026, il est freelance en partenariat avec SY Solutions.
-Auparavant, de septembre 2022 à août 2025, chez Go2cam International… »
-Incorrect : « De septembre 2022 à août 2025, chez Go2cam… Depuis 2026… »
+Auparavant, de 2022 à 2025, chez Go2cam International… »
+Incorrect : « De 2022 à 2025, chez Go2cam… Depuis 2026… »
 
 Ton rôle est de répondre aux questions sur :
 - Son parcours, son expérience professionnelle et ses compétences (section PROFIL VÉRIFIÉ)
@@ -1152,7 +1152,7 @@ Règle de vérité (la plus importante) :
   n'y figure pas. Si l'information manque, dis simplement que tu ne l'as pas et
   renvoie vers sminawi24@gmail.com.
 - Ne minimise jamais son expérience. Il travaille en entreprise depuis
-  septembre 2022 : ne dis jamais le contraire, ni qu'il serait débutant, ni que
+  2022 : ne dis jamais le contraire, ni qu'il serait débutant, ni que
   son parcours serait uniquement scolaire ou académique.
 
 Règles de format (obligatoires) :

@@ -31,15 +31,6 @@
   --color-secondary-wash: #f7ebe5;
 
   /* Sémantique — état, jamais décoratif. Ne remplace pas l'accent. */
-  /* Troisième teinte, réservée aux notions de la stack (RAG, LLM, API REST…).
-     Elle ne sert qu'à ça : distinguer ce qui est un concept de ce qui est un
-     outil ayant une marque. Un violet parce que la rangée de logos est
-     dominée par des bleus et des verts, et qu'il fallait trancher dessus.
-     Contraste 7,71 sur le fond de page, 8,17 sur la surface : AAA.
-     Volontairement pas le terracotta, déjà porteur du sens
-     « professionnel / personnel » sur les fiches projets. */
-  --color-concept: #574191;
-  --color-concept-wash: #efedf7;
 
   --color-danger: #8f2c1c;
   --color-danger-wash: #f9ece9;

@@ -175,24 +175,49 @@
    font partie de la même stack et méritaient un support plutôt que d'être
    posées à nu sur le fond.
 
-   Elles portent la troisième teinte du site, réservée à cet usage. C'est ce
-   qui remplace le logo absent : là où les autres tuiles sont identifiées par
-   une marque, celles-ci le sont par une couleur. Jamais un pictogramme
-   générique inventé pour combler le vide. */
+   Sans logo, rien ne les identifie visuellement. La couleur prend ce rôle,
+   mais uniquement quand elle dit quelque chose de vrai : le vert pour ce qui
+   stocke ou représente la donnée, le terracotta pour ce qui calcule dessus.
+   Une notion qui ne relève ni de l'un ni de l'autre reste neutre. Jamais un
+   pictogramme générique inventé pour combler l'absence de marque. */
 .concept {
   justify-content: center;
-  background: var(--color-concept-wash);
-  border-color: color-mix(in srgb, var(--color-concept) 22%, transparent);
-}
-
-.concept:hover {
-  border-color: color-mix(in srgb, var(--color-concept) 55%, transparent);
+  background: var(--color-surface);
+  border-color: var(--color-line);
 }
 
 .conceptLabel {
   font-size: var(--text-xs);
   font-weight: var(--weight-medium);
   line-height: 1.25;
-  color: var(--color-concept);
+  color: var(--color-muted);
   text-align: center;
+}
+
+/* Donnée : ce qui stocke ou représente. */
+.conceptData {
+  background: var(--color-accent-wash);
+  border-color: color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+.conceptData .conceptLabel {
+  color: var(--color-accent);
+}
+
+/* Traitement : ce qui calcule sur la donnée. */
+.conceptProcess {
+  background: var(--color-secondary-wash);
+  border-color: color-mix(in srgb, var(--color-secondary) 20%, transparent);
+}
+
+.conceptProcess .conceptLabel {
+  color: var(--color-secondary);
+}
+
+.conceptData:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+}
+
+.conceptProcess:hover {
+  border-color: color-mix(in srgb, var(--color-secondary) 50%, transparent);
 }

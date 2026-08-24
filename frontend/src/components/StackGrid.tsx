@@ -3,7 +3,7 @@
 import type { CSSProperties } from "react";
 import { motion } from "framer-motion";
 
-import { getTechColor, getTechIcon, hasTechIcon } from "./TechIcon";
+import { getConceptFamily, getTechColor, getTechIcon, hasTechIcon } from "./TechIcon";
 import s from "./stackGrid.module.css";
 import { fadeUp, REVEAL, REVEAL_VIEWPORT, staggerDense } from "./motion";
 
@@ -75,7 +75,17 @@ export function StackGrid({ items, drift = false }: Props) {
         const Icon = getTechIcon(item);
         const color = getTechColor(item);
         const path = DRIFT_PATHS[index % DRIFT_PATHS.length];
-        const classes = [s.tile, Icon ? null : s.concept, drift ? s.drift : null, drift ? s[`path${path}`] : null]
+        // Une notion reçoit la teinte de sa famille quand elle en a une.
+        // Sans famille, elle reste neutre : voir CONCEPT_FAMILIES.
+        const family = Icon ? undefined : getConceptFamily(item);
+        const classes = [
+          s.tile,
+          Icon ? null : s.concept,
+          family === "data" ? s.conceptData : null,
+          family === "process" ? s.conceptProcess : null,
+          drift ? s.drift : null,
+          drift ? s[`path${path}`] : null,
+        ]
           .filter(Boolean)
           .join(" ");
 

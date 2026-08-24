@@ -65,6 +65,34 @@ const TECH_ICONS: Record<string, TechEntry> = {
   JWT: { icon: SiJsonwebtokens, color: "#000000" },
 };
 
+/**
+ * Familles des notions sans marque.
+ *
+ * Une notion n'a pas de logo, donc rien ne l'identifie visuellement. La
+ * couleur prend ce rôle, mais seulement quand elle dit quelque chose de
+ * vrai : `data` pour ce qui stocke ou représente la donnée, `process` pour
+ * ce qui calcule dessus.
+ *
+ * `API REST` et `CI/CD` n'y figurent volontairement pas. Ce sont de
+ * l'exposition et de la livraison, ni l'un ni l'autre ; les forcer dans une
+ * des deux cases rendrait la couleur mensongère. Ils restent neutres, et
+ * cette absence est la décision, pas un oubli.
+ */
+const CONCEPT_FAMILIES: Record<string, "data" | "process"> = {
+  pgvector: "data",
+  ChromaDB: "data",
+  Embeddings: "data",
+  SQL: "data",
+  RAG: "process",
+  LLM: "process",
+  XGBoost: "process",
+  "Data engineering": "process",
+};
+
+export function getConceptFamily(name: string): "data" | "process" | undefined {
+  return CONCEPT_FAMILIES[name];
+}
+
 export function getTechIcon(name: string): IconType | undefined {
   return TECH_ICONS[name]?.icon;
 }
