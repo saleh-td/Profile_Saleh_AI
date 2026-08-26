@@ -304,9 +304,16 @@ Convention pour toute nouvelle animation :
   est piloté par React. Jamais de propriété qui déclenche un reflow
   (`width`, `height`, `top`, `left`, `margin`) dans une transition.
 
-Trois animations dérogent volontairement et sont documentées sur place : les
-points du schéma de pipeline, la dérive de la stack sur `/parcours`, et
-l'arrivée de la fiche mise en avant (`useSpotlightArrival`).
+Le principe 4 tient de nouveau sans exception : **plus rien ne bouge sans
+qu'on agisse.** Les points du schéma de pipeline et la dérive de la stack ont
+existé un temps, puis ont été retirés — un mouvement permanent finit par
+peser, et il attirait l'œil sur le décor plutôt que sur le contenu.
+
+Deux animations sortent encore du cadre commun, toutes deux justifiées et
+documentées sur place : l'arrivée de la fiche mise en avant
+(`useSpotlightArrival`), jouée une fois à la navigation, et la pastille du
+chat, qui ne pulse que pendant une attente réelle et cesse dès la réponse
+reçue.
 
 ---
 

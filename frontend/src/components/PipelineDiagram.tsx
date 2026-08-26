@@ -112,16 +112,6 @@ export function PipelineDiagram({ labels }: { labels: Labels }) {
           {labels.ui}
         </text>
 
-        {/* ── Flux animé. Chaque point part du départ de son segment et se
-             déplace en translate pur, sans recalcul de mise en page. ── */}
-        <g className={s.flow} aria-hidden="true">
-          <circle className={`${s.dot} ${s.dotFanLeft}`} cx="57.5" cy="52" r="2.5" />
-          <circle className={`${s.dot} ${s.dotFanMiddle}`} cx="170" cy="52" r="2.5" />
-          <circle className={`${s.dot} ${s.dotFanRight}`} cx="282.5" cy="52" r="2.5" />
-          <circle className={`${s.dot} ${s.dotSpine1}`} cx="170" cy="136" r="2.5" />
-          <circle className={`${s.dot} ${s.dotSpine2}`} cx="170" cy="228" r="2.5" />
-          <circle className={`${s.dot} ${s.dotSpine3}`} cx="170" cy="306" r="2.5" />
-        </g>
       </svg>
 
       <figcaption className={s.caption}>{labels.title}</figcaption>

@@ -8,30 +8,6 @@
    288px morts sur 756, 38 % de la rangée. Le `1fr` se répartissait sur les
    pistes vides comprises, donc les tuiles ne s'élargissaient même pas. */
 /* Conteneur du champ de trajectoires, posé uniquement en mode dérive. */
-.field {
-  position: relative;
-}
-
-/* Courbes de fond : elles suggèrent des trajectoires sans en décrire aucune.
-   Purement décoratives, donc masquées aux lecteurs d'écran, et tracées dans
-   le gris de filet du site, sans nouvelle couleur ni lueur. */
-.paths {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  color: var(--color-line);
-}
-
-/* `vector-effect` n'est pas héritée : posée sur le groupe, elle ne descend
-   pas sur les ellipses. Sans elle, le viewBox de 100x100 étiré sur 1700px
-   multiplie le trait par dix-sept et les courbes se lisent comme des tuyaux
-   reliant les tuiles, donc comme un flux de données qui n'existe pas. */
-.paths ellipse {
-  vector-effect: non-scaling-stroke;
-}
-
 .grid {
   position: relative;
   display: flex;
@@ -61,6 +37,11 @@
   background: var(--color-surface);
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
+  /* Hauteur plancher : `align-items: stretch` n'égalise que les tuiles d'une
+     même rangée. Les notions, qui n'ont pas de logo, se retrouvaient seules
+     sur la dernière rangée et y tombaient à 42px contre 72 pour les autres.
+     Valeur = padding vertical + icône + interligne du libellé. */
+  min-height: 4.5rem;
   /* transform seulement : aucune propriété qui déclenche un reflow. */
   transition: border-color var(--transition), transform var(--transition);
 }
@@ -70,98 +51,12 @@
   transform: translateY(-2px);
 }
 
-/* ── Dérive en apesanteur ────────────────────────────────────────
-   Activée uniquement là où la stack est le sujet de la section (prop
-   `drift`). Chaque tuile garde sa place dans la grille : l'amplitude est
-   de quelques pixels, très en dessous de la gouttière, donc rien ne se
-   chevauche et la grille reste scannable d'un coup d'œil. */
-
-/* Gouttière élargie sur la grille qui dérive. C'est elle qui plafonne
-   l'amplitude : à 12px, deux voisines convergentes se touchaient dès 5px de
-   déplacement chacune. À 24px, on peut aller à 9px et 2deg. */
-.driftGrid {
-  gap: var(--space-lg);
-}
-
-.drift {
-  animation-name: driftA;
-  animation-duration: var(--drift-period, 19s);
-  animation-delay: var(--drift-offset, 0s);
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  /* Chaque tuile devient sa propre couche : sans ça le navigateur repeint
-     la grille entière à chaque image. */
-  will-change: transform;
-}
-
-.path1 {
-  animation-name: driftB;
-}
-
-.path2 {
-  animation-name: driftC;
-}
-
-/* Au survol la tuile s'immobilise sous le curseur : viser une cible qui
-   bouge est désagréable. Le décalage courant est figé par la keyframe, donc
-   le `translateY` de survol ne s'applique pas ici — c'est la bordure qui
-   porte seule le retour visuel. */
-.drift:hover {
-  animation-play-state: paused;
-}
-
-/* Trois trajectoires sans symétrie ni retour sur leurs pas, pour qu'aucune
-   ne se lise comme un aller-retour.
-
-   L'amplitude est plafonnée à 9px de translation et 2deg de rotation, et ce
-   n'est pas un réglage esthétique : la gouttière passe à 24px sur la grille
-   qui dérive, et deux tuiles voisines qui convergent en consomment chacune
-   environ 10.5px, rotation comprise. Au-delà, elles se touchent.
-
-   C'est la rotation qui porte la sensation d'apesanteur. La translation
-   seule se lit comme un bloc qui glisse. */
-@keyframes driftA {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  20% { transform: translate(7px, -7px) rotate(1.7deg); }
-  40% { transform: translate(9px, 4px) rotate(-0.9deg); }
-  60% { transform: translate(-2px, 9px) rotate(-2deg); }
-  80% { transform: translate(-9px, 0) rotate(1deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
-}
-
-@keyframes driftB {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  20% { transform: translate(-7px, 4px) rotate(-1.5deg); }
-  40% { transform: translate(2px, 9px) rotate(1.2deg); }
-  60% { transform: translate(9px, -2px) rotate(2deg); }
-  80% { transform: translate(4px, -9px) rotate(-0.7deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
-}
-
-@keyframes driftC {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  20% { transform: translate(4px, 9px) rotate(0.8deg); }
-  40% { transform: translate(-9px, 2px) rotate(-1.9deg); }
-  60% { transform: translate(-4px, -7px) rotate(1.5deg); }
-  80% { transform: translate(7px, -4px) rotate(-1deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
-}
-
-/* Un mouvement permanent et non sollicité est exactement ce que ce réglage
-   demande de supprimer. */
-@media (prefers-reduced-motion: reduce) {
-  .drift {
-    animation: none;
-    will-change: auto;
-  }
-}
-
 /* Couleur de marque posée en style inline par composant (voir TechIcon) :
    seule exception du site à la règle « un seul accent ». La tuile reste
    neutre, seule l'icône porte la couleur. */
 .icon {
-  width: 1.625rem;
-  height: 1.625rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .label {
